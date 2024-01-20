@@ -1,0 +1,10 @@
+<div class="toaster" [ngClass]="[type, position, customClass]" *ngIf="showToaster">
+    <div class="toaster-title" *ngIf="title">
+        <i class="vi vi-bell"></i>
+        <label *ngIf="(this.type === 'info')">Information</label>
+        <label *ngIf="(this.type === 'success')">Success</label>
+        <label *ngIf="(this.type === 'error')">Error</label>
+        <label *ngIf="(this.type === 'warning')">Warning</label>
+    </div>
+    <div class="toaster-msg">{{ message }}</div>
+</div>

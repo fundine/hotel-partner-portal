@@ -1,0 +1,263 @@
+<div class="page-wrap">
+    <div class="aside-left">
+        <div class="card">
+            <div class="card-body" [ngClass]="{ 'disabled': loading }">
+                <div class="nav-item" (click)="loading ? null : onItemsQuickAdd()">Item Quick Add</div>
+                <div class="nav-item" (click)="loading ? null : onItemsBatchEntry()">Item Batch Entry</div>
+                <div class="nav-item active">Featured Group <i class="vi vi-chevron-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="aside-right">
+        <div class="card" [ngClass]="{'feature-groups' : featureGroupsList}">
+
+            <ng-container *ngIf="featureGroupsList">
+                <ng-container *ngIf="!innerLoading && (featureGroups && featureGroups.length > 0)">
+                    <div class="card-header">
+                        <div></div>
+                        <div>
+                            <button type="button" class="btn btn-xs btn-primary" (click)="addNewFeatureGroup()">ADD NEW FEATURE GROUP</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="feature-group" *ngFor="let featureGroup of featureGroups; let i = index">
+                            <div class="group-info">
+                                <div class="group-name">
+                                    {{ featureGroup.itemGroupName }}
+                                    <span>({{ featureGroup.items.length }})</span>
+                                </div>
+                                <div class="group-actions">
+                                    <label class="btn-action" (click)="editFeatureGroup(i)"><i
+                                            class="vi vi-pencil"></i></label>
+                                    <label class="btn-action" (click)="deleteFeatureGroup(i)"><i
+                                            class="vi vi-trash"></i></label>
+                                </div>
+                            </div>
+                            <div class="group-items">
+                                <div class="item-list" *ngFor="let item of featureGroup.items; let j = index">
+                                    <div>{{ item.itemName }}</div>
+                                    <div class="item-price">
+                                        <i class="vi vi-rupee"></i>{{ item.itemPrice }}
+                                    </div>
+                                    <div class="item-type">
+                                        <ng-container *ngIf="item.itemTypeId !== '4'">
+                                            <ng-container *ngIf="(item.itemTypeId === '1' || item.itemTypeId === '2')">
+                                                <i class="vi"
+                                                    [ngClass]="{'vi-veg' : item.itemTypeId === '1', 'vi-non-veg': item.itemTypeId === '2'}"></i>
+                                            </ng-container>
+                                            <ng-container
+                                                *ngIf="item.itemTypeId === '3' && !(item.itemTypeId === '1' || item.itemTypeId === '2')">
+                                                <i class="vi vi-veg"></i>
+                                                <i class="vi vi-non-veg"></i>
+                                            </ng-container>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="feature-group add-new" (click)="addNewFeatureGroup()">
+                            <div class="add-icon">
+                                <label><i class="vi vi-plus"></i></label>
+                            </div>
+                            <div class="add-info">
+                                <div class="info-title">Add New Feature Group</div>
+                                <div class="info-sub-title">Create a feature group with a selection of
+                                    signature menu items that
+                                    you believe customers should try.</div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="innerLoading || (featureGroups && featureGroups.length === 0)">
+                    <ng-container *ngIf="innerLoading && (featureGroups && featureGroups.length === 0)">
+                        <div class="card-body">
+                            <div class="feature-group" *ngFor="let item of skeletonCardItems; let i = index">
+                                <div class="group-info skeleton-box skeleton-loader w-100"></div>
+                                <div class="group-items">
+                                    <div class="item-list skeleton-box skeleton-loader w-90"></div>
+                                    <div class="item-list skeleton-box skeleton-loader w-50"></div>
+                                    <div class="item-list skeleton-box skeleton-loader w-80"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!innerLoading && (featureGroups && featureGroups.length === 0)">
+                        <div class="no-record">
+                            <div class="ta-c">
+                                <div class="nr-img"><img src="../../../assets/images/general/empty.webp" /></div>
+                                <div class="title-lg">No Groups Found!</div>
+                                <div class="title-md">It seems you haven't added any featured group yet.</div>
+                                <div class="title-md">Make your own group effortlessly and list signature items on top.
+                                </div>
+                                <div class="nr-action">
+                                    <button type="button" class="btn btn-info" (click)="addNewFeatureGroup()">ADD NEW GROUP</button>
+                                </div>
+                                <div class="btn-text" (click)="onCancelClick()">BACK TO MENU</div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="!featureGroupsList">
+                <div class="card-header">
+                    <div class="item-title">
+                        <form [formGroup]="featureMenuItemsForm" autocomplete="off">
+                            <div class="form-group clear-bottom">
+                                <input type="text" class="form-control" formControlName="itemGroupName"
+                                    placeholder="Feature Group Titile" (input)="onItemGroupNameChange()" [ngClass]="controlClass('itemGroupName')" />
+                                <span class="focus-border"></span>
+                                <label class="val-msg"
+                                    *ngIf="featureMenuItemsForm.get('itemGroupName')?.errors?.['maxlength']">Max
+                                    Lenghth is 100</label>
+                                <label class="val-msg"
+                                    *ngIf="featureMenuItemsForm.get('itemGroupName')?.errors?.['invalidName']">
+                                    Group Name Already Exist</label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="item-action">
+                        <button type="button" class="btn btn-outline-danger" (click)="cancelAddfeatureGroup()">Back
+                            To
+                            Group</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="menu-items-list">
+                        <div class="list-header" *ngIf="!innerLoading && menuItems.length > 0">
+                            <div class="form-group search-input clear-bottom">
+                                <input type="text" class="form-control" placeholder="Search Item Name"
+                                    [(ngModel)]="searchText" />
+                                <span class="filter-search"><i class="vi vi-search"></i></span>
+                                <span class="input-clear-val" (click)="clearSearchText()" *ngIf="searchText !== ''"><i
+                                        class="vi vi-close"></i></span>
+                            </div>
+                        </div>
+                        <div class="list-body">
+                            <ng-container *ngIf="!innerLoading && menuItems.length > 0">
+                                <ng-container *ngFor="let item of menuItems; let i = index">
+                                    <div class="menu-item"
+                                        [ngClass]="{'not-available':!item.isAvailable, 'none': !(matchesSearch(item))}">
+                                        <div class="item-sel">
+                                            <label class="checkbox-container blank clear-bottom">
+                                                <input type="checkbox" (change)="onItemSelectionChange(i)" />
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                        <div class="item-info">
+                                            <div class="item-name">{{ item.itemName }}</div>
+                                            <div class="item-desc" *ngIf="item.description !== ''">
+                                                {{item.description }}</div>
+                                            <div class="info" *ngIf="!(item.isAvailable)">Next available
+                                                at <span>11:30 am</span>, tomorrow</div>
+                                        </div>
+                                        <div class="item-type">
+                                            <div class="item-price">
+                                                <i class="vi vi-rupee"></i>
+                                                <span>{{ item.itemPrice }}</span>
+                                            </div>
+                                            <div class="item-tags">
+                                                <label class="f-type">
+                                                    <ng-container *ngIf="item.itemTypeId !== '4'">
+                                                        <ng-container
+                                                            *ngIf="(item.itemTypeId === '1' || item.itemTypeId === '2')">
+                                                            <i class="vi"
+                                                                [ngClass]="{'vi-veg' : item.itemTypeId === '1', 'vi-non-veg': item.itemTypeId === '2'}"></i>
+                                                        </ng-container>
+                                                        <ng-container
+                                                            *ngIf="item.itemTypeId === '3' && !(item.itemTypeId === '1' || item.itemTypeId === '2')">
+                                                            <i class="vi vi-veg"></i>
+                                                            <i class="vi vi-non-veg"></i>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </label>
+                                                <label class="f-class" *ngIf="item.isBestSeller">
+                                                    <i class="vi vi-star-o"></i><label>Bestseller</label>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                            <ng-container *ngIf="innerLoading || menuItems.length === 0">
+                                <ng-container *ngIf="innerLoading && menuItems.length === 0">
+                                    <div class="menu-item" *ngFor="let item of skeletonMenuItems; let i = index"
+                                        [ngClass]="{'skeleton-wrap': innerLoading}">
+                                        <div class="skeleton-sel skeleton-box skeleton-loader"></div>
+                                        <div class="skeleton-item">
+                                            <div class="skeleton-box skeleton-loader w-100"></div>
+                                            <div class="skeleton-box skeleton-loader w-80"></div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="!innerLoading && menuItems.length === 0">
+                                    <div class="card-body">
+                                        <div class="no-record">
+                                            <div class="ta-c">
+                                                <div class="nr-img"><img
+                                                        src="../../../assets/images/general/empty.webp" /></div>
+                                                <div class="title-lg">No Items Found!</div>
+                                                <div class="title-md">It seems you haven't added any menu items yet.
+                                                </div>
+                                                <div class="title-md">Make your menu effortlessly with our innovative
+                                                    platform.
+                                                </div>
+                                                <div class="nr-action">
+                                                    <button type="button" class="btn btn-info"
+                                                        (click)="onAddNewMenuItem()">Add New
+                                                        Items</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer" *ngIf="!innerLoading && menuItems.length > 0">
+                    <div class="footer-group">
+                        <div class="checkbox-list">
+
+                        </div>
+                        <div class="btn-list">
+                            <button type="button" class="btn btn-success" (click)="onSaveFeatureGroup()">Add To
+                                Group</button>
+                            <button type="button" class="btn btn-danger" (click)="onCancelClick()">Back To
+                                Menu</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="loader-wrap" *ngIf="loading">
+                    <app-spinner [pageLoader]="loading"></app-spinner>
+                </div>
+            </ng-container>
+
+        </div>
+    </div>
+</div>
+
+
+<app-dialog *ngIf="formChangeWarningDialog" type="confirm" [customClass]="'delete justify'" [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onConfirmClearChanges()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+<app-dialog *ngIf="formChangeDetectedDialog" type="confirm" [customClass]="'delete justify'"
+    [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onCancelConfirmClick()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+<app-dialog *ngIf="formChangeIdentifiedDialog" type="confirm" [customClass]="'delete justify'"
+    [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onBackConfirmClick()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+<app-dialog *ngIf="deleteConfirmDialog" type="confirm" [customClass]="'delete justify'" [title]="'Are you sure?'"
+    [message]="'Are you sure you want to delete this feature group from menu? Deleting this group will also remove it from the customers menu. This action cannot be restored.'"
+    (confirmClick)="onConfirmDeleteFeatureGroup()" (cancelClick)="onCancelDeleteFeatureGroup()"></app-dialog>
+
+<app-dialog *ngIf="emptyItemDialog" type="info" [customClass]="'delete justify'" [title]="'Warning!'"
+    [message]="'We cannot proceed without selecting menu items.'" (cancelClick)="onCancelInfo()"></app-dialog>
+
+<app-toaster *ngIf="alertSuccess" type="success" position="top-right" customClass="" [title]="false"
+    message="Great, there's a new addition to the menu!"></app-toaster>

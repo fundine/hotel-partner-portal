@@ -1,0 +1,111 @@
+// app general
+$app-bg: #f2f3f9;
+$app-base: #212529;
+$app-icon: #495057;
+$text-link: #277af7;
+$page-title: #0088ab;
+$cmn-icon-hover: #ff7f5d;
+$app-font-family: system-ui, sans-serif;
+$cmn-back-drop: rgba(0, 0, 0, 0.7);
+$cmn-border-2: 2px solid #efefef;
+$cmn-popup-bg: #ffffff;
+$cmn-popup-title: #0f7d8b;
+
+// navbar
+$navbar-bs: 0 -1px 4px 0 #a1a1a1;
+$navbar-bg: linear-gradient(to right, #151933, #2a3266);
+$navbar-icon: #bfbfbf;
+$navbar-icon-hover: #ffffff;
+$navbar-icon-active: #12ceb7;
+
+// header
+$header-bg: #ffffff;
+$header-menu-bar: #108c9c;
+$header-bs: 3px -1px 6px 0 #a1a1a1;
+$header-icon: #ff7f5d;
+$header-icon-bg: rgba(255, 127, 93, 0.1);
+
+// dialog
+$dialog-bs:
+    0 0 0 0.05rem rgba(8, 60, 130, 6%),
+    0 0 1.25rem rgba(30, 34, 40, 48%);
+$dialog-text: #343f52;
+
+// modal
+$modal-bs: 0px 0px 10px rgba(0, 0, 0, 0.2);
+$modal-text: #343f52;
+$close-btn: #ff0000;
+$close-btn-bg: #ffffff;
+$close-btn-bs: -1px 1px 2px 0px #818181;
+
+// custom - scrollbar
+$scrollbar-track: #ffffff;
+$scrollbar-thumb: #888888;
+$scrollbar-thumb-hover: #555555;
+
+// filter
+$filter-bg: rgba(67, 89, 113, 0.04);
+$filter-bs: 3px -1px 4px 0 #a1a1a1;
+$filter-border: 2px solid transparent;
+
+// card
+$card-bg: #ffffff;
+$card-bs: 0 0 5px 1px rgba(209, 209, 209, 0.7);
+$card-h-border: 2px solid #eeecec;
+$card-f-border: 2px solid #efefef;
+$card-h-label: #0f7d8b;
+
+// buttons
+$btn-out-primary: transparent;
+$btn-out-primary-color: #6259ca;
+$btn-out-secondary: transparent;
+$btn-out-secondary-color: #fb6b25;
+$btn-out-success: transparent;
+$btn-out-success-color: #13bfa6;
+$btn-out-info: transparent;
+$btn-out-info-color: #45aaf2;
+$btn-out-warning: transparent;
+$btn-out-warning-color: #f7b731;
+$btn-out-danger: transparent;
+$btn-out-danger-color: #f82649;
+
+// formcontrols
+$formcontrol-bg: #ffffff;
+$formcontrol-color: #4d5875;
+$formcontrol-border: #d7d7d7;
+$formcontrol-invalid: #ff0000;
+$formcontrol-focus-bg: #ffffff;
+$formcontrol-focus-border: #d4d4d4;
+$formcontrol-disable-bg: #d7d7d7;
+$formcontrol-disable-border: #d7d7d7;
+$formcontrol-invalid-border: #ff3e1d;
+$formcontrol-placeholder-color: #b5b5b5;
+$formcontrol-section-border: #b8b8b8;
+$formcontrol-section-focus-border: #d4d4d4;
+
+// list
+$multi-action-hover: #efefef;
+$multi-menu-bg: #ffffff;
+$multi-menu-shadow: 0 10px 40px 0 rgba(104, 113, 123, 30%);
+$multi-menu-hover-bg: rgba(98, 89, 202, 0.1);
+$multi-menu-title-color: #8f9daf;
+
+// modal
+$modal-bg: #ffffff;
+$modal-border: #d8d6da;
+$modal-header-bg: #fafafa;
+$modal-rb-color: #263871;
+$modal-rb-title-bg: #d6deee;
+$modal-rb-title-border: #e9ebfa;
+$modal-shadow: 0px 8px 14.72px 1.28px rgba(130, 130, 134, 20%);
+
+// color
+$veg: #00da00;
+$non-veg: #ff0000;
+$white: #ffffff;
+$danger: #ff0000;
+$primary: #6259ca;
+$secondary: #6c757d;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ffc107;

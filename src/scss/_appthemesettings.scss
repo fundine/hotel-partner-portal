@@ -1,0 +1,159 @@
+// navbar
+.main-menu {
+    box-shadow: $navbar-bs;
+    background: $navbar-bg;
+
+    ul {
+        li {
+            a {
+                .nav-icon,
+                .nav-name {
+                    color: $navbar-icon;
+                }
+            }
+            &:hover,
+            &.active {
+                a {
+                    .nav-icon,
+                    .nav-name {
+                        color: #ffffff;
+                    }
+                }
+            }
+            &.active {
+                // background: #21295a;
+                &::before {
+                    background: $navbar-icon-active;
+                }
+            }
+        }
+    }
+}
+
+// header
+.app-container {
+    &.open {
+        .app-header {
+            .header-actions {
+                .menu-icon {
+                    a {
+                        span:nth-child(2) {
+                            left: 8px;
+                            position: relative;
+                            transition: left 0.75s ease;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.app-header {
+    background: $header-bg;
+    box-shadow: $header-bs;
+    .header-actions {
+        .menu-icon {
+            a {
+                span {
+                    background: $header-menu-bar;
+                }
+            }
+        }
+    }
+    .header-nav {
+        .header-nav-link {
+            &.user-img {
+                a {
+                    img {
+                        background: #000000;
+                        border: 1px solid #252626;
+                    }
+                }
+            }
+            &:hover {
+                a {
+                    color: $header-icon;
+                    background: $header-icon-bg;
+                }
+            }
+        }
+    }
+}
+
+// dialog
+.dialog-container {
+    .dialog-content {
+        background: $cmn-popup-bg;
+        box-shadow: $dialog-bs;
+        .dialog-title {
+            color: $cmn-popup-title;
+        }
+        .dialog-message {
+            color: $dialog-text;
+        }
+        &.delete {
+            .dialog-title {
+                color: $danger;
+            }
+        }
+    }
+    &.bg-fade {
+        background-color: $cmn-back-drop;
+    }
+}
+
+// modal
+.modal {
+    background-color: $cmn-back-drop;
+    .modal-content {
+        background-color: $cmn-popup-bg;
+        box-shadow: $modal-bs;
+        .modal-header {
+            border-bottom: $cmn-border-2;
+            .modal-title {
+                color: $cmn-popup-title;
+            }
+            button {
+                color: $close-btn;
+                background: $close-btn-bg;
+                box-shadow: $close-btn-bs;
+            }
+        }
+        .modal-body {
+            color: $modal-text;
+            form {
+                .form-footer {
+                    border-top: $cmn-border-2;
+                }
+            }
+        }
+        .modal-footer {
+            border-top: $cmn-border-2;
+        }
+    }
+}
+
+// layout
+.filter-bar {
+    border-bottom: $filter-border;
+    box-shadow: $filter-bs;
+    background-color: $filter-bg;
+}
+
+// card
+.card {
+    color: $app-base;
+    box-shadow: $card-bs;
+    .card-header {
+        color: $card-h-label;
+        background: $card-bg;
+        border-bottom: $card-h-border;
+    }
+    .card-body {
+        background: $card-bg;
+    }
+    .card-footer {
+        background: $card-bg;
+        border-top: $card-f-border;
+    }
+}

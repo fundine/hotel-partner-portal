@@ -1,0 +1,29 @@
+<ng-container>
+    <div class="error-bg-wrap">
+        <div class="error-content">
+            <div>
+                <div class="title-xl">WHOOOPS</div>
+                <div class="title-md" *ngIf="!isMobileView">
+                    <div class="mb-3">We couldnt find the page you are looking for,</div>
+                    <div class="mb-3">
+                        <div>You're either misspelling the URL</div>
+                        <div>or requesting a page that's no longer here.</div>
+                    </div>
+                    <div class="mb-4">
+                        <div>We've got a collection of delightful items waiting</div>
+                        <div>to bring a smile to your face.</div>
+                    </div>
+                </div>
+                <div class="title-md" *ngIf="isMobileView">
+                    <div class="mb-3">We couldnt find the page you are looking for, You're either misspelling the URL or
+                        requesting a page that's no longer here.</div>
+                    <div class="mb-4">We've got a collection of delightful items waiting to bring a smile to your face.
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-secondary active" (click)="btnGetBackToHome()">GO TO HOME</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

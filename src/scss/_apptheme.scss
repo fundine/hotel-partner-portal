@@ -1,0 +1,65 @@
+body {
+    &.night-mode {
+        color: #e8e8e8;
+        background: #181c3a;
+        $app-base: #e8e8e8;
+        $cmn-back-drop: rgba(0, 0, 0, 0.4);
+        $cmn-border-2: 2px solid #000000;
+        $cmn-popup-bg: #242b4e;
+        $cmn-popup-title: #ffffff;
+
+        // navbar
+        $navbar-bs: 0 0 3px 0 #000000;
+        $navbar-bg: linear-gradient(to right, #151933, #2a3266);
+
+        // header
+        $header-bg: linear-gradient(to bottom, #151933, #2a3266);
+        $header-menu-bar: #ffffff;
+        $header-bs: 0 0 3px 0 #000000;
+        $header-icon: #ffffff;
+
+        // dialog
+        $dialog-bs: 0 0 3px 0 #000000;
+        $dialog-text: #e8e8e8;
+
+        // modal
+        $modal-bs: 0 0 3px 0 #000000;
+        $modal-text: #e8e8e8;
+        $close-btn: #ffffff;
+        $close-btn-bg: #ff0000;
+        $close-btn-bs: 0 0 3px 0 #000000;
+
+        // filter
+        $filter-bg: #1a2051;
+        $filter-bs: 0 0 0 0 #000000;
+        $filter-border: 2px solid #000000;
+
+        // card
+        $card-bg: #21274a;
+        $card-bs: 0 0 0 0 #000000;
+        $card-h-border: 2px solid #1f1e1e;
+        $card-f-border: 2px solid #1f1e1e;
+        $card-h-label: #ffffff;
+
+        @import "appthemesettings";
+    }
+
+    &.trans-theme {
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        content: "";
+        color: #dedefd;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-color: transparent;
+        background-blend-mode: overlay;
+        $app-border: rgba(255, 255, 255, 0.1);
+        // background-image: url("../assets/images/theme/trans-bg.jpg");
+
+        @import "appthemesettings";
+    }
+}

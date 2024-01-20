@@ -1,0 +1,57 @@
+.page-content {
+    padding: 20px 0;
+    .card {
+        margin-bottom: 20px;
+        .card-header {
+            padding: 0 1.5rem;
+            color: #99012a;
+        }
+        .card-body {
+            padding: 1.25rem 1.5rem;
+            .tax-setting {
+                margin-bottom: 1.5rem;
+                border: 1px solid #cccccc;
+                padding: 0.75rem 1rem 1.25rem;
+                .tax-title {
+                    font-weight: 500;
+                    color: #0f7d8b;
+                    margin-bottom: 10px;
+                }
+                .tax-sel,
+                .tax-prec {
+                    gap: 50px;
+                    display: flex;
+                    color: #555f57;
+                    align-items: center;
+                }
+                .tax-sel {
+                    margin-bottom: 1rem;
+                }
+                .tax-prec {
+                    .form-group {
+                        .form-control {
+                            min-width: 220px;
+                        }
+                    }
+                }
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+        .card-footer {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            justify-content: space-between;
+            .btn-list {
+                .btn {
+                    min-width: 110px;
+                }
+            }
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}

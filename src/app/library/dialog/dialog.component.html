@@ -1,0 +1,15 @@
+<div class="dialog-container bg-fade">
+    <div class="dialog-content" [ngClass]="customClass">
+        <div class="dialog-title">{{title}}</div>
+        <div class="dialog-message">{{message}}</div>
+        <div class="dialog-buttons">
+            <ng-container *ngIf="(type === 'confirm')">
+                <button class="btn btn-sm btn-primary" (click)="onClickContinue()">Continue</button>
+                <button class="btn btn-sm btn-danger" (click)="onClickCancel()">Cancel</button>
+            </ng-container>
+            <ng-container *ngIf="(type === 'info')">
+                <button class="btn btn-sm btn-info" (click)="onClickCancel()">Understood</button>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+.page-wrap {
+    height: 100%;
+    display: flex;
+    .page-nav {
+        width: 230px;
+        background: #efefef;
+        box-shadow: 0 -1px 4px -1px #a1a1a1;
+        .nav-item {
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid #dedede;
+            &.active {
+                color: #ffffff;
+                background: #5f9ea0;
+                &::after {
+                    content: "";
+                    z-index: 1;
+                    right: -6px;
+                    width: 13px;
+                    height: 13px;
+                    position: absolute;
+                    top: calc(50% - 7px);
+                    background: #5f9ea0;
+                    transform: rotate(45deg);
+                    border-top: 1px solid #5f9ea0;
+                    border-left: 1px solid #5f9ea0;
+                }
+            }
+        }
+    }
+    .page-preview {
+        height: 100%;
+        padding: 0 25px;
+        overflow-y: overlay;
+        width: calc(100% - 230px);
+    }
+}

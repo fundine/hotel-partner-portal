@@ -1,0 +1,90 @@
+.app-header {
+    z-index: 5;
+    height: 50px;
+    display: flex;
+    padding: 0 1.75rem;
+    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    .header-actions {
+        display: flex;
+        align-items: center;
+        .menu-icon {
+            cursor: pointer;
+            margin-right: 1rem;
+            a {
+                span {
+                    height: 2px;
+                    width: 22px;
+                    display: block;
+                    &:nth-child(2) {
+                        width: 13px;
+                        margin: 5px 0;
+                    }
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+        .page-name {
+            font-size: 1em;
+            font-weight: 600;
+            margin-left: 5px;
+            color: #108c9c;
+            text-transform: uppercase;
+        }
+    }
+    .header-nav {
+        display: flex;
+        align-items: center;
+        .header-nav-link {
+            padding: 0 4px;
+            position: relative;
+            a {
+                height: 38px;
+                width: 38px;
+                display: grid;
+                cursor: pointer;
+                position: relative;
+                border-radius: 50%;
+                place-items: center;
+                .vi {
+                    font-size: 18px;
+                    color: inherit;
+                    &.vi-sun {
+                        font-size: 22px;
+                    }
+                    &.vi-minimize {
+                        top: 1px;
+                        font-size: 17px;
+                    }
+                    &.vi-help-circle {
+                        top: 1px;
+                        font-size: 23px;
+                        font-weight: 500;
+                    }
+                    &.vi-bell {
+                        font-size: 21px;
+                    }
+                }
+            }
+            &.user-img {
+                padding: 0;
+                margin-left: 1rem;
+                border-radius: 50%;
+                a {
+                    height: 35px;
+                    width: 35px;
+                    img {
+                        width: 35px;
+                        height: 35px;
+                        padding: 2px;
+                        cursor: pointer;
+                        border-radius: inherit;
+                    }
+                }
+            }
+        }
+    }
+}

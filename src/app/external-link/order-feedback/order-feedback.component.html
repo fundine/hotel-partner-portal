@@ -1,0 +1,356 @@
+<div class="fb-container">
+    <div class="row">
+        <div class="col-lg-7 col-center">
+            <div class="card">
+                <div class="card-header">
+                    <div class="order-label">ORDER</div>
+                    <div class="order-no">#11345678654</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="header-info">
+                                <div class="info-title">ROOM NUMBER</div>
+                                <div class="info-value xl">2007</div>
+                            </div>
+                            <div class="header-info">
+                                <div class="info-title">STATUS</div>
+                                <div class="info-value md">DELIVERED</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+
+
+
+                            <div class="order-tracker">
+                                <div class="order-tracking completed">
+                                    <div class="order-status">
+                                        <span class="is-complete"></span>
+                                    </div>
+                                    <div class="order-info">
+                                        <p>ORDER PLACED</p>
+                                        <span>Dec 12, 2023. 07:30 PM</span>
+                                    </div>
+                                </div>
+                                <div class="order-tracking completed">
+                                    <div class="order-status">
+                                        <span class="is-complete"></span>
+                                    </div>
+                                    <div class="order-info">
+                                        <p>ORDER ACCEPTED</p>
+                                        <span>Dec 12, 2023. 07:45 PM</span>
+                                    </div>
+                                </div>
+                                <div class="order-tracking">
+                                    <div class="order-status">
+                                        <span class="is-complete"></span>
+                                    </div>
+                                    <div class="order-info">
+                                        <p>START PREPARING</p>
+                                        <span>Dec 12, 2023. 07:45 PM</span>
+                                    </div>
+                                </div>
+                                <div class="order-tracking">
+                                    <div class="order-status">
+                                        <span class="is-complete"></span>
+                                    </div>
+                                    <div class="order-info">
+                                        <p>DELIVERED</p>
+                                        <span>Dec 12, 2023. 07:45 PM</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card-title">ORDER DETAILS</div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="item-info">
+                                <div class="item-type">
+                                    <label><i class="vi vi-non-veg"></i></label>
+                                </div>
+                                <div class="item-name">
+                                    <label>Special Chicken Keema Kothu Perotta <span
+                                            class="qty">X</span><span>1</span></label>
+                                </div>
+                                <div class="item-price">
+                                    <label><i class="vi vi-rupee"></i>199.00</label>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <div class="item-type">
+                                    <label><i class="vi vi-veg"></i></label>
+                                </div>
+                                <div class="item-name">
+                                    <label>Kothu Perotta <span class="qty">X</span><span>1</span></label>
+                                </div>
+                                <div class="item-price">
+                                    <label><i class="vi vi-rupee"></i>149.00</label>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <div class="item-type">
+                                    <label><i class="vi vi-non-veg"></i></label>
+                                </div>
+                                <div class="item-name">
+                                    <label>Chicken Kothu Perotta <span class="qty">X</span><span>1</span></label>
+                                </div>
+                                <div class="item-price">
+                                    <label><i class="vi vi-rupee"></i>199.00</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="bill-info">
+                                <div class="">Item Total</div>
+                                <div class="item-price">
+                                    <label><i class="vi vi-rupee"></i>547.00</label>
+                                </div>
+                            </div>
+                            <div class="bill-info">
+                                <div class="">Taxes</div>
+                                <div class="item-price">
+                                    <label><i class="vi vi-rupee"></i>27.00</label>
+                                </div>
+                            </div>
+                            <div class="bill-info">
+                                <div class="">BILL TOTAL</div>
+                                <div class="item-price">
+                                    <label><i class="vi vi-rupee"></i>574.00</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form [formGroup]="customerFeedbackForm" autocomplete="off">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="fb-title">
+                                    <div>Let's Dive Into Your Experience</div>
+                                    <div>We would love to hear from you</div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="fb-question-list" formGroupName="deliveryTime">
+                                    <div class="question">Were you satisfied with the delivery time?</div>
+                                    <div class="question-desc">Rate your satisfaction with the time it took for your
+                                        order to be delivered.
+                                    </div>
+                                    <div class="emoji-sel">
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryTime')?.get('level')?.value === 'Terrible')}">
+                                            <input type="radio" name="level" id="Terrible" value="Terrible"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/terrible.png" />
+                                            <span class="item-name">Terrible</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryTime')?.get('level')?.value === 'Bad')}">
+                                            <input type="radio" name="level" id="Bad" value="Bad"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/bad.png" />
+                                            <span class="item-name">Bad</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryTime')?.get('level')?.value === 'Average')}">
+                                            <input type="radio" name="level" id="Average" value="Average"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/average.png" />
+                                            <span class="item-name">Average</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryTime')?.get('level')?.value === 'Good')}">
+                                            <input type="radio" name="level" id="Good" value="Good"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/good.png" />
+                                            <span class="item-name">Good</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryTime')?.get('level')?.value === 'Amazing')}">
+                                            <input type="radio" name="level" id="Amazing" value="Amazing"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/amazing.png" />
+                                            <span class="item-name">Amazing</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="fb-question-list" formGroupName="foodQuality">
+                                    <div class="question">Quality of the Food?</div>
+                                    <div class="question-desc">Share your opinion on the taste, freshness, and overall
+                                        quality of the food
+                                        items you ordered</div>
+                                    <div class="emoji-sel">
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('foodQuality')?.get('level')?.value === 'Terrible')}">
+                                            <input type="radio" name="level" id="Terrible" value="Terrible"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/terrible.png" />
+                                            <span class="item-name">Terrible</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('foodQuality')?.get('level')?.value === 'Bad')}">
+                                            <input type="radio" name="level" id="Bad" value="Bad"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/bad.png" />
+                                            <span class="item-name">Bad</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('foodQuality')?.get('level')?.value === 'Average')}">
+                                            <input type="radio" name="level" id="Average" value="Average"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/average.png" />
+                                            <span class="item-name">Average</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('foodQuality')?.get('level')?.value === 'Good')}">
+                                            <input type="radio" name="level" id="Good" value="Good"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/good.png" />
+                                            <span class="item-name">Good</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('foodQuality')?.get('level')?.value === 'Amazing')}">
+                                            <input type="radio" name="level" id="Amazing" value="Amazing"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/amazing.png" />
+                                            <span class="item-name">Amazing</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="fb-question-list" formGroupName="deliveryPerson">
+                                    <div class="question">Delivery Person's Behavior?</div>
+                                    <div class="question-desc">Assess the demeanor and professionalism of the delivery
+                                        person and share your
+                                        feedback regarding their friendliness and service quality.</div>
+                                    <div class="emoji-sel">
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryPerson')?.get('level')?.value === 'Terrible')}">
+                                            <input type="radio" name="level" id="Terrible" value="Terrible"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/terrible.png" />
+                                            <span class="item-name">Terrible</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryPerson')?.get('level')?.value === 'Bad')}">
+                                            <input type="radio" name="level" id="Bad" value="Bad"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/bad.png" />
+                                            <span class="item-name">Bad</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryPerson')?.get('level')?.value === 'Average')}">
+                                            <input type="radio" name="level" id="Average" value="Average"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/average.png" />
+                                            <span class="item-name">Average</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryPerson')?.get('level')?.value === 'Good')}">
+                                            <input type="radio" name="level" id="Good" value="Good"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/good.png" />
+                                            <span class="item-name">Good</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('deliveryPerson')?.get('level')?.value === 'Amazing')}">
+                                            <input type="radio" name="level" id="Amazing" value="Amazing"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/amazing.png" />
+                                            <span class="item-name">Amazing</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="fb-question-list" formGroupName="overallExperience">
+                                    <div class="question">Overall Experience ?</div>
+                                    <div class="question-desc">Share your holistic impression of the entire experience,
+                                        including ordering,
+                                        delivery, and overall satisfaction.</div>
+                                    <div class="emoji-sel">
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('overallExperience')?.get('level')?.value === 'Terrible')}">
+                                            <input type="radio" name="level" id="Terrible" value="Terrible"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/terrible.png" />
+                                            <span class="item-name">Terrible</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('overallExperience')?.get('level')?.value === 'Bad')}">
+                                            <input type="radio" name="level" id="Bad" value="Bad"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/bad.png" />
+                                            <span class="item-name">Bad</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('overallExperience')?.get('level')?.value === 'Average')}">
+                                            <input type="radio" name="level" id="Average" value="Average"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/average.png" />
+                                            <span class="item-name">Average</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('overallExperience')?.get('level')?.value === 'Good')}">
+                                            <input type="radio" name="level" id="Good" value="Good"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/good.png" />
+                                            <span class="item-name">Good</span>
+                                        </label>
+                                        <label
+                                            [ngClass]="{'active': (customerFeedbackForm.get('overallExperience')?.get('level')?.value === 'Amazing')}">
+                                            <input type="radio" name="level" id="Amazing" value="Amazing"
+                                                formControlName="level" />
+                                            <img src="../../../assets/images/emoji/amazing.png" />
+                                            <span class="item-name">Amazing</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="textarea-desc">Provide constructive suggestions on the areas where you
+                                    think our service could be enhanced or any specific suggestions you may have.</div>
+                                <div class="form-group comments">
+                                    <textarea class="form-control" formControlName="feedbackComments"
+                                        placeholder="Suggestions for Improvement"></textarea>
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="btn-list">
+                                    <button type="button" class="btn btn-success" (click)="onSubmitFeedback()">SUBMIT
+                                        YOUR FEEDBACK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+
+
+                    <div style="margin: 1rem 0;">
+                        <div>
+                            <span *ngFor="let star of stars" (click)="setRating(star)" [class.selected]="star <= rating">&#9733;</span>
+                          </div>
+                          <p>Selected Rating: {{ rating }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

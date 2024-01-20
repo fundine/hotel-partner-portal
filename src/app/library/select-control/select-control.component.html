@@ -1,0 +1,34 @@
+<div class="form-group select" [ngClass]="customClass" (clickOutside)="selectListOutsideClick($event)">
+    <label class="inp-label" [ngClass]="validation" *ngIf="!noLabel">{{title}}</label>
+    <input type="text" class="form-control" placeholder="{{placeholder}}" [ngClass]="{'is-invalid': validationClass}"
+        [value]="selectedItem" [disabled]="disabled" (click)="toggleDropdown()" readonly />
+    <span class="focus-border"></span>
+    <label class="arrow"><i class="vi vi-chevron-down"></i></label>
+    <label class="close" *ngIf="isDropdownOpen" (click)="resetSelection()">
+        <i class="vi vi-close"></i>
+    </label>
+    <div class="option-list" *ngIf="isDropdownOpen">
+        <div class="list-item" [ngClass]="{'active': option === selectedItem}" *ngFor="let option of options"
+            (click)="selectOption(option)">{{ option }}</div>
+        <div class="list-item action" *ngIf="controlAddType === 'category'" (click)="openRestCategoryAdd()">Add New
+            Category <i class="vi vi-plus-circle-o"></i></div>
+        <div class="list-item action" *ngIf="controlAddType === 'subCategory'" (click)="openRestSubCategoryAdd()">Add
+            New Sub Category <i class="vi vi-plus-circle-o"></i>
+        </div>
+    </div>
+</div>
+
+
+<!-- <app-modal *ngIf="openResCategoryModal" (closed)="onModalClosed()" [header]="'show'"
+    [modalTitle]="'CREATE NEW CATEGORY'" [customClass]="'modal-sm'">
+    <div class="modal-body">
+        <app-add-category (cancelClicked)="onModalClosed()"></app-add-category>
+    </div>
+</app-modal>
+
+<app-modal *ngIf="openResSubCategoryModal" (closed)="onModalClosed()" [header]="'show'"
+    [modalTitle]="'CREATE NEW SUB CATEGORY'" [customClass]="'modal-sm'">
+    <div class="modal-body">
+        <app-add-subcategory (cancelClicked)="onModalClosed()"></app-add-subcategory>
+    </div>
+</app-modal> -->

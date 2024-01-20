@@ -1,0 +1,29 @@
+<form [formGroup]="addSubCategoryForm" autocomplete="off">
+    <div class="form-body">
+        <!-- <div class="form-group">
+            <label class="inp-label">Category Name</label>
+            <input type="text" class="form-control" formControlName="categoryName"
+                [ngClass]="controlClass('categoryName')" [readonly]="isCategoryNameReadonly" />
+            <span class="focus-border"></span>
+        </div> -->
+        <select-control title="Category" validation="required" formControlName="categoryName" controlAddType="category"
+            [disabled]="isCategoryNameReadonly" [selectedItem]="categoryItem" [options]="categoryOptions"
+            (optionSelected)="selectCategory($event)"
+            [validationClass]="(addSubCategoryForm.get('categoryName')?.invalid && addSubCategoryForm.get('categoryName')?.touched) ?? false">
+        </select-control>
+
+        <div class="form-group">
+            <label class="inp-label">Sub Category Name</label>
+            <input type="text" class="form-control" formControlName="subCategoryName"
+                [ngClass]="controlClass('subCategoryName')" #subCategoryNameInput />
+            <span class="focus-border"></span>
+            <label class="val-msg" *ngIf="addSubCategoryForm.get('subCategoryName')?.errors?.['maxlength']">Max
+                Length is 100</label>
+            <label class="val-msg" *ngIf="isUniquNameShow">Sub Category Name Already Exist</label>
+        </div>
+    </div>
+    <div class="form-footer btn-list">
+        <button type="button" class="btn btn-sm btn-success" (click)="onSaveSubCategory()">ADD SUB-CATEGORY</button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="onCancelSubCategory()">CANCEL</button>
+    </div>
+</form>

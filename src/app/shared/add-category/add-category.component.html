@@ -1,0 +1,17 @@
+<form [formGroup]="addCategoryForm" autocomplete="off">
+    <div class="form-body">
+        <div class="form-group">
+            <label class="inp-label">Category Name</label>
+            <input type="text" class="form-control" formControlName="categoryName"
+                [ngClass]="controlClass('categoryName')" #categoryNameInput />
+            <span class="focus-border"></span>
+            <label class="val-msg" *ngIf="addCategoryForm.get('categoryName')?.errors?.['maxlength']">Max Lenght
+                is 100</label>
+            <label class="val-msg" *ngIf="isUniquNameShow">Category Name Already Exist</label>
+        </div>
+    </div>
+    <div class="form-footer btn-list">
+        <button type="button" class="btn btn-sm btn-success" (click)="onSaveCategory()">ADD CATEGORY</button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="onCancelCategory()">CANCEL</button>
+    </div>
+</form>

@@ -1,0 +1,104 @@
+<div class="page-content">
+    <div class="row">
+        <div class="col-lg-12 col-center">
+
+            <div class="card outlet-card">
+                <div class="card-body">
+                    <!-- <div>Outlet 1</div> -->
+                    <div>The Sky Bar (Seaview Resto Bar)</div>
+                </div>
+            </div>
+            <form [formGroup]="outletInfoForm" autocomplete="off">
+                <div class="card">
+                    <div class="card-header">The Sky Bar (Seaview Resto Bar)</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Outlet Name</label>
+                                    <input type="text" class="form-control" formControlName="unitName"
+                                        [ngClass]="controlClass('unitName')" />
+                                    <span class="focus-border"></span>
+                                    <label class="val-msg"
+                                        *ngIf="outletInfoForm.get('unitName')?.errors?.['maxlength']">Max Length is
+                                        50</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Outlet Type</label>
+                                    <input type="text" class="form-control" formControlName="unitType"
+                                        [ngClass]="controlClass('unitType')" />
+                                    <span class="focus-border"></span>
+                                    <label class="val-msg"
+                                        *ngIf="outletInfoForm.get('unitType')?.errors?.['maxlength']">Max Length is
+                                        50</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Outlet Category</label>
+                                    <input type="text" class="form-control" formControlName="unitCategory" readonly />
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Location</label>
+                                    <input type="text" class="form-control" formControlName="unitLocation"
+                                        [ngClass]="controlClass('unitLocation')" />
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Opening / Check-In Time</label>
+                                    <input type="time" class="form-control" formControlName="openingTime"
+                                        [ngClass]="controlClass('openingTime')" />
+                                    <span class="focus-border"></span>
+                                    <label class="time-icon"><i class="vi vi-time"></i></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Closing / Check-Out Time</label>
+                                    <input type="time" class="form-control" formControlName="closingTime"
+                                        [ngClass]="controlClass('closingTime')" />
+                                    <span class="focus-border"></span>
+                                    <label class="time-icon"><i class="vi vi-time"></i></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="checkbox-list">
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isValid" />
+                                <span class="checkmark"></span>Valid
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isDisabled" />
+                                <span class="checkmark"></span>Disable
+                            </label>
+                        </div>
+                        <div class="btn-list">
+                            <button class="btn btn-sm btn-success" (click)="onUpdateOutletInfo()">UPDATE</button>
+                            <button class="btn btn-sm btn-danger">CANCEL</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<app-dialog *ngIf="formChangeWarningDialog" type="confirm" [customClass]="'delete justify'" [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onBackConfirmClick()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+<app-toaster *ngIf="alertSuccess" type="success" position="top-right" customClass="" [title]="false"
+    message="Great, there's a new coupon added!"></app-toaster>

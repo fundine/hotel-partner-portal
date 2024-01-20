@@ -1,0 +1,19 @@
+<div class="modal">
+    <div class="modal-dialog" [ngClass]="customClass">
+        <div class="modal-content">
+            <div class="modal-header" *ngIf="header === 'show'">
+                <div class="modal-title">{{ modalTitle }}</div>
+                <div>
+                    <button type="button" class="close" (click)="closeModal()">
+                        <i class="vi vi-close"></i>
+                    </button>
+                </div>
+            </div>
+            <ng-content select=".modal-body"></ng-content>
+            <ng-content select=".modal-footer"></ng-content>
+            <div class="modal-footer" *ngIf="footer === 'show'">
+                <button type="button" class="btn btn-sm btn-primary" (click)="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

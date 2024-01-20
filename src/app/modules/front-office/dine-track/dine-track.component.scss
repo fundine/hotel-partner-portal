@@ -1,0 +1,204 @@
+@mixin count {
+    height: 18px;
+    padding: 0 5px;
+    min-width: 22px;
+    margin-left: 5px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #4a4444;
+    font-size: 12.5px;
+    position: relative;
+    border-radius: 4px;
+    text-align: center;
+    background: #e7e7e7;
+}
+@mixin info-title {
+    font-size: 0.7em;
+    font-weight: 500;
+    color: #b4aeae;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+@mixin info-value {
+    line-height: 1.4;
+    color: #555f57;
+    min-height: 19px;
+    font-size: 0.975em;
+}
+
+.filter-bar {
+    .filter-controls {
+        gap: 25px;
+        display: flex;
+        height: inherit;
+        padding: 0 25px;
+        position: relative;
+        align-items: center;
+        justify-content: space-between;
+        .left-group {
+            width: 40%;
+        }
+        .right-group {
+            flex: 1;
+            width: 60%;
+            display: flex;
+            padding: 0 5px;
+            height: inherit;
+            position: relative;
+            align-items: center;
+            justify-content: space-between;
+            .btn-list {
+                text-align: right;
+                .btn {
+                    min-width: 125px;
+                }
+            }
+        }
+    }
+}
+.page-wrap {
+    padding: 20px 25px;
+    .card {
+        // height: 100%;
+        margin-bottom: 20px;
+        .card-body {
+            padding: 0.5rem 1rem;
+            .category {
+                .category-header {
+                    display: flex;
+                    min-height: 35px;
+                    font-weight: 500;
+                    padding: 12px 5px;
+                    align-items: center;
+                    justify-content: space-between;
+                    border-bottom: 1px solid #d8d2d2;
+                    .category-name {
+                        color: #0f7d8b;
+                        font-size: 1.1em;
+                        .count {
+                            top: -1px;
+                            @include count;
+                            cursor: default;
+                        }
+                    }
+                }
+                .category-content {
+                    .guest-card {
+                        display: flex;
+                        padding: 15px 5px;
+                        align-items: center;
+                        border-bottom: 1px solid #e6e1e1;
+                        .guest-info {
+                            width: 20%;
+                            .room-no {
+                                line-height: 1;
+                                font-weight: 700;
+                                color: #ff4500;
+                                font-size: 1.35em;
+                            }
+                            .room-name {
+                                line-height: 1.4;
+                                color: #555f57;
+                                font-size: 0.975em;
+                            }
+                        }
+                        .booking-info {
+                            width: 65%;
+                            display: flex;
+                            margin: 0 1rem;
+                            flex-wrap: wrap;
+                            align-items: center;
+                            padding: 0.25rem 1rem;
+                            border-left: 1px solid #dedddd;
+                            border-right: 1px solid #dedddd;
+                            .info-group {
+                                width: 25%;
+                                .info-title {
+                                    @include info-title;
+                                }
+                                .info-value {
+                                    @include info-value;
+                                    &.guest-count,
+                                    &.attendees-count {
+                                        label {
+                                            line-height: 1;
+                                            margin-left: 6px;
+                                            padding-left: 5px;
+                                            border-left: 1px solid #cccccc;
+                                            &:first-child {
+                                                margin-left: 0;
+                                                padding-left: 0;
+                                                border-left: 0;
+                                            }
+                                        }
+                                    }
+                                    &.attendees-count {
+                                        label {
+                                            color: #ff0000;
+                                            &.completed {
+                                                color: #12c612;
+                                            }
+                                        }
+                                    }
+                                }
+                                &:nth-child(1) {
+                                    width: 30%;
+                                }
+                                &:nth-child(2) {
+                                    width: 20%;
+                                }
+                            }
+                        }
+                        .booking-actions {
+                            width: 15%;
+                            text-align: center;
+                            .success {
+                                color: #12c612;
+                                font-weight: 500;
+                            }
+                            .danger {
+                                color: #ff0000;
+                                font-size: 0.8em;
+                                i {
+                                    font-weight: 400;
+                                    padding-right: 5px;
+                                    &.vi-close {
+                                        top: 1px;
+                                        font-size: 9px;
+                                        color: #ff0000;
+                                    }
+                                }
+                            }
+                            .btn {
+                                width: 100%;
+                            }
+                        }
+                        &:last-of-type {
+                            border-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// modal
+.confirm-attendance {
+    display: grid;
+    padding: 30px 25px;
+    place-items: center;
+    .room-info {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        .room-no {
+            line-height: 1;
+            font-weight: 700;
+            color: #ff4500;
+            font-size: 1.5em;
+        }
+        .guest-name {
+            font-size: 1.2em;
+        }
+    }    
+}

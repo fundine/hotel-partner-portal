@@ -1,0 +1,96 @@
+.main-menu {
+    z-index: 5;
+    width: 80px;
+    height: 100vh;
+    position: relative;
+    .app-logo {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        a {
+            img {
+                width: 37px;
+                height: 37px;
+                cursor: pointer;
+                transition-duration: 0.5s;
+                transition-property: transform;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                transform: translate(0, 0) rotate(0deg) skewX(0) skewY(0) scaleX(1) scaleY(1);
+            }
+            &:hover {
+                img {
+                    transform: translate(0, 0) rotate(360deg) skewX(0) skewY(0) scaleX(1.1) scaleY(1.1);
+                }
+            }
+        }
+    }
+    ul {
+        margin: 0;
+        overflow-y: overlay;
+        height: calc(100vh - 60px);
+        padding: 0.5rem 0.35rem 1rem;
+        li {
+            display: flex;
+            outline: none;
+            cursor: pointer;
+            list-style: none;
+            min-height: 50px;
+            border-radius: 5px;
+            text-align: center;
+            position: relative;
+            margin-bottom: 10px;
+            align-items: center;
+            justify-content: center;
+            a {
+                .nav-icon {
+                    .vi {
+                        top: 1px;
+                        color: inherit;
+                        font-size: 24px;
+                        font-weight: 500;
+                        &.vi-list-o,
+                        &.vi-insights-o {
+                            font-size: 21px;
+                        }
+                        &.vi-bed-o {
+                            font-size: 21px;
+                        }
+                        &.vi-category-o,
+                        &.vi-parking-o {
+                            font-size: 23px;
+                        }
+                        &.vi-room-cleaning-o {
+                            font-size: 26px;
+                        }
+                        &.vi-outlet-o {
+                            font-size: 22px;
+                            font-weight: 400;
+                        }
+                    }
+                }
+                .nav-name {
+                    font-size: 10px;
+                    font-weight: 500;
+                    word-break: break-all;
+                    letter-spacing: 0.015rem;
+                }
+            }
+            &.active {
+                &::before {
+                    left: -2px;
+                    width: 6px;
+                    content: "";
+                    height: 35px;
+                    border-radius: 5px;
+                    position: absolute;
+                }
+                a {
+                    .nav-icon {
+                        animation: swing ease-in-out 0.5s 1 alternate;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,409 @@
+.page-wrap {
+    gap: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px 25px;
+    .aside-left {
+        top: 0;
+        z-index: 3;
+        width: 160px;
+        height: 100%;
+        position: sticky;
+        .card {
+            .card-body {
+                padding: 0;
+                .nav-item {
+                    display: flex;
+                    cursor: pointer;
+                    font-weight: 500;
+                    color: #9b9b9b;
+                    padding: 11px 15px;
+                    align-items: center;
+                    justify-content: space-between;
+                    i {
+                        top: 1px;
+                        display: none;
+                        color: inherit;
+                        font-size: 0.9em;
+                    }
+                    &.active {
+                        color: #99012a;
+                        background: #faebd7;
+                        i {
+                            display: unset;
+                        }
+                    }
+                }
+                &.disabled {
+                    .nav-item {
+                        user-select: none;
+                        cursor: not-allowed;
+                    }
+                }
+            }
+        }
+    }
+    .aside-right {
+        flex: 1;
+        position: relative;
+        width: calc(100% - 160px);
+        .card {
+            height: 100%;
+            margin-bottom: 0;
+            .card-header {
+                gap: 15px;
+                top: -20px;
+                z-index: 1;
+                min-height: 70px;
+                position: sticky;
+                padding: 0 1.25rem;
+                .item-title {
+                    width: calc(100% - 200px);
+                }
+                .item-action {
+                    width: 200px;
+                    text-align: right;
+                }
+            }
+            .card-body {
+                padding: 1.5rem 1.25rem 1rem;
+                .feature-group {
+                    min-height: 125px;
+                    margin-bottom: 1rem;
+                    padding: 0.5rem 1rem;
+                    border: 1px solid #e4dcdc;
+                    // box-shadow: 0 0 2px 1px #dad4d4;
+                    .group-info {
+                        display: flex;
+                        align-items: center;
+                        padding-bottom: 2px;
+                        justify-content: space-between;
+                        border-bottom: 1px solid #e4dcdc;
+                        .group-name {
+                            font-weight: 500;
+                            color: #0f7d8b;
+                            span {
+                                padding-left: 5px;
+                            }
+                        }
+                        .group-actions {
+                            width: 75px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-end;
+                            .btn-action {
+                                width: 30px;
+                                height: 30px;
+                                display: grid;
+                                cursor: pointer;
+                                place-items: center;
+                                i {
+                                    font-size: 1.025em;
+                                    &.vi-trash {
+                                        color: #ff0000;
+                                    }
+                                }
+                            }
+                        }
+                        &.skeleton-box {
+                            height: 20px;
+                            margin: 5px 0;
+                            overflow: hidden;
+                            border-bottom: 0;
+                            position: relative;
+                            background-color: #f7f7f7;
+                        }
+                    }
+                    .group-items {
+                        padding: 5px 0;
+                        .item-list {
+                            gap: 10px;
+                            display: flex;
+                            color: #9b9b9b;
+                            min-height: 25px;
+                            font-size: 0.95em;
+                            align-items: center;
+                            .item-type {
+                                i {
+                                    top: 0.048rem;
+                                    cursor: default;
+                                    font-size: 13px;
+                                    & + i {
+                                        padding-left: 5px;
+                                    }
+                                }
+                                .vi-veg {
+                                    color: #12c612;
+                                }
+                                .vi-non-veg {
+                                    color: #ff0000;
+                                }
+                            }
+                            .item-price {
+                                i {
+                                    color: inherit;
+                                    cursor: default;
+                                    font-size: 10px;
+                                    font-weight: 400;
+                                }
+                            }
+                            &.skeleton-box {
+                                min-height: 12px;
+                                overflow: hidden;
+                                border-bottom: 0;
+                                margin-bottom: 8px;
+                                position: relative;
+                                background-color: #f7f7f7;
+                                &:last-child {
+                                    margin-bottom: 0;
+                                }
+                            }
+                        }
+                    }
+                    &.add-new {
+                        display: flex;
+                        cursor: pointer;
+                        align-items: center;
+                        border: 2px dashed #e7e7e7;
+                        .add-icon {
+                            width: 60px;
+                            label {
+                                padding-left: 5px;
+                                i {
+                                    font-size: 35px;
+                                    font-weight: 400;
+                                    color: #b5bcc1;
+                                }
+                            }
+                        }
+                        .add-info {
+                            width: calc(100% - 60px);
+                            .info-title {
+                                font-size: 1em;
+                                font-weight: 500;
+                                margin-bottom: 3px;
+                            }
+                            .info-sub-title {
+                                font-size: 0.9em;
+                                color: #9b9b9b;
+                            }
+                        }
+                        &:hover {
+                            background: #fef7ee;
+                            border: 2px dashed #fbead3;
+                            .add-icon {
+                                label {
+                                    i {
+                                        color: #ebc490;
+                                    }
+                                }
+                            }
+                            .add-info {
+                                .info-title {
+                                    color: #e7a957;
+                                }
+                            }
+                        }
+                    }
+                }
+                .menu-items-list {
+                    height: 100%;
+                    border: 1px solid #efefef;
+                    .list-header {
+                        top: 50px;
+                        z-index: 1;
+                        position: sticky;
+                        min-height: 50px;
+                        padding: 10px 15px;
+                        background: #ffffff;
+                        border-bottom: 2px solid #efefef;
+                    }
+                    .list-body {
+                        .menu-item {
+                            display: flex;
+                            min-height: 50px;
+                            padding: 10px 15px;
+                            align-items: center;
+                            border-bottom: 1px solid #efefef;
+                            .item-sel {
+                                top: 2px;
+                                padding: 0;
+                                width: 40px;
+                            }
+                            .item-info {
+                                padding-right: 2rem;
+                                width: calc(100% - 240px);
+                                .item-name {
+                                    line-height: 1.3;
+                                    font-size: 0.95em;
+                                }
+                                .item-desc {
+                                    line-height: 1.3;
+                                    font-size: 0.75rem;
+                                    text-align: justify;
+                                    word-break: break-all;
+                                    letter-spacing: -0.3px;
+                                    color: rgba(40, 44, 63, 0.45);
+                                }
+                                .notice,
+                                .info {
+                                    font-size: 0.75rem;
+                                    text-align: justify;
+                                    span {
+                                        font-size: 0.65rem;
+                                    }
+                                }
+                                .notice {
+                                    color: #ff0000;
+                                }
+                                .info {
+                                    color: #008000;
+                                }
+                            }
+                            .item-type {
+                                width: 200px;
+                                display: flex;
+                                line-height: 1;
+                                align-items: center;
+                                .item-price {
+                                    min-width: 53px;
+                                    line-height: 1.3;
+                                    color: #554c4c;
+                                    font-family: Muli;
+                                    font-size: 0.9rem;
+                                    i {
+                                        color: inherit;
+                                        cursor: default;
+                                        font-size: 12px;
+                                        font-weight: 400;
+                                        padding-right: 2px;
+                                        text-decoration: unset !important;
+                                    }
+                                }
+                                .item-tags {
+                                    line-height: 1;
+                                    padding-left: 5px;
+                                    .f-type {
+                                        min-width: 15px;
+                                        i {
+                                            top: -0.048rem;
+                                            cursor: default;
+                                            font-size: 13px;
+                                            & + i {
+                                                padding-left: 5px;
+                                            }
+                                        }
+                                        .vi-veg {
+                                            color: #12c612;
+                                        }
+                                        .vi-non-veg {
+                                            color: #ff0000;
+                                        }
+                                    }
+                                    .f-class {
+                                        padding-left: 7px;
+                                        .vi-star-o {
+                                            top: -0.12rem;
+                                            cursor: default;
+                                            font-size: 12px;
+                                            color: #ee9c00;
+                                        }
+                                        label {
+                                            top: -0.11rem;
+                                            color: #ee9c00;
+                                            padding-left: 5px;
+                                            position: relative;
+                                            width: fit-content;
+                                            font-size: 0.875rem;
+                                        }
+                                    }
+                                }
+                            }
+                            &.skeleton-wrap {
+                                .skeleton-sel {
+                                    width: 23px;
+                                    height: 23px;
+                                    margin-bottom: 0;
+                                    margin-right: 15px;
+                                }
+                                .skeleton-item {
+                                    width: calc(100% - 38px);
+                                    .skeleton-box {
+                                        min-height: 16px;
+                                        margin-bottom: 6px;
+                                        &:last-child {
+                                            min-height: 12px;
+                                            margin-bottom: 0;
+                                        }
+                                    }
+                                }
+                                &:hover {
+                                    background: transparent;
+                                }
+                            }
+                            &.not-available {
+                                .item-img {
+                                    .img-wrap {
+                                        img {
+                                            filter: grayscale(100%);
+                                        }
+                                    }
+                                }
+                                .item-info .item-name,
+                                .item-info .item-desc,
+                                .item-type .item-price span {
+                                    color: #ff0000;
+                                }
+                                .item-type .item-price i {
+                                    color: #ff0000;
+                                }
+                            }
+                            &:hover {
+                                background: #fff7eb;
+                            }
+                            &:last-child {
+                                border-bottom: 0;
+                            }
+                            &.none {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+            .card-footer {
+                text-align: right;
+                padding: 0.75rem 1.75rem;
+                .footer-group {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    .btn-list {
+                        .btn {
+                            min-width: 120px;
+                        }
+                    }
+                }
+            }
+            .no-record {
+                .nr-img {
+                    img {
+                        width: 150px;
+                    }
+                }
+                .nr-action {
+                    .btn-text {
+                        margin-top: 15px;
+                    }
+                }
+            }
+            &.feature-groups {
+                .card-body {
+                    display: grid;
+                    column-gap: 2em;
+                    grid-template-columns: repeat(2, minmax(0px, 1fr));
+                }
+            }
+        }
+    }
+}

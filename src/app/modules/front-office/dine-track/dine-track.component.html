@@ -1,0 +1,116 @@
+<div class="filter-bar">
+    <div class="filter-controls">
+        <div class="left-group">
+            <div class="form-group search-input">
+                <input type="text" class="form-control" placeholder="Search Room No / Guest Name" />
+                <span class="focus-border"></span>
+                <span class="filter-search"><i class="vi vi-search"></i></span>
+            </div>
+        </div>
+        <div class="right-group">
+            <div class="d-flex">
+
+            </div>
+            <div class="d-flex btn-list">
+                <button type="button" class="btn btn-xs btn-primary">NEW GUEST</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-wrap">
+
+    <ng-container *ngFor="let category of dineGuestInfo; let i = index">
+        <div class="card">
+            <div class="card-body">
+                <div class="category">
+                    <div class="category-header">
+                        <div class="category-name">{{ category.roomCategory }}
+                            <label class="count">{{ categoryTotalCount(category) }}</label>
+                        </div>
+                    </div>
+                    <div class="category-content">
+                        <div *ngFor="let item of category.items; let j = index" class="guest-card">
+                            <div class="guest-info">
+                                <div class="room-no">{{ item.roomNumber }}</div>
+                                <div class="guest-name">{{ item.guestName }}</div>
+                            </div>
+                            <div class="booking-info">
+                                <div class="info-group">
+                                    <div class="info-title">Room Name</div>
+                                    <div class="info-value">{{ item.roomName }}</div>
+                                </div>
+                                <div class="info-group">
+                                    <div class="info-title">Telephone</div>
+                                    <div class="info-value">{{ item.roomTelephoneNo }}</div>
+                                </div>
+                                <div class="info-group">
+                                    <div class="info-title">Attendees</div>
+                                    <div class="info-value guest-count">
+                                        <label>{{ item.adultsCount }} Adults</label>
+                                        <label>{{ item.childCount }} Child</label>
+                                    </div>
+                                </div>
+                                <div class="info-group"
+                                    *ngIf="!(item.isBreakfastServed && (item.pendingAdultsCount == '0' && item.pendingChildCount == '0'))">
+                                    <div class="info-title">Total Pending</div>
+                                    <div class="info-value attendees-count">
+                                        <label [ngClass]="{'completed': item.pendingAdultsCount == '0'}">{{
+                                            item.pendingAdultsCount }} Adults</label>
+                                        <label [ngClass]="{'completed': item.pendingChildCount == '0'}">{{
+                                            item.pendingChildCount }} Child</label>
+                                    </div>
+                                </div>
+                                <div class="info-group"
+                                    *ngIf="(item.isBreakfastServed && (item.pendingAdultsCount == '0' && item.pendingChildCount == '0'))">
+                                    <div class="info-title">Date And Time</div>
+                                    <div class="info-value">{{item.servedDateTime}}</div>
+                                </div>
+                            </div>
+                            <div class="booking-actions">
+                                <div
+                                    *ngIf="(item.isBreakfastServed && (item.pendingAdultsCount == '0' && item.pendingChildCount == '0'))">
+                                    <div class="success">Breakfast Served</div>
+                                    <div class="danger"><i class="vi vi-close"></i>Review Not Yet Submitted</div>
+                                </div>
+                                <div
+                                    *ngIf="!(item.isBreakfastServed && (item.pendingAdultsCount == '0' && item.pendingChildCount == '0'))">
+                                    <button type="button" class="btn btn-xs btn-success"
+                                        (click)="onConfirmGuestAttendance(item)">MARK ATTENDANCE</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+</div>
+
+
+<app-modal *ngIf="markAttendanceModal" (closed)="onModalClosed()" [customClass]="'modal-xs split-button'">
+    <div class="modal-body">
+        <div class="confirm-attendance">
+            <div class="room-info">
+                <div class="room-no">{{ roomInfo.roomNo }}</div>
+                <div class="guest-name">{{ roomInfo.guestName }}</div>
+            </div>
+            <div class="form-group handle-input">
+                <label class="minus" (click)="inputHandleMinus('pendingAdultsCount')"><label>-</label></label>
+                <input type="text" class="form-control" [value]="roomInfo.pendingAdultsCount + ' ADULTS'" readonly />
+                <label class="plus" (click)="inputHandlePlus('pendingAdultsCount')"><label>+</label></label>
+            </div>
+            <div class="form-group clear-bottom handle-input">
+                <label class="minus" (click)="inputHandleMinus('pendingChildCount')"><label>-</label></label>
+                <input type="text" class="form-control" [value]="roomInfo.pendingChildCount + ' CHILDS'" readonly />
+                <label class="plus" (click)="inputHandlePlus('pendingChildCount')"><label>+</label></label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer split-action">
+        <div class="btn-list">
+            <button type="button" class="btn btn-success" (click)="markGuestAttendance()">MARK ATTENDANCE</button>
+            <button type="button" class="btn btn-danger" (click)="onModalClosed()">CANCEL</button>
+        </div>
+    </div>
+</app-modal>

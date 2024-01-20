@@ -1,0 +1,98 @@
+<div class="page-wrap">
+    <div class="aside-left">
+        <div class="counter">
+            <div class="counter-item">
+                <div class="item-count">125</div>
+                <div class="item-title">Parked Cars</div>
+            </div>
+            <div class="counter-item">
+                <div class="item-count">44</div>
+                <div class="item-title">Today's Cars</div>
+            </div>
+            <div class="counter-item">
+                <div class="item-count">266</div>
+                <div class="item-title">Availabile</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="header-label">Car Valet Service</div>
+                <div class="search-icon">
+                    <label class="btn-action"><i class="vi vi-search"></i></label>
+                </div>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="valetCarParkingForm" autocomplete="off">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="inp-label">Guest Full Name</label>
+                                <input type="text" class="form-control" formControlName="guestFullName"
+                                    [ngClass]="controlClass('guestFullName')" />
+                                <span class="focus-border"></span>
+                                <label class="val-msg"
+                                    *ngIf="valetCarParkingForm.get('guestFullName')?.errors?.['maxlength']">Max Lenght
+                                    is 100</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="inp-label required">Vehicle Number (LPN)</label>
+                                <input type="text" class="form-control" formControlName="vehicleNumber"
+                                    [ngClass]="controlClass('vehicleNumber')" (input)="onVehicleNumberInput()" />
+                                <span class="focus-border"></span>
+                                <label class="val-msg"
+                                    *ngIf="valetCarParkingForm.get('vehicleNumber')?.errors?.['maxlength']">Invalid
+                                    Vehicle Number</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="inp-label required">Contact Number</label>
+                                <div class="input-group">
+                                    <div class="first-control lg-25">
+                                        <input type="text" class="form-control" formControlName="guestPhoneCode"
+                                            [ngClass]="controlClass('guestPhoneCode')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                    <div class="second-control lg-75">
+                                        <input type="number" class="form-control" formControlName="guestPhoneNumber"
+                                            [ngClass]="controlClass('guestPhoneNumber')" />
+                                        <span class="focus-border"></span>
+                                        <label class="val-msg"
+                                            *ngIf="valetCarParkingForm.get('guestPhoneNumber')?.errors?.['pattern']">Only
+                                            Numbers Are Allowed</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <button type="button" class="btn btn-success" (click)="onIssueValetParkingTicket()">
+                                <i class="vi vi-ticket-o"></i>ISSUE PARKING TICKET
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="aside-right">
+        <div class="card">
+            <div class="card-header">
+
+            </div>
+            <div class="card-body">
+                <div class="list-row" *ngFor="let item of valetParkingInfo">
+                    <div class="row-item token-no">{{ item.tokenNumber }}</div>
+                    <div class="row-item vehile-no">{{ item.vehicleNumber }}</div>
+                    <div class="row-item phone-no">{{ item.phoneNumber }}</div>
+                    <div class="row-item date-time">{{ item.parkedDateTime }}</div>
+                    <div class="row-item guest-name">{{ item.guestName }}</div>
+                    <div class="row-item status"
+                        [ngClass]="{'parked': item.currentStatusId === '1', 'exited': item.currentStatusId === '2'}">{{
+                        item.currentStatus }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

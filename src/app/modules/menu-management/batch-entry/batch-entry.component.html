@@ -1,0 +1,197 @@
+<div class="page-wrap">
+    <div class="aside-left">
+        <div class="card">
+            <div class="card-body" [ngClass]="{ 'disabled': loading }">
+                <div class="nav-item" (click)="loading ? null : onItemsQuickAdd()">Item Quick Add</div>
+                <div class="nav-item active">Item Batch Entry <i class="vi vi-chevron-right"></i></div>
+                <div class="nav-item" (click)="loading ? null : onItemsfeaturedGroup()"
+                    *ngIf="(categoryTypeId === '1' || categoryTypeId === '2')">Featured Group</div>
+            </div>
+        </div>
+    </div>
+    <div class="aside-right">
+        <form [formGroup]="menuBatchEntryForm" autocomplete="off">
+            <div class="card" [ngClass]="{'min-card' : (categoryTypeId === '3' || categoryTypeId === '4')}">
+                <div class="card-header">
+                    <div class="item-outlets">
+                        <multi-select-control [title]="'Allowed Outlets'" validation="required"
+                            formControlName="allowedOutlets" [noLabel]="true" placeholder="Allowed Outlets"
+                            [options]="['Outlet 1', 'Outlet 2', 'Outlet 3','Outlet 4']"
+                            customClass="clear-bottom no-label"
+                            [validationClass]="(menuBatchEntryForm.get('allowedOutlets')?.invalid && menuBatchEntryForm.get('allowedOutlets')?.touched) ?? false"></multi-select-control>
+                    </div>
+                    <div class="item-category">
+                        <select-control title="Category" validation="required" formControlName="categoryName"
+                            [noLabel]="true" controlAddType="category" [selectedItem]="categoryItem"
+                            [options]="categoryOptions" placeholder="Category" customClass="clear-bottom no-label"
+                            (optionSelected)="selectCategory($event)"
+                            [validationClass]="(menuBatchEntryForm.get('categoryName')?.invalid && menuBatchEntryForm.get('categoryName')?.touched) ?? false">
+                        </select-control>
+                    </div>
+                    <div class="item-subcategory">
+                        <select-control title="Sub Category" formControlName="subCategoryName" [noLabel]="true"
+                            controlAddType="subCategory" [selectedItem]="subCategoryItem" [options]="subCategoryOptions"
+                            placeholder="Sub Category" customClass="clear-bottom no-label"
+                            (optionSelected)="selectSubCategory($event)">
+                        </select-control>
+                    </div>
+                    <div class="item-action">
+                        <button type="button" class="btn btn-xs btn-primary" (click)="addNewMenuItem()">Add New
+                            Row</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div formArrayName="menuArray">
+                        <div class="menu-row" *ngFor="let item of menuInfoArray.controls; let i = index;">
+                            <div [formGroupName]="i">
+                                <div class="menu-item">
+                                    <div class="item-img" *ngIf="(categoryTypeId === '1' || categoryTypeId === '2')">
+                                        <div class="img-wrap" [ngClass]="{'non-blank': selectedImage[i] }">
+                                            <ng-container *ngIf="!selectedImage[i]">
+                                                <label><i class="vi vi-camera"></i></label>
+                                            </ng-container>
+                                            <ng-container *ngIf="selectedImage[i]">
+                                                <img [src]="selectedImage[i]" />
+                                                <div class="remove" (click)="removeImage(i)"><i class="vi vi-close"></i>
+                                                </div>
+                                            </ng-container>
+                                            <input type="file" formControlName="imageUrl"
+                                                (change)="onImageUpload($event, i)" accept="image/*" />
+                                        </div>
+                                    </div>
+                                    <div class="item-name">
+                                        <div class="form-group clear-bottom">
+                                            <input type="text" class="form-control" placeholder="Item Name"
+                                                formControlName="itemName"
+                                                [ngClass]="controlClass('menuArray', i, 'itemName')" />
+                                            <span class="focus-border"></span>
+                                            <label class="val-msg"
+                                                *ngIf="menuBatchEntryForm.get('menuArray')?.get(i.toString())?.get('itemName')?.errors?.['maxlength']">
+                                                Max Length is 100</label>
+                                        </div>
+                                    </div>
+                                    <div class="item-type" *ngIf="(categoryTypeId === '1' || categoryTypeId === '2')">
+                                        <select-control title="Type" validation="required" [noLabel]="true"
+                                            formControlName="itemTypeName" [selectedItem]="itemTypeItem[i]"
+                                            [options]="itemTypeOptions" placeholder="Type"
+                                            customClass="clear-bottom no-label"
+                                            (optionSelected)="selectItemType($event, i)"
+                                            [validationClass]="controlClass('menuArray', i, 'itemTypeName')['is-invalid'] ?? false">
+                                        </select-control>
+                                    </div>
+                                    <div class="item-price">
+                                        <div class="form-group clear-bottom">
+                                            <input type="text" class="form-control price-input" placeholder="Price"
+                                                formControlName="itemPrice"
+                                                [ngClass]="controlClass('menuArray', i, 'itemPrice')" />
+                                            <span class="focus-border"></span>
+                                            <label class="price-icon"><i class="vi vi-rupee"></i></label>
+                                            <label class="val-msg"
+                                                *ngIf="menuBatchEntryForm.get('menuArray')?.get(i.toString())?.get('itemPrice')?.errors?.['pattern']">
+                                                Only Numbers Are Allowed</label>
+                                        </div>
+                                    </div>
+                                    <div class="item-tax">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" placeholder="Tax"
+                                                formControlName="itemTax"
+                                                [ngClass]="controlClass('menuArray', i, 'itemTax')" />
+                                            <span class="focus-border"></span>
+                                            <label class="val-msg"
+                                                *ngIf="menuBatchEntryForm.get('menuArray')?.get(i.toString())?.get('itemTax')?.errors?.['pattern']">
+                                                Invalid Tax Format</label>
+                                        </div>
+                                    </div>
+                                    <div class="item-price">
+                                        <div class="form-group">
+                                            <input type="number" class="form-control price-input"
+                                                placeholder="Final Price" formControlName="itemFinalPrice"
+                                                [ngClass]="controlClass('menuArray', i, 'itemFinalPrice')" readonly />
+                                            <span class="focus-border"></span>
+                                            <label class="price-icon"><i class="vi vi-rupee"></i></label>
+                                            <label class="val-msg"
+                                                *ngIf="menuBatchEntryForm.get('menuArray')?.get(i.toString())?.get('itemFinalPrice')?.errors?.['pattern']">
+                                                Only Numbers Are Allowed</label>
+                                        </div>
+                                    </div>
+                                    <div class="item-desc">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control clear-bottom"
+                                                [ngClass]="controlClass('description')" placeholder="Description"
+                                                formControlName="description" />
+                                            <span class="focus-border"></span>
+                                            <label class="val-msg"
+                                                *ngIf="menuBatchEntryForm.get('menuArray')?.get(i.toString())?.get('description')?.errors?.['maxlength']">
+                                                Max Length is 500</label>
+                                        </div>
+                                    </div>
+                                    <div class="item-action-list">
+                                        <div class="item-action" (clickOutside)="closeItemAdditionalInfo(i)">
+                                            <label class="action-icon" title="More Options" (click)="toggleItemInfo(i)">
+                                                <i class="vi vi-others-o"></i>
+                                            </label>
+                                            <div class="more-list" [ngClass]="{'list-lg': categoryTypeId === '4'}"
+                                                *ngIf="itemAdditionalInfo[i]">
+                                                <div class="list-item">
+                                                    <label class="checkbox-container clear-bottom">
+                                                        <input type="checkbox" checked formControlName="isAvailable" />
+                                                        <span class="checkmark"></span>Available
+                                                    </label>
+                                                </div>
+                                                <div class="list-item"
+                                                    *ngIf="(categoryTypeId === '1' || categoryTypeId === '2')">
+                                                    <label class="checkbox-container clear-bottom">
+                                                        <input type="checkbox" formControlName="isBestSeller" />
+                                                        <span class="checkmark"></span>Best Seller
+                                                    </label>
+                                                </div>
+                                                <div class="list-item" *ngIf="(categoryTypeId === '4')">
+                                                    <label class="checkbox-container clear-bottom">
+                                                        <input type="checkbox" formControlName="isBestSeller" />
+                                                        <span class="checkmark"></span>Most Demanded
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item-action">
+                                            <label class="action-icon" title="Remove This Menu Item"
+                                                (click)="removeItemRow(i)"><i class="vi vi-trash"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-list">
+                        <button type="button" class="btn btn-success" (click)="onSaveAllMenuItems()">ADD TO
+                            MENU</button>
+                        <button type="button" class="btn btn-danger" (click)="onCancelClick()">BACK TO MENU</button>
+                    </div>
+                </div>
+                <div class="loader-wrap" *ngIf="loading">
+                    <app-spinner [pageLoader]="loading"></app-spinner>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<app-dialog *ngIf="emptyItemDialog" type="info" [customClass]="'delete justify'" [title]="'Warning!'"
+    [message]="'We cannot proceed without adding items.'" (cancelClick)="onCancelInfo()"></app-dialog>
+
+<app-dialog *ngIf="formChangeWarningDialog" type="confirm" [customClass]="'delete justify'" [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onConfirmClearChanges()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+
+<app-dialog *ngIf="formChangeDetectedDialog" type="confirm" [customClass]="'delete justify'"
+    [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onBackConfirmClick()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+<app-toaster *ngIf="alertSuccess" type="success" position="top-right" customClass="" [title]="false"
+    message="Great, there's few new addition to the menu!"></app-toaster>

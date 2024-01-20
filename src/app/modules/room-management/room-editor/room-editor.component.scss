@@ -1,0 +1,98 @@
+@mixin count {
+    height: 18px;
+    padding: 0 5px;
+    min-width: 22px;
+    margin-left: 5px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #4a4444;
+    font-size: 12.5px;
+    position: relative;
+    border-radius: 4px;
+    text-align: center;
+    background: #e7e7e7;
+}
+
+.filter-bar {
+    .filter-controls {
+        gap: 25px;
+        display: flex;
+        height: inherit;
+        padding: 0 25px;
+        position: relative;
+        align-items: center;
+        justify-content: space-between;
+        .left-group {
+            width: 300px;
+        }
+        .right-group {
+            flex: 1;
+            display: flex;
+            padding: 0 5px;
+            height: inherit;
+            position: relative;
+            align-items: center;
+            width: calc(100% - 300px);
+            justify-content: space-between;
+
+            .btn-list {
+                .btn {
+                    min-width: 125px;
+                }
+            }
+        }
+    }
+}
+
+.page-wrap {
+    gap: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px 25px;
+    .aside-left {
+        top: 0;
+        z-index: 3;
+        width: 300px;
+        height: 100%;
+        position: sticky;
+        .card {
+            height: 100%;
+            .card-header {
+                padding: 0.5rem 1.25rem;
+                justify-content: space-between;
+                .count {
+                    @include count;
+                    color: #ffffff;
+                    background: #12ceb7;
+                }
+                .h-action {
+                    right: -5px;
+                    display: grid;
+                    padding: 5px 5px;
+                    position: relative;
+                    place-items: center;
+                }
+            }
+            .card-body {
+                padding: 0;
+                height: calc(100% - 45px);
+            }
+        }
+    }
+    .aside-right {
+        flex: 1;
+        position: relative;
+        width: calc(100% - 300px);
+        .card {
+            height: 100%;
+            margin-bottom: 0;
+            .card-header {
+                padding: 0 1.5rem;                
+            }
+            .card-body {
+                padding: 1.25rem 1.5rem 0;
+               
+            }
+        }
+    }
+}

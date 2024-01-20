@@ -1,0 +1,193 @@
+<div class="page-wrap">
+    <div class="aside-left">
+        <div class="card">
+            <div class="card-body" [ngClass]="{ 'disabled': loading }">
+                <div class="nav-item active">Room Quick Add <i class="vi vi-chevron-right"></i></div>
+                <div class="nav-item" (click)="loading ? null : onRoomsBatchEntry()">Room Batch Entry</div>
+            </div>
+        </div>
+    </div>
+    <div class="aside-right">
+        <form [formGroup]="roomQuickAddForm" autocomplete="off">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-title-group first">
+                                <div class="form-title">Room Basic Information</div>
+                                <div class="form-sub-title">A high-quality image is mandatory. Choose the relevant
+                                    category, and sub-category is optional. Specify outlets where the item will be
+                                    available. You can select 'None' if the item doesn't belong to any type.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="inp-label required">Room Category</label>
+                                <input type="text" class="form-control" formControlName="roomCategoryName"
+                                    [ngClass]="controlClass('roomCategoryName')" />
+                                <span class="focus-border"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="inp-label required">Block</label>
+                                <input type="text" class="form-control" formControlName="roomBlock"
+                                    [ngClass]="controlClass('roomBlock')" />
+                                <span class="focus-border"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="inp-label required">Floor</label>
+                                <input type="text" class="form-control" formControlName="roomFloor"
+                                    [ngClass]="controlClass('roomFloor')" />
+                                <span class="focus-border"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="inp-label required">Room Number</label>
+                                <input type="text" class="form-control" formControlName="roomNumber"
+                                    [ngClass]="controlClass('roomNumber')" />
+                                <span class="focus-border"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="inp-label">Bed Type</label>
+                                <input type="text" class="form-control" formControlName="roomBedType"
+                                    [ngClass]="controlClass('roomBedType')" />
+                                <span class="focus-border"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <select-control title="Max Adult Occupancy" validation="required"
+                                formControlName="maxAdultOccupancy" [options]="adultCountOptions"
+                                [validationClass]="(roomQuickAddForm.get('maxAdultOccupancy')?.invalid && roomQuickAddForm.get('maxAdultOccupancy')?.touched) ?? false">
+                            </select-control>
+                        </div>
+                        <div class="col-lg-3">
+                            <select-control title="Max Child Occupancy" validation="required"
+                                formControlName="maxChildOccupancy" [options]="childrenCountOptions"
+                                [validationClass]="(roomQuickAddForm.get('maxChildOccupancy')?.invalid && roomQuickAddForm.get('maxChildOccupancy')?.touched) ?? false">
+                            </select-control>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-title-group">
+                                <div class="form-title">Room Status Configuration</div>
+                                <div class="form-sub-title">A high-quality image is mandatory. Choose the relevant
+                                    category, and sub-category is optional. Specify outlets where the item will be
+                                    available. You can select 'None' if the item doesn't belong to any type.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="rs-list-wrap">
+                                <div class="checkbox-list">
+                                    <label class="checkbox-container clear-bottom">
+                                        <input type="checkbox" formControlName="isRoomVacant" />
+                                        <span class="checkmark"></span>Unoccupied Room
+                                    </label>
+                                    <label class="checkbox-container clear-bottom">
+                                        <input type="checkbox" formControlName="isRoomOccupied" />
+                                        <span class="checkmark"></span>Occupied Room
+                                    </label>
+                                    <label class="checkbox-container clear-bottom">
+                                        <input type="checkbox" formControlName="isCleaningInProgress" />
+                                        <span class="checkmark"></span>Cleaning In-Progress
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-title-group">
+                                <div class="form-title">QR Tagging for Rooms</div>
+                                <div class="form-sub-title">A high-quality image is mandatory. Choose the relevant
+                                    category, and sub-category is optional. Specify outlets where the item will be
+                                    available. You can select 'None' if the item doesn't belong to any type.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="qc-section">
+                                <div class="qc-container">
+                                    <qr-code [value]="qrCodeUrl" size="150" errorCorrectionLevel="M"
+                                        [margin]="2"></qr-code>
+                                </div>
+                                <div class="qc-info">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="qc-desc">A high-quality image is mandatory. Choose the relevant
+                                                category, and sub-category is optional. Specify outlets where the item
+                                                will be available. You can select 'None' if the item doesn't belong to
+                                                any type.</div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label class="inp-label required">Quick Scan Url</label>
+                                                <input type="text" class="form-control" formControlName="quickScanUrl"
+                                                    [ngClass]="controlClass('quickScanUrl')" [(ngModel)]="qrCodeUrl" />
+                                                <span class="focus-border"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="footer-group">
+                        <div class="checkbox-list">
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isRoomOnHold" />
+                                <span class="checkmark"></span>On Hold
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isUnderMaintenance" />
+                                <span class="checkmark"></span>Under Maintenance
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isRoomDisable" />
+                                <span class="checkmark"></span>Disable
+                            </label>
+                        </div>
+                        <div class="btn-list">
+                            <button type="button" class="btn btn-success">ADD NEW ROOM</button>
+                            <button type="button" class="btn btn-danger">BACK TO ROOM</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="loader-wrap" *ngIf="loading">
+                    <app-spinner [pageLoader]="loading"></app-spinner>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+
+<!-- <app-dialog *ngIf="formChangeWarningDialog" type="confirm" [customClass]="'delete justify'" [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onConfirmClearChanges()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+<app-dialog *ngIf="formChangeDetectedDialog" type="confirm" [customClass]="'delete justify'"
+    [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onBackConfirmClick()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+<app-toaster *ngIf="alertSuccess" type="success" position="top-right" customClass="" [title]="false"
+    message="Great, there's a new addition to the menu!"></app-toaster> -->

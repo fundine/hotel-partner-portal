@@ -1,0 +1,26 @@
+<div class="card" *ngFor="let item of roomAvailability">
+    <div class="card-header">
+        <label>{{ item.blockName }}</label>
+        <label>{{ item.floorNumber }}</label>
+    </div>
+    <div class="card-body">
+        <ng-container>
+            <div class="room-layout card-md">
+                <ng-container *ngFor="let item of item.items">
+                    <div class="room-card">
+                        <div class="status-info" [ngClass]="item.roomStatus">
+                            <div class="status-icon">
+                                <i class="vi"
+                                    [ngClass]="{'vi-bed-o': item.roomStatusId === '1'|| item.roomStatusId === '4' || item.roomStatusId === '5', 'vi-room-occupied-o': item.roomStatusId === '2', 'vi-room-cleaning-o': item.roomStatusId === '3'}"></i>
+                            </div>
+                            <div class="room-no">{{ item.roomNumber }}</div>
+                        </div>
+                        <div class="room-info">
+                            sdfgh
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </ng-container>
+    </div>
+</div>

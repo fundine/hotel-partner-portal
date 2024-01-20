@@ -1,0 +1,110 @@
+<div class="app-header">
+    <div class="header-actions">
+        <div class="menu-icon">
+            <a (click)="sidemenuToggle()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </a>
+        </div>
+        <div class="page-name">{{ pageName }}</div>
+    </div>
+    <div class="header-nav">
+        <div class="header-nav-link">
+            <a (click)="isNightMode()">
+                <i class="vi" [ngClass]="{'vi-moon': nightModeIcon != true, 'vi-sun': nightModeIcon == true}"></i>
+            </a>
+        </div>
+        <div class="header-nav-link">
+            <a *ngIf="!isFullScreenMode" (click)="openFullscreen()">
+                <i class="vi vi-maximize"></i>
+            </a>
+            <a *ngIf="isFullScreenMode" (click)="closeFullscreen()">
+                <i class="vi vi-minimize"></i>
+            </a>
+        </div>
+        <div class="header-nav-link" (clickOutside)="closeUserNotifications()">
+            <a (click)="toggleUserNotifications()"><i class="vi vi-bell"></i></a>
+            <div class="multi-menu-list list-lg notification-list" *ngIf="notificationsList">
+                <div class="list-head">
+                    <div class="head-title">You have notifications</div>
+                    <div><label class="badge rounded-pill">3</label></div>
+                </div>
+                <div class="list-item">
+                    <div class="media">
+                        <div class="media-icon align-center bg-primary-gradient mre-2">
+                            <i class="vi vi-chat"></i>
+                        </div>
+                        <div class="media-body">
+                            <div class="notification-label">New message received</div>
+                            <div class="notification-subtext">2 hours ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="media">
+                        <div class="media-icon align-center bg-secondary-gradient mre-2">
+                            <i class="vi vi-shopping-bag"></i>
+                        </div>
+                        <div class="media-body">
+                            <div class="notification-label">New Order received</div>
+                            <div class="notification-subtext">4 hours ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <div class="media">
+                        <div class="media-icon align-center bg-success-gradient mre-2">
+                            <i class="vi vi-gift"></i>
+                        </div>
+                        <div class="media-body">
+                            <div class="notification-label">Loyalty Points Redeemed</div>
+                            <div class="notification-subtext">4 hours ago</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-item list-footer">
+                    <div>View all notifications</div>
+                </div>
+            </div>
+        </div>
+        <div class="header-nav-link">
+            <a><i class="vi vi-help-circle"></i></a>
+        </div>
+        <div class="header-nav-link user-img" (clickOutside)="closeUserList()">
+            <a (click)="toggleUserList()">
+                <img src="../../../assets/images/client/client-logo.png" />
+            </a>
+
+            <div class="multi-menu-list list-md user-list" *ngIf="userList">
+                <div class="list-item" (click)="myProfile()">
+                    <div class="item-icon"><i class="vi vi-user"></i></div>
+                    <div class="item-label">My Profile</div>
+                </div>
+                <div class="list-item" (click)="passwordChangeRequest()">
+                    <div class="item-icon"><i class="vi vi-key"></i></div>
+                    <div class="item-label">Change Password</div>
+                </div>
+                <div class="list-item" (click)="lockScreenRequest()">
+                    <div class="item-icon"><i class="vi vi-lock"></i></div>
+                    <div class="item-label">Lock Screen</div>
+                </div>
+                <div class="list-item list-footer" (click)="userLogoutRequest()">
+                    <div class="item-icon"><i class="vi vi-power-off"></i></div>
+                    <div class="item-label">Logout</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-modal *ngIf="changePasswordModal" (closed)="onModalClosed()" [header]="'show'" [modalTitle]="'CHANGE PASSWORD'"
+    [customClass]="'modal-sm'">
+    <div class="modal-body">
+        <app-change-password (closeChangePasswordModal)="closeChangePasswordModal()"></app-change-password>
+    </div>
+</app-modal>
+
+<app-dialog *ngIf="userLogoutDialog" type="confirm" [customClass]="'delete justify'" [title]="'Logout?'"
+    [message]="'Are you sure you want to logout?'" (confirmClick)="onConfirmLogout()"
+    (cancelClick)="onCancelLogout()"></app-dialog>

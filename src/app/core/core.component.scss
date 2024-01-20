@@ -1,0 +1,31 @@
+.app-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    .app-navbar {
+        top: 0;
+        left: 0;
+        z-index: 10;
+        width: 80px;
+        position: fixed;
+        margin-left: -80px;
+        transition: 0.5s ease;
+    }
+    .app-body {
+        width: 100vw;
+        transition: 0.5s ease;
+        .page-container {
+            position: relative;
+            overflow-y: overlay;
+            height: calc(100vh - 50px);
+        }
+    }
+    &.open {
+        .app-navbar {
+            margin-left: 0;
+        }
+        .app-navbar + .app-body {
+            padding-left: 80px;
+        }
+    }
+}

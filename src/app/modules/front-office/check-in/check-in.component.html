@@ -1,0 +1,324 @@
+<ng-container *ngIf="showAllGuestList">
+    <div class="filter-bar">
+        <div class="filter-controls">
+            <div class="left-group">
+
+            </div>
+            <div class="right-group">
+                <div class="d-flex">
+                    <div class="form-group search-input">
+                        <input type="text" class="form-control" placeholder="Search Room No / Guest Name" />
+                        <span class="focus-border"></span>
+                        <span class="filter-search"><i class="vi vi-search"></i></span>
+                    </div>
+                </div>
+                <div class="d-flex btn-list">
+                    <button type="button" class="btn btn-xs btn-secondary">UNOCCUPIED</button>
+                    <button type="button" class="btn btn-xs btn-primary" (click)="addNewCheckIn()">NEW CHECK-IN</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="page-wrap">
+        <div class="aside-right">
+            <ng-container *ngFor="let category of roomDetails; let i = index">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="category">
+                            <div class="category-header">
+                                <div class="category-name">{{ category.roomCategory }}
+                                    <label class="count">{{ categoryTotalCount(category) }}</label>
+                                </div>
+                            </div>
+                            <div class="category-content">
+                                <div *ngFor="let item of category.items; let j = index" class="guest-card">
+                                    <div class="guest-info">
+                                        <div class="room-no">{{ item.roomNumber }}</div>
+                                        <div class="guest-name">{{ item.guestName }}</div>
+                                        <div class="room-name">{{ item.roomName }}</div>
+                                    </div>
+                                    <div class="booking-info">
+                                        <div class="info-group">
+                                            <div class="info-title">Check-In</div>
+                                            <div class="info-value">{{ item.checkInTime }}</div>
+                                        </div>
+                                        <div class="info-group">
+                                            <div class="info-title">Check-Out</div>
+                                            <div class="info-value">{{ item.checkOutTime }}</div>
+                                        </div>
+                                        <div class="info-group">
+                                            <div class="info-title">Occupancy</div>
+                                            <div class="info-value guest-count">
+                                                <label>{{ item.roomsOccupied }} Room</label>
+                                                <label>{{ item.adultsCount }} Adults</label>
+                                                <label>{{ item.childCount }} Child</label>
+                                            </div>
+                                        </div>
+                                        <div class="info-group">
+                                            <div class="info-title">Nights</div>
+                                            <div class="info-value"><i class="vi vi-moon-star-o"></i>{{ item.totalNights
+                                                }}
+                                            </div>
+                                        </div>
+                                        <div class="info-group">
+                                            <div class="info-title">Phone</div>
+                                            <div class="info-value">{{ item.guestPhoneNo }}</div>
+                                        </div>
+                                        <div class="info-group">
+                                            <div class="info-title">Email Id</div>
+                                            <div class="info-value email">{{ item.guestEmail }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="booking-actions">
+                                        <div class="tags">
+                                            <label><i class="vi vi-check"></i>Breakfast Included</label>
+                                            <label><i class="vi vi-check"></i>Parking Accessed</label>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-xs btn-success"
+                                                (click)="openGuestProfile(i, j)">GUEST PROFILE</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="showGuestProfile">
+    <div class="page-wrap guest-profile">
+        <div class="aside-left">
+            <div class="guest-info">
+                <div class="guest-room-no">2005</div>
+                <div class="guest-name">Vishnu Anandababu</div>
+                <div class="guest-room-cat">
+                    <label><i class="vi vi-bed-o"></i>Super Deluxe Room</label>
+                </div>
+                <div class="guest-duration">
+                    <label>1 Room</label>
+                    <label>2 Adults</label>
+                    <label>1 Child</label>
+                    <label><i class="vi vi-moon-star-o"></i>2</label>
+                </div>
+            </div>
+            <div class="booking-info">
+                <div class="info-group">
+                    <div class="info-title">Check-In</div>
+                    <div class="info-value">Jan 12, 2024. 12:45 PM</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-title">Check-Out</div>
+                    <div class="info-value">Jan 12, 2024. 11:00 AM</div>
+                </div>
+            </div>
+            <div class="contact-info">
+                <div class="info-group">
+                    <div class="info-title">Phone</div>
+                    <div class="info-value">+91 8089583858</div>
+                </div>
+                <div class="info-group">
+                    <div class="info-title">Email Id</div>
+                    <div class="info-value">vishnuanandababu@gmail.com</div>
+                </div>
+            </div>
+            <div class="btn-checkout">
+                <button type="button" class="btn btn-sm btn-success">REQUEST CHECKOUT</button>
+            </div>
+        </div>
+        <div class="aside-right">
+            <div class="guest-nav-link">
+                <div class="tab-link">
+                    <div class="tab-item" (click)="onGuestNavLink('accounts')"
+                        [ngClass]="{'active': currentTab === 'accounts' }" title="Accounts">Accounts</div>
+                    <div class="tab-item" (click)="onGuestNavLink('orders')"
+                        [ngClass]="{'active': currentTab === 'orders' }" title="Orders">Orders</div>
+                    <div class="tab-item" (click)="onGuestNavLink('reviews')"
+                        [ngClass]="{'active': currentTab === 'reviews' }" title="Reviews">Reviews</div>
+                    <div class="tab-item" (click)="onGuestNavLink('guestprofile')"
+                        [ngClass]="{'active': currentTab === 'guestprofile' }" title="Guest Profile">Guest Profile</div>
+                    <div class="tab-item" (click)="onGuestNavLink('activityfeed')"
+                        [ngClass]="{'active': currentTab === 'activityfeed' }" title="Activity Feed">Activity Feed</div>
+                </div>
+                <div class="navlinkbar-action">
+                    <button type="button" class="btn btn-xs btn-outline-danger" (click)="backToGuestList()">BACK TO
+                        GUEST LIST</button>
+                </div>
+            </div>
+            <div class="activity-panel">
+                <ng-container *ngIf="currentTab === 'accounts'">
+                    <app-guestaccounts></app-guestaccounts>
+                </ng-container>
+                <ng-container *ngIf="currentTab === 'orders'">
+                    <app-guestorders></app-guestorders>
+                </ng-container>
+                <ng-container *ngIf="currentTab === 'reviews'">
+                    <app-guestreviews></app-guestreviews>
+                </ng-container>
+                <ng-container *ngIf="currentTab === 'guestprofile'">
+                    <app-guestprofile></app-guestprofile>
+                </ng-container>
+                <ng-container *ngIf="currentTab === 'activityfeed'">
+                    <app-guestactivityfeed></app-guestactivityfeed>
+                </ng-container>
+            </div>
+        </div>
+
+    </div>
+</ng-container>
+
+
+<app-modal *ngIf="addNewCheckInModal" (closed)="onModalClosed()" [header]="'show'" [customClass]="'modal-lg'"
+    [modalTitle]="'ONBOARD NEW GUEST'">
+    <div class="modal-body">
+        <form [formGroup]="guestCheckInForm" autocomplete="off">
+            <div class="checkin-form">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="inp-label required">Primary Guest Full Name</label>
+                            <input type="text" class="form-control" formControlName="guestFullName"
+                                [ngClass]="controlClass('guestFullName')" />
+                            <span class="focus-border"></span>
+                            <label class="val-msg"
+                                *ngIf="guestCheckInForm.get('guestFullName')?.errors?.['maxlength']">Max
+                                Length is
+                                100</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <select-control title="Adults" validation="required" formControlName="totalAdults"
+                            [options]="adultCountOptions"
+                            [validationClass]="(guestCheckInForm.get('totalAdults')?.invalid && guestCheckInForm.get('totalAdults')?.touched) ?? false">
+                        </select-control>
+                    </div>
+                    <div class="col-lg-2">
+                        <select-control title="Children" validation="required" formControlName="totalChildren"
+                            [options]="childrenCountOptions"
+                            [validationClass]="(guestCheckInForm.get('totalChildren')?.invalid && guestCheckInForm.get('totalChildren')?.touched) ?? false">
+                        </select-control>
+                    </div>
+                    <div class="col-lg-2">
+                        <select-control title="Total Rooms" validation="required" formControlName="totalRooms"
+                            [options]="roomCountOptions"
+                            [validationClass]="(guestCheckInForm.get('totalRooms')?.invalid && guestCheckInForm.get('totalRooms')?.touched) ?? false">
+                        </select-control>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="inp-label required">Country</label>
+                            <input type="text" class="form-control" formControlName="country"
+                                [ngClass]="controlClass('country')" />
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="inp-label required">Country Code</label>
+                            <input type="text" class="form-control" formControlName="countryCode"
+                                [ngClass]="controlClass('countryCode')" />
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="inp-label required">WhatsApp Number</label>
+                            <input type="text" class="form-control" formControlName="whatsappNumber"
+                                [ngClass]="controlClass('whatsappNumber')" />
+                            <span class="focus-border"></span>
+                            <label class="val-msg"
+                                *ngIf="guestCheckInForm.get('whatsappNumber')?.errors?.['pattern']">Only
+                                Numbers Are Allowed</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="inp-label required">Email ID</label>
+                            <input type="email" class="form-control" formControlName="guestEmail"
+                                [ngClass]="controlClass('guestEmail')" />
+                            <span class="focus-border"></span>
+                            <label class="val-msg" *ngIf="guestCheckInForm.get('guestEmail')?.errors?.['email']">Invalid
+                                Email Format</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="inp-label required">Room Category</label>
+                            <input type="text" class="form-control" formControlName="roomCategory"
+                                [ngClass]="controlClass('roomCategory')" />
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="inp-label required">Room Number</label>
+                            <input type="text" class="form-control" formControlName="roomNumber"
+                                [ngClass]="controlClass('roomNumber')" />
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="inp-label required">Check-In Time</label>
+                            <input type="datetime-local" class="form-control cal-input" formControlName="checkinTime"
+                                [ngClass]="controlClass('checkinTime')" />
+                            <span class="focus-border"></span>
+                            <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="inp-label required">Check-Out Time</label>
+                            <input type="datetime-local" class="form-control cal-input" formControlName="checkoutTime"
+                                [ngClass]="controlClass('checkoutTime')" />
+                            <span class="focus-border"></span>
+                            <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                            <label class="val-msg" *ngIf="guestCheckInForm.hasError('dateRangeInvalid')">Checkout Cannot
+                                Be Before Check-In</label>
+                        </div>
+                    </div>                   
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="checkbox-list">
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isBreakfastIncluded" />
+                                <span class="checkmark"></span>Breakfast Included
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isLunchIncluded" />
+                                <span class="checkmark"></span>Lunch Included
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isDinnerIncluded" />
+                                <span class="checkmark"></span>Dinner Included
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isAllowFeedback" />
+                                <span class="checkmark"></span>Allow Feedback
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="btn-list">
+            <button class="btn btn-sm btn-success" (click)="onCheckInGuest()">CHECK-IN</button>
+            <button class="btn btn-sm btn-danger" (click)="onModalClosed()">CANCEL</button>
+        </div>
+    </div>
+</app-modal>
+
+<app-dialog *ngIf="formChangeWarningDialog" type="confirm" [customClass]="'delete justify'" [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onConfirmClearChanges()" (cancelClick)="onCancelClearChanges()"></app-dialog>

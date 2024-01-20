@@ -1,0 +1,142 @@
+<div class="card">
+    <div class="card-body">
+        <form [formGroup]="guestCheckInForm" autocomplete="off">
+            <div class="checkin-form">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="inp-label required">Primary Guest Full Name</label>
+                            <input type="text" class="form-control" formControlName="guestFullName"
+                                [ngClass]="controlClass('guestFullName')" />
+                            <span class="focus-border"></span>
+                            <label class="val-msg"
+                                *ngIf="guestCheckInForm.get('guestFullName')?.errors?.['maxlength']">Max
+                                Length is
+                                100</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <select-control title="Adults" validation="required" formControlName="totalAdults"
+                            [options]="adultCountOptions"
+                            [validationClass]="(guestCheckInForm.get('totalAdults')?.invalid && guestCheckInForm.get('totalAdults')?.touched) ?? false">
+                        </select-control>
+                    </div>
+                    <div class="col-lg-2">
+                        <select-control title="Children" validation="required" formControlName="totalChildren"
+                            [options]="childrenCountOptions"
+                            [validationClass]="(guestCheckInForm.get('totalChildren')?.invalid && guestCheckInForm.get('totalChildren')?.touched) ?? false">
+                        </select-control>
+                    </div>
+                    <div class="col-lg-2">
+                        <select-control title="Total Rooms" validation="required" formControlName="totalRooms"
+                            [options]="roomCountOptions"
+                            [validationClass]="(guestCheckInForm.get('totalRooms')?.invalid && guestCheckInForm.get('totalRooms')?.touched) ?? false">
+                        </select-control>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="inp-label required">Country</label>
+                            <input type="text" class="form-control" formControlName="country"
+                                [ngClass]="controlClass('country')" />
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="inp-label required">Country Code</label>
+                            <input type="text" class="form-control" formControlName="countryCode"
+                                [ngClass]="controlClass('countryCode')" />
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="inp-label required">WhatsApp Number</label>
+                            <input type="text" class="form-control" formControlName="whatsappNumber"
+                                [ngClass]="controlClass('whatsappNumber')" />
+                            <span class="focus-border"></span>
+                            <label class="val-msg"
+                                *ngIf="guestCheckInForm.get('whatsappNumber')?.errors?.['pattern']">Only
+                                Numbers Are Allowed</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="inp-label required">Email ID</label>
+                            <input type="email" class="form-control" formControlName="guestEmail"
+                                [ngClass]="controlClass('guestEmail')" />
+                            <span class="focus-border"></span>
+                            <label class="val-msg" *ngIf="guestCheckInForm.get('guestEmail')?.errors?.['email']">Invalid
+                                Email Format</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label class="inp-label required">Room Category</label>
+                            <input type="text" class="form-control" formControlName="roomCategory"
+                                [ngClass]="controlClass('roomCategory')" />
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            <label class="inp-label required">Room Number</label>
+                            <input type="text" class="form-control" formControlName="roomNumber"
+                                [ngClass]="controlClass('roomNumber')" />
+                            <span class="focus-border"></span>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="inp-label required">Check-In Time</label>
+                            <input type="datetime-local" class="form-control cal-input" formControlName="checkinTime"
+                                [ngClass]="controlClass('checkinTime')" />
+                            <span class="focus-border"></span>
+                            <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="inp-label required">Check-Out Time</label>
+                            <input type="datetime-local" class="form-control cal-input" formControlName="checkoutTime"
+                                [ngClass]="controlClass('checkoutTime')" />
+                            <span class="focus-border"></span>
+                            <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                            <label class="val-msg" *ngIf="guestCheckInForm.hasError('dateRangeInvalid')">Checkout Cannot
+                                Be Before Check-In</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="checkbox-list">
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isBreakfastIncluded" />
+                                <span class="checkmark"></span>Breakfast Included
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isLunchIncluded" />
+                                <span class="checkmark"></span>Lunch Included
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isDinnerIncluded" />
+                                <span class="checkmark"></span>Dinner Included
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer">
+        <div class="btn-list">
+            <button class="btn btn-sm btn-success" (click)="onCheckInGuest()">CHECK-IN</button>
+            <button class="btn btn-sm btn-danger">CANCEL</button>
+        </div>
+    </div>
+</div>

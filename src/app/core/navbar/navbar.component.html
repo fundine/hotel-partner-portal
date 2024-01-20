@@ -1,0 +1,18 @@
+<div class="main-menu">
+    <div class="app-logo">
+        <a (click)="returnToHome()"><img src="../../../assets/images/branding/logo-sm.svg" /></a>
+    </div>
+    <ul>
+        <ng-container *ngFor="let roleItems of navigationItems">
+            <ng-container *ngIf="roleItems">
+                <li *ngFor="let item of roleItems" [ngClass]="{'active': activeTab === item?.tabName}"
+                    (click)="onMenuItemClick(item?.tabName || '')" [routerLink]="item?.route" title="{{item?.name}}">
+                    <a>
+                        <div class="nav-icon"><i [class]="item?.iconClass"></i></div>
+                        <div class="nav-name">{{item?.name}}</div>
+                    </a>
+                </li>              
+            </ng-container>
+        </ng-container>
+    </ul>
+</div>

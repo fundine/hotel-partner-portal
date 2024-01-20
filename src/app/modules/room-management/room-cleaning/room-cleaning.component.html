@@ -1,0 +1,58 @@
+<div class="filter-bar">
+    <div class="filter-controls">
+        <div class="left-group">
+
+        </div>
+        <div class="right-group">
+            <div class="d-flex">
+
+
+
+            </div>
+            <div class="d-flex btn-list">
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="page-wrap">
+
+    <div class="aside-left">
+        <div class="card">
+
+        </div>
+    </div>
+
+    <div class="aside-right">
+        <div class="card">
+            <div class="card-body" style="padding: 2rem;">
+
+                <div class="d-flex" style="gap: 50px; margin-bottom: 1rem;">
+                    <div class="card" style="height: fit-content; width: fit-content;">
+                        <div class="card-body" style="padding: 0;" *ngIf="qrCodeUrl != ''">
+                            <qr-code [value]="qrCodeUrl" size="200" errorCorrectionLevel="M" [margin]="2">
+                            </qr-code>
+                        </div>
+                    </div>
+                    <div class="card" style="height: fit-content; width: fit-content;">
+                        <div class="card-body" style="padding: 0;">
+                            <qr-code value="https://hotelceeceetower.menuqrcode.co.in/sample-page/" size="200"
+                                errorCorrectionLevel="M" centerImageSrc="../../../assets/images/client/client-logo.png"
+                                centerImageSize="50" lightColor="#fff" darkColor="#7b1fa2" [margin]="2">
+                            </qr-code>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group">
+                        <label class="inp-label">Url</label>
+                        <input type="text" class="form-control" [(ngModel)]="qrCodeUrl" />
+                        <span class="focus-border"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

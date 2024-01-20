@@ -1,0 +1,317 @@
+.filter-bar {
+    min-height: 50px;
+    .filter-controls {
+        gap: 25px;
+        display: flex;
+        padding: 0 25px;
+        position: relative;
+        min-height: inherit;
+        align-items: center;
+        justify-content: space-between;
+        .btn-list {
+            .btn {
+                min-width: 110px;
+            }
+            &.steps {
+                .btn {
+                    margin-right: 2rem;
+                    position: relative;
+                    &::after {
+                        top: 13px;
+                        content: "";
+                        width: 15px;
+                        height: 1px;
+                        right: -24px;
+                        overflow: visible;
+                        position: absolute;
+                        border: 1px dashed #008000;
+                    }
+                    &:last-child {
+                        margin-right: 0;
+                        &::after {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.page-wrap {
+    gap: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px 25px;
+    .aside-left {
+        top: 0;
+        z-index: 3;
+        width: 300px;
+        height: 100%;
+        position: sticky;
+        .card {
+            height: 100%;
+            .card-header {
+                display: block;
+                .form-group {
+                    .form-control {
+                        text-indent: 1.25rem;
+                        background: #e8edf2;
+                        border-color: #e8edf2;
+                        border-bottom: 0 !important;
+                    }
+                    .filter-search {
+                        left: 8px;
+                    }
+                }
+            }
+            .card-body {
+                padding: 0;
+                .order-info {
+                    cursor: pointer;
+                    padding: 12px 15px;
+                    border-bottom: 1px solid #efefef;
+                    .order-from {
+                        font-weight: 700;
+                        color: #ff4500;
+                        font-size: 1.25em;
+                        span {
+                            top: 2px;
+                            float: right;
+                            position: relative;
+                            animation: bell 1s 1s both infinite;
+                            i {
+                                font-size: 13px;
+                                cursor: default;
+                                color: #ff4500;
+                            }
+                        }
+                    }
+                    .order-summary,
+                    .order-duration {
+                        line-height: 1.4;
+                        color: #555f57;
+                    }
+                    .order-summary {
+                        font-size: 0.9em;
+                        span {
+                            padding: 0 3px;
+                            &.price {
+                                font-size: 0.95em;
+                            }
+                            &:first-child {
+                                padding-left: 0;
+                            }
+                            i {
+                                color: inherit;
+                                font-size: 10px;
+                                font-weight: 400;
+                            }
+                        }
+                    }
+                    .order-duration {
+                        font-size: 0.8em;
+                        span {
+                            font-weight: 500;
+                            padding: 0 4px 0 1px;
+                            &.placed {
+                                color: #00da00;
+                            }
+                            &.limited {
+                                color: #ff8400;
+                            }
+                            &.exceed {
+                                color: #ff0000;
+                            }
+                        }
+                    }
+                    &.active {
+                        background: #faebd7;
+                    }
+                    &:last-child {
+                        border-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+    .aside-right {
+        flex: 1;
+        position: relative;
+        width: calc(100% - 300px);
+        .card {
+            height: 100%;
+            .card-body {
+                padding: 1rem 1rem 0.5rem;
+                .order-header {
+                    gap: 25px;
+                    display: flex;
+                    padding: 0 1rem;
+                    min-height: 75px;
+                    align-items: center;
+                    background: #ecf1f6;
+                    margin-bottom: 1.5rem;
+                    .order-info {
+                        width: 30%;
+                        .order-id {
+                            display: flex;
+                            font-weight: 700;
+                            color: #ff4500;
+                            font-size: 1.25em;
+                            align-items: center;
+                            span {
+                                font-size: 0.5em;
+                                color: #ffffff;
+                                font-weight: 700;
+                                padding: 1px 5px;
+                                margin-left: 10px;
+                                border-radius: 2px;
+                                transform: skew(-15deg);
+                                background: linear-gradient(to right, #c816b1, #af53c5, #7e0a6f);
+                            }
+                        }
+                        .order-summary {
+                            font-size: 0.9em;
+                            line-height: 1.4;
+                            color: #555f57;
+                            span {
+                                padding: 0 3px;
+                                &.price {
+                                    font-size: 0.95em;
+                                }
+                                &:first-child {
+                                    padding-left: 0;
+                                }
+                                i {
+                                    color: inherit;
+                                    font-size: 10px;
+                                    font-weight: 400;
+                                }
+                            }
+                        }
+                    }
+                    .cust-info,
+                    .order-time {
+                        width: 30%;
+                        color: #555f57;
+                        font-size: 0.95em;
+                        .order-from {
+                            font-size: 1.1em;
+                            font-weight: 700;
+                            color: #ff4500;
+                        }
+                    }
+                    .order-time {
+                        line-height: 1.35;
+                    }
+                    .order-actions {
+                        width: 10%;
+                        label {
+                            gap: 5px;
+                            display: flex;
+                            align-items: center;
+                            cursor: pointer;
+                            justify-content: center;
+                        }
+                    }
+                }
+                .order-list {
+                    .list-item {
+                        display: flex;
+                        font-size: 0.95em;
+                        margin-bottom: 10px;
+                        padding: 0.75rem 1rem;
+                        align-items: flex-start;
+                        border: 1px solid #e3e0e0;
+                        .item-type {
+                            width: 25px;
+                            label {
+                                i {
+                                    top: 0.15rem;
+                                    cursor: default;
+                                    font-size: 13px;
+                                    &.vi-veg {
+                                        color: #12c612;
+                                    }
+                                    &.vi-veg-egg {
+                                        color: #ffbf00;
+                                    }
+                                    &.vi-non-veg {
+                                        color: #ff0000;
+                                    }
+                                }
+                            }
+                        }
+                        .item-info {
+                            width: calc(100% - 100px);
+                            .item-name {
+                                .qty {
+                                    padding: 0 5px;
+                                    font-size: 0.85em;
+                                }
+                            }
+                            .cat-name {
+                                color: #867d7d;
+                                font-size: 0.9em;
+                            }
+                        }
+                        .item-price {
+                            width: 75px;
+                            text-align: right;
+                            label {
+                                i {
+                                    color: inherit;
+                                    font-size: 10px;
+                                    font-weight: 400;
+                                }
+                            }
+                        }
+                        &:last-of-type {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+            .card-footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                .btn {
+                    min-width: 120px;
+                }
+            }
+        }
+    }
+}
+
+.filter-bar + .page-wrap {
+    height: calc(100% - 50px);
+}
+
+// modal
+.confirm-order {
+    display: grid;
+    padding: 30px 25px;
+    place-items: center;
+    .confirm-label {        
+        color: #555f57;
+        font-size: 0.95em;
+        margin: 0.25rem 0 1rem;
+    }
+    i {
+        &.vi-timepiece {
+            font-size: 28px;
+            font-weight: 400;
+        }
+    }
+}
+
+.reject-order {
+    padding: 20px 10px;
+    .reject-label {
+        line-height: 1.4;
+        color: #555f57;
+        font-size: 0.95em;
+        text-align: justify;
+        margin-bottom: 15px;
+    }
+}

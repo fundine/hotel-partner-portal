@@ -1,0 +1,172 @@
+<div class="page-content">
+    <div class="row">
+        <div class="col-lg-12">
+            <form [formGroup]="discountCouponForm" autocomplete="off">
+                <div class="card">
+                    <div class="card-header">Discount Settings</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <select-control [title]="'Discount Type'" validation="required"
+                                    formControlName="discountType"
+                                    [validationClass]="(discountCouponForm.get('discountType')?.invalid && discountCouponForm.get('discountType')?.touched) ?? false"
+                                    [options]="['Coupon Discounts', 'Flat Cashback', 'Percentage Discount', 'BOGO : Buy One Get One']"></select-control>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Coupon Code</label>
+                                    <input type="text" class="form-control" formControlName="couponCode"
+                                        [ngClass]="controlClass('couponCode')" />
+                                    <span class="focus-border"></span>
+                                    <label class="val-msg"
+                                        *ngIf="discountCouponForm.get('couponCode')?.errors?.['maxlength']">Max
+                                        Length is 20</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Discount Title</label>
+                                    <input type="text" class="form-control" formControlName="discountTitle"
+                                        [ngClass]="controlClass('discountTitle')" />
+                                    <span class="focus-border"></span>
+                                    <label class="val-msg"
+                                        *ngIf="discountCouponForm.get('discountTitle')?.errors?.['maxlength']">Max
+                                        Length is 30</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- <ng-container>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Discount Amount</label>
+                                        <input type="text" class="form-control price-input"
+                                            formControlName="discountAmount"
+                                            [ngClass]="controlClass('discountAmount')" />
+                                        <span class="focus-border"></span>
+                                        <label class="price-icon"><i class="vi vi-rupee"></i></label>
+                                        <label class="val-msg"
+                                            *ngIf="discountCouponForm.get('discountAmount')?.errors?.['pattern']">Only
+                                            Numbers
+                                            Are Allowed</label>
+                                    </div>
+                                </div>
+                            </ng-container> -->
+                            <ng-container>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Discount Percentage</label>
+                                        <input type="text" class="form-control" formControlName="discountPercentage"
+                                            [ngClass]="controlClass('discountPercentage')" />
+                                        <span class="focus-border"></span>
+                                        <label class="val-msg"
+                                            *ngIf="discountCouponForm.get('discountPercentage')?.errors?.['pattern']">Invalid
+                                            Format</label>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Max Discount Amount</label>
+                                    <input type="text" class="form-control price-input"
+                                        formControlName="maxDiscountAmount"
+                                        [ngClass]="controlClass('maxDiscountAmount')" />
+                                    <span class="focus-border"></span>
+                                    <label class="price-icon"><i class="vi vi-rupee"></i></label>
+                                    <label class="val-msg"
+                                        *ngIf="discountCouponForm.get('maxDiscountAmount')?.errors?.['pattern']">Only
+                                        Numbers
+                                        Are Allowed</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Min Order Value</label>
+                                    <input type="text" class="form-control price-input" formControlName="minOrderValue"
+                                        [ngClass]="controlClass('minOrderValue')" />
+                                    <span class="focus-border"></span>
+                                    <label class="price-icon"><i class="vi vi-rupee"></i></label>
+                                    <label class="val-msg"
+                                        *ngIf="discountCouponForm.get('minOrderValue')?.errors?.['pattern']">Only Numbers
+                                        Are Allowed</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Validity Start From</label>
+                                    <input type="date" class="form-control cal-input"
+                                        formControlName="validityStartsFrom"
+                                        [ngClass]="controlClass('validityStartsFrom')" />
+                                    <span class="focus-border"></span>
+                                    <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Validity End To</label>
+                                    <input type="date" class="form-control cal-input" formControlName="validityEndTo"
+                                        [ngClass]="controlClass('validityEndTo')" />
+                                    <span class="focus-border"></span>
+                                    <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <select-control [title]="'Type of Customer'" validation="required"
+                                    formControlName="customerType"
+                                    [validationClass]="(discountCouponForm.get('customerType')?.invalid && discountCouponForm.get('customerType')?.touched) ?? false"
+                                    [options]="['All Customers', 'First Time Customer']"></select-control>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <multi-select-control [title]="'Allowed Outlets'" validation="required"
+                                    formControlName="allowedOutlets"
+                                    [validationClass]="(discountCouponForm.get('allowedOutlets')?.invalid && discountCouponForm.get('allowedOutlets')?.touched) ?? false"
+                                    [options]="['Outlet 1', 'Outlet 2', 'Outlet 3','Outlet 4']"></multi-select-control>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="inp-label">Description</label>
+                                    <textarea class="form-control" formControlName="description"
+                                        [ngClass]="controlClass('description')"
+                                        placeholder="Provide a short description about the discount."></textarea>
+                                    <span class="focus-border"></span>
+                                    <label class="val-msg"
+                                        *ngIf="discountCouponForm.get('description')?.errors?.['maxlength']">Max
+                                        Length is 200</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="checkbox-list">
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isValid" />
+                                <span class="checkmark"></span>Valid
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isDisabled" />
+                                <span class="checkmark"></span>Disable
+                            </label>
+                        </div>
+                        <div class="btn-list">
+                            <button class="btn btn-sm btn-success" (click)="onSaveDiscountCoupon()">SAVE</button>
+                            <button class="btn btn-sm btn-danger" (click)="onCancelClick()">CANCEL</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<app-dialog *ngIf="formChangeWarningDialog" type="confirm" [customClass]="'delete justify'" [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onBackConfirmClick()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+<app-toaster *ngIf="alertSuccess" type="success" position="top-right" customClass="" [title]="false"
+    message="Great, there's a new coupon added!"></app-toaster>

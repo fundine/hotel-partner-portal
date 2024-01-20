@@ -1,0 +1,25 @@
+<div class="page-wrap">
+    <div class="page-nav">
+        <div class="nav-item" (click)="loadPage('outlet-management')" *ngIf="roleId === '3'"
+            [class.active]="currentPage === 'outlet-management'">Outlet Management</div>
+        <div class="nav-item" (click)="loadPage('user-management')" [class.active]="currentPage === 'user-management'"
+            *ngIf="roleId === '3'">User Management</div>
+        <div class="nav-item" (click)="loadPage('finance-settings')" [class.active]="currentPage === 'finance-settings'"
+            *ngIf="roleId === '3'">Finance Settings</div>
+        <div class="nav-item" (click)="loadPage('discount-coupons')" [class.active]="currentPage === 'discount-coupons'"
+            *ngIf="roleId === '3'">Discount Coupons</div>
+        <div class="nav-item" (click)="loadPage('settings')" [class.active]="currentPage === 'settings'"
+            *ngIf="roleId === '3'">Settings</div>
+    </div>
+
+    <div class="page-preview">
+        <ng-container [ngSwitch]="currentPage">
+            <app-outlet-management *ngSwitchCase="'outlet-management'"></app-outlet-management>
+            <app-user-management *ngSwitchCase="'user-management'"></app-user-management>
+            <app-finance *ngSwitchCase="'finance-settings'"></app-finance>
+            <app-discount-coupons *ngSwitchCase="'discount-coupons'"></app-discount-coupons>
+            <app-settings *ngSwitchCase="'settings'"></app-settings>
+        </ng-container>
+    </div>
+
+</div>

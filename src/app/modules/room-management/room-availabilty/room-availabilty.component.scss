@@ -1,0 +1,144 @@
+.card {
+    height: 100%;
+    margin-bottom: 0;
+    .card-header {
+        padding: 0 1.5rem;
+        label {
+            &:last-child {
+                padding-left: 5px;
+            }
+        }
+    }
+    .card-body {
+        padding: 1.25rem 1.5rem 0;
+        .room-layout {
+            display: grid;
+            column-gap: 1.5em;
+            .room-card {
+                cursor: pointer;
+                padding: 5px 7px;
+                position: relative;
+                margin-bottom: 1.5em;
+                background: #ffffff;
+                box-shadow: 0 0 3px 1px rgba(209, 209, 209, 0.5);
+                .status-info {
+                    .status-icon {
+                        display: grid;
+                        place-items: center;
+                        background: #dcdcdc;
+                        i {
+                            font-size: 50px;
+                            font-weight: 400;
+                            &.vi-room-occupied-o {
+                                top: 1px;
+                                font-size: 47px;
+                            }
+                            &.vi-bed-o {
+                                top: 4px;
+                                font-size: 35px;
+                            }
+                        }
+                    }
+                    .room-no {
+                        width: 100%;
+                        height: 25px;
+                        display: flex;
+                        font-weight: 700;
+                        color: #ffffff;
+                        text-align: center;
+                        align-items: center;
+                        justify-content: center;
+                        background: rgba(0, 0, 0, 0.25);
+                    }
+                    &.free {
+                        .status-icon {
+                            background: #bdf5bd;
+                            i {
+                                &.vi-bed-o {
+                                    color: #2bc72b;
+                                }
+                            }
+                        }
+                        .room-no {
+                            background: #2bc72b;
+                        }
+                    }
+                    &.occupied {
+                        .status-icon {
+                            background: #dbe8f4;
+                            i {
+                                &.vi-room-occupied-o {
+                                    color: #5298d9;
+                                }
+                            }
+                        }
+                        .room-no {
+                            background: #5298d9;
+                        }
+                    }
+                    &.cleaning {
+                        .status-icon {
+                            background: #faebd7;
+                            i {
+                                &.vi-room-cleaning-o {
+                                    color: #ff7937;
+                                }
+                            }
+                        }
+                        .room-no {
+                            background: #ff7937;
+                        }
+                    }
+                    &.maintenance {
+                        .status-icon {
+                            background: #faebd7;
+                            i {
+                                &.vi-bed-o {
+                                    color: #ed4c4c;
+                                }
+                            }
+                        }
+                        .room-no {
+                            background: #ed4c4c;
+                        }
+                    }
+                    &.blocked {
+                        filter: grayscale(100%);
+                    }
+                }
+            }
+            &.card-sm {
+                grid-template-columns: repeat(6, minmax(0px, 1fr));
+                .room-card {
+                    min-height: 95px;
+                    .status-icon {
+                        width: 100%;
+                        height: 60px;
+                    }
+                    .room-info {
+                        height: 25px;
+                        display: flex;
+                        font-weight: 700;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+            &.card-md {
+                grid-template-columns: repeat(3, minmax(0px, 1fr));
+                .room-card {
+                    display: flex;
+                    min-height: 95px;
+                    .status-icon {
+                        width: 97px;
+                        height: 60px;
+                    }
+                    .room-info {
+                        padding: 0 10px;
+                        width: calc(100% - 97px);
+                    }
+                }
+            }
+        }
+    }
+}

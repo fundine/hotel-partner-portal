@@ -1,0 +1,46 @@
+<div class="page-header">
+    <div>
+        <div>User Management</div>
+        <div>Manage your users and their account permissions here.</div>
+    </div>
+    <div>
+        <button type="button" class="btn btn-xs btn-primary">ADD NEW USER</button>
+    </div>
+</div>
+<div class="page-content">
+    <ng-container *ngFor="let role of users">
+        <div class="content-group">
+            <div class="lt-content">
+                <div class="title-group">
+                    <div class="title-lg">{{ role.userRole }}</div>
+                    <div class="title-info">Admin users can add, edit, disable and remove organizational level
+                        settings</div>
+                </div>
+            </div>
+            <div class="rt-content">
+                <table class="table user-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Assigned Outlets</th>
+                            <th>Last Active</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let user of role.items">
+                            <td>{{ user.userName }}</td>
+                            <td>{{ user.assignedUnits }}</td>
+                            <td>{{ user.lastActive }}</td>
+                            <td>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </ng-container>
+</div>
