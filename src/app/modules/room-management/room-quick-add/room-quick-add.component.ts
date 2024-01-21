@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class RoomQuickAddComponent implements OnInit {
 
   loading: boolean = false;
-  qrCodeUrl: string = 'http://';
+  qrCodeUrl: string = 'https://';
   adultCountOptions: number[] = Array.from({ length: 10 }, (_, i) => i + 1);
   childrenCountOptions: number[] = Array.from({ length: 11 }, (_, i) => i + 0);
 

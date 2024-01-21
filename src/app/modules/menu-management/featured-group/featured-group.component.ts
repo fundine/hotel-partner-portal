@@ -11,10 +11,10 @@ import { environment } from 'src/environment';
 })
 export class FeaturedGroupComponent implements OnInit {
 
-    // global variables
-    public roleId: string = environment.roleId;
-    public unitId: string = environment.unitId;
-    // end global variables
+  // global variables
+  public roleId: string = environment.roleId;
+  public unitId: string = environment.unitId;
+  // end global variables
 
   categoryTypeId: string = '';
 
@@ -55,7 +55,7 @@ export class FeaturedGroupComponent implements OnInit {
       }
     );
   }
-  
+
   menuItems: any = [];
   getCategoryWiseMenuitems(categoryTypeId: any, unitId: any) {
     this.menuItemsLoading = true;
@@ -136,8 +136,7 @@ export class FeaturedGroupComponent implements OnInit {
   addNewFeatureGroup() {
     this.featureGroupsList = false;
     this.getCategoryWiseMenuitems(this.categoryTypeId, this.unitId);
-  }
-  
+  };
   cancelAddfeatureGroup() {
     const itemsArray = this.featureMenuItemsForm.get('items') as FormArray;
     if (this.featureMenuItemsForm.dirty || itemsArray.length > 0) {
@@ -177,12 +176,18 @@ export class FeaturedGroupComponent implements OnInit {
     this.deleteIndex = index;
     this.deleteConfirmDialog = true;
   }
-  onConfirmDeleteFeatureGroup() {
-    if (this.deleteIndex !== undefined) {
-      this.featureGroups.splice(this.deleteIndex, 1);
-      this.deleteIndex = undefined;
-    }
-    this.deleteConfirmDialog = false;
+  onConfirmDeleteFeatureGroup(index: number) {
+    const groupId = this.featureGroups[index].id;
+    this.apiService.deleteFeatureGroup(groupId).subscribe(
+      () => {
+        this.deleteConfirmDialog = false;
+        this.getCategoryWiseFeatureGroups(this.categoryTypeId);
+        console.log('Feature group deleted successfully.');
+      },
+      (error) => {
+        console.error('Error deleting feature group:', error);
+      }
+    );
   }
   onCancelDeleteFeatureGroup() {
     this.deleteIndex = undefined;

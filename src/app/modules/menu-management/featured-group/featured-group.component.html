@@ -7,6 +7,12 @@
                 <div class="nav-item active">Featured Group <i class="vi vi-chevron-right"></i></div>
             </div>
         </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="nav-item btn-back" (click)="onCancelClick()">Back To Menu <i
+                        class="vi vi-chevron-left block"></i></div>
+            </div>
+        </div>
     </div>
     <div class="aside-right">
         <div class="card" [ngClass]="{'feature-groups' : featureGroupsList}">
@@ -16,7 +22,8 @@
                     <div class="card-header">
                         <div></div>
                         <div>
-                            <button type="button" class="btn btn-xs btn-primary" (click)="addNewFeatureGroup()">ADD NEW FEATURE GROUP</button>
+                            <button type="button" class="btn btn-xs btn-primary" (click)="addNewFeatureGroup()">ADD NEW
+                                FEATURE GROUP</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -89,7 +96,8 @@
                                 <div class="title-md">Make your own group effortlessly and list signature items on top.
                                 </div>
                                 <div class="nr-action">
-                                    <button type="button" class="btn btn-info" (click)="addNewFeatureGroup()">ADD NEW GROUP</button>
+                                    <button type="button" class="btn btn-info" (click)="addNewFeatureGroup()">ADD NEW
+                                        GROUP</button>
                                 </div>
                                 <div class="btn-text" (click)="onCancelClick()">BACK TO MENU</div>
                             </div>
@@ -104,7 +112,8 @@
                         <form [formGroup]="featureMenuItemsForm" autocomplete="off">
                             <div class="form-group clear-bottom">
                                 <input type="text" class="form-control" formControlName="itemGroupName"
-                                    placeholder="Feature Group Titile" (input)="onItemGroupNameChange()" [ngClass]="controlClass('itemGroupName')" />
+                                    placeholder="Feature Group Titile" (input)="onItemGroupNameChange()"
+                                    [ngClass]="controlClass('itemGroupName')" />
                                 <span class="focus-border"></span>
                                 <label class="val-msg"
                                     *ngIf="featureMenuItemsForm.get('itemGroupName')?.errors?.['maxlength']">Max
@@ -250,9 +259,10 @@
     [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
     (confirmClick)="onBackConfirmClick()" (cancelClick)="onCancelClearChanges()"></app-dialog>
 
-<app-dialog *ngIf="deleteConfirmDialog" type="confirm" [customClass]="'delete justify'" [title]="'Are you sure?'"
+<app-dialog *ngIf="deleteConfirmDialog && deleteIndex !== undefined" type="confirm" [customClass]="'delete justify'"
+    [title]="'Are you sure?'"
     [message]="'Are you sure you want to delete this feature group from menu? Deleting this group will also remove it from the customers menu. This action cannot be restored.'"
-    (confirmClick)="onConfirmDeleteFeatureGroup()" (cancelClick)="onCancelDeleteFeatureGroup()"></app-dialog>
+    (confirmClick)="onConfirmDeleteFeatureGroup(deleteIndex)" (cancelClick)="onCancelDeleteFeatureGroup()"></app-dialog>
 
 <app-dialog *ngIf="emptyItemDialog" type="info" [customClass]="'delete justify'" [title]="'Warning!'"
     [message]="'We cannot proceed without selecting menu items.'" (cancelClick)="onCancelInfo()"></app-dialog>

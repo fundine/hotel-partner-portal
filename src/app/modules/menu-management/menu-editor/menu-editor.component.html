@@ -250,9 +250,9 @@
                                                 <label class="btn-action" (click)="onEditCategoryItem(i, j)">
                                                     <i class="vi vi-pencil"></i>
                                                 </label>
-                                                <label class="btn-action" (click)="requestDeleteCategoryItem(i, j)">
+                                                <!-- <label class="btn-action" (click)="requestDeleteCategoryItem(i, j)">
                                                     <i class="vi vi-trash"></i>
-                                                </label>
+                                                </label> -->
                                                 <label class="btn-slider">
                                                     <label class="switch-container sleek" *ngIf="!(item.isDisabled)">
                                                         <input type="checkbox" [checked]="item.isAvailable" />
@@ -329,10 +329,10 @@
                                                             (click)="onEditSubCategoryItem(i, j, k)">
                                                             <i class="vi vi-pencil"></i>
                                                         </label>
-                                                        <label class="btn-action"
+                                                        <!-- <label class="btn-action"
                                                             (click)="requestDeleteSubcategoryItem(i, j, k)">
                                                             <i class="vi vi-trash"></i>
-                                                        </label>
+                                                        </label> -->
                                                         <label class="btn-slider">
                                                             <label class="switch-container sleek"
                                                                 *ngIf="!(item.isDisabled)">
@@ -403,7 +403,7 @@
                 <div class="list-item" *ngFor="let item of assignedUnits; let i = index"
                     [class.active]="i === selectedUnitIndex">
                     <div class="unit-action">
-                        <label class="switch-container sleek">
+                        <label class="switch-container sleek" (click)="toggleUnitStatus(item, i)">
                             <input type="checkbox" [checked]="item.isUnitOpen" />
                             <span class="switch-slider"></span>
                         </label>
@@ -456,7 +456,7 @@
     </div>
 </app-modal>
 
-<app-dialog *ngIf="selectedCategoryIndex !== undefined && deleteMode === 'category'" type="confirm"
+<!-- <app-dialog *ngIf="selectedCategoryIndex !== undefined && deleteMode === 'category'" type="confirm"
     [customClass]="'delete justify'" [title]="'Are you sure?'"
     [message]="'Are you sure you want to delete this item from menu? Deleting the menu item will also remove it from the customers menu. This action cannot be restored.'"
     (confirmClick)="onConfirmDeleteCategoryItem(selectedCategoryIndex, selectedItemIndex)"
@@ -467,7 +467,7 @@
     type="confirm" [customClass]="'delete justify'" [title]="'Are you sure?'"
     [message]="'Are you sure you want to delete this item from menu? Deleting the menu item will also remove it from the customers menu. This action cannot be restored.'"
     (confirmClick)="onConfirmDeleteSubCategoryItem(selectedCategoryIndex!, selectedSubCategoryIndex!, selectedSubItemIndex!)"
-    (cancelClick)="onCancelDeleteSubCategoryItem()"></app-dialog>
+    (cancelClick)="onCancelDeleteSubCategoryItem()"></app-dialog> -->
 
 <app-toaster *ngIf="alertSuccess" type="success" position="top-right" customClass="" [title]="false"
     message="Great, Applied changes saved to the menu!"></app-toaster>

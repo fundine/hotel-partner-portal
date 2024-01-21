@@ -27,8 +27,9 @@
                         font-size: 0.9em;
                     }
                     &.btn-back {
-                        flex-direction: row-reverse;
+                        color: #f82649;
                         justify-content: flex-end;
+                        flex-direction: row-reverse;
                         i {
                             display: block;
                             padding-right: 10px;

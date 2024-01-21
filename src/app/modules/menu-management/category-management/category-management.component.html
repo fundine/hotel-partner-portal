@@ -175,7 +175,7 @@
 <app-dialog *ngIf="selectedCategoryIndex !== undefined && deleteMode === 'category'" type="confirm"
     [customClass]="'delete justify'" [title]="'Are you sure?'"
     [message]="'Are you sure you want to delete this category? Deleting the category will also remove all of its associated subcategories, if any. This action cannot be restore.'"
-    (confirmClick)="onConfirmDeleteCategory(selectedCategoryIndex)"
+     (confirmClick)="onConfirmDeleteCategory(selectedCategoryIndex)"
     (cancelClick)="onCancelDeleteCategory()"></app-dialog>
 
 <app-dialog

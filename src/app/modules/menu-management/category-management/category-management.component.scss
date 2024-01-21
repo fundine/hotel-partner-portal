@@ -131,6 +131,9 @@
                             }
                         }
                     }
+                    &:last-of-type {
+                        margin-bottom: 0;
+                    }
                 }
                 .sub-categories {
                     padding-left: 2rem;

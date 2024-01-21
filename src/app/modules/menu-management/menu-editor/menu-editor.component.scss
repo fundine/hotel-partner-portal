@@ -305,7 +305,7 @@
                     }
                     .item-info {
                         padding-right: 2rem;
-                        width: calc(100% - 360px);
+                        width: calc(100% - 330px);
                         .item-name {
                             line-height: 1.3;
                             font-size: 0.95em;
@@ -387,7 +387,7 @@
                         }
                     }
                     .item-actions {
-                        width: 105px;
+                        width: 75px;
                         display: flex;
                         align-items: center;
                         justify-content: flex-end;
@@ -399,9 +399,6 @@
                             place-items: center;
                             i {
                                 font-size: 1.05em;
-                                &.vi-trash {
-                                    color: #ff0000;
-                                }
                             }
                             &:last-child {
                                 margin-left: 2px;

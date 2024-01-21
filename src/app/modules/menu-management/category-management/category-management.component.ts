@@ -15,7 +15,7 @@ export class CategoryManagementComponent implements OnInit {
   public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
-  //@Output() cancelClicked = new EventEmitter<void>();
+  // @Output() cancelClicked = new EventEmitter<void>();
 
   innerLoading: boolean = false;
   loading: boolean = false;
@@ -35,67 +35,6 @@ export class CategoryManagementComponent implements OnInit {
   editingSubCategoryIndex!: number | null;
 
   // api 
-  // getRestaurantCategory() {
-  //   this.innerLoading = true;
-  //   this.apiService.getRestaurantCategoryData().subscribe(
-  //     (data) => {
-  //       this.categories = data.results;
-  //       console.log('Data from API:', data);
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching data:', error);
-  //     },
-  //     () => {
-  //       this.innerLoading = false;
-  //     }
-  //   );
-  // }
-  // getBarCategory() {
-  //   this.innerLoading = true;
-  //   this.apiService.getBarCategoryData().subscribe(
-  //     (data) => {
-  //       this.categories = data.results;
-  //       console.log('Data from API:', data);
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching data:', error);
-  //     },
-  //     () => {
-  //       this.innerLoading = false;
-  //     }
-  //   );
-  // }
-  // getLaundryCategory() {
-  //   this.innerLoading = true;
-  //   this.apiService.getLaundryCategoryData().subscribe(
-  //     (data) => {
-  //       this.categories = data.results;
-  //       console.log('Data from API:', data);
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching data:', error);
-  //     },
-  //     () => {
-  //       this.innerLoading = false;
-  //     }
-  //   );
-  // }
-  // getSpaCategory() {
-  //   this.innerLoading = true;
-  //   this.apiService.getSpaCategoryData().subscribe(
-  //     (data) => {
-  //       this.categories = data.results;
-  //       console.log('Data from API:', data);
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching data:', error);
-  //     },
-  //     () => {
-  //       this.innerLoading = false;
-  //     }
-  //   );
-  // }
-
   getCategoryList(activeCategory: string) {
     this.innerLoading = true;
     this.apiService.getCategoryData(activeCategory).subscribe(
@@ -115,40 +54,11 @@ export class CategoryManagementComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    // if (this.categoryTypeId.includes('1')) {
-    //   this.getRestaurantCategory();
-    //   this.activeCategory = '1';
-    // } else if (this.categoryTypeId.includes('2')) {
-    //   this.getBarCategory();
-    //   this.activeCategory = '2';
-    // } else if (this.categoryTypeId.includes('3')) {
-    //   this.getLaundryCategory();
-    //   this.activeCategory = '3';
-    // } else if (this.categoryTypeId.includes('4')) {
-    //   this.getSpaCategory();
-    //   this.activeCategory = '4';
-    // } else {
-    //   this.getRestaurantCategory();
-    // }
-
     this.getCategoryList(this.activeCategory);
   }
 
   selectCategoryType(categoryTypeId: string): void {
     this.activeCategory = categoryTypeId;
-    // if (categoryTypeId === '1') {
-    //   this.getRestaurantCategory();
-    //   this.activeCategory = '1';
-    // } else if (categoryTypeId === '2') {
-    //   this.getBarCategory();
-    //   this.activeCategory = '2';
-    // } else if (categoryTypeId === '3') {
-    //   this.getLaundryCategory();
-    //   this.activeCategory = '3';
-    // } else if (categoryTypeId === '4') {
-    //   this.getSpaCategory();
-    //   this.activeCategory = '4';
-    // }
     this.getCategoryList(this.activeCategory);
   }
 
@@ -175,8 +85,17 @@ export class CategoryManagementComponent implements OnInit {
     this.selectedCategoryIndex = index;
   }
   onConfirmDeleteCategory(index: number) {
-    this.categories.splice(index, 1);
-    this.selectedCategoryIndex = undefined;
+    const deletedCategoryId = this.categories[index].id;
+    this.apiService.deleteCategory(deletedCategoryId).subscribe(
+      () => {
+        this.selectedCategoryIndex = undefined;
+        this.getCategoryList(this.activeCategory);
+        console.log('Category deleted successfully.');
+      },
+      (error) => {
+        console.error('Error deleting category:', error);
+      }
+    );
   }
   onCancelDeleteCategory() {
     this.selectedCategoryIndex = undefined;
@@ -201,14 +120,30 @@ export class CategoryManagementComponent implements OnInit {
   onConfirmDeleteSubCategory(categoryIndex: number, subcategoryIndex: number) {
     if (categoryIndex !== undefined && subcategoryIndex !== undefined) {
       if (categoryIndex >= 0 && categoryIndex < this.categories.length) {
-        const subcategory = this.categories[categoryIndex].subcategory;
-        if (subcategory && subcategoryIndex >= 0 && subcategoryIndex < subcategory.length) {
-          subcategory.splice(subcategoryIndex, 1);
+        const categoryId = this.categories[categoryIndex].id;
+        if (categoryId) {
+          const subcategory = this.categories[categoryIndex].subcategory;
+
+          if (subcategory && subcategoryIndex >= 0 && subcategoryIndex < subcategory.length) {
+            const subCategoryId = subcategory[subcategoryIndex].id;
+
+            if (subCategoryId) {
+              this.apiService.deleteSubCategory(categoryId, subCategoryId).subscribe(
+                () => {
+                  this.selectedCategoryIndex = undefined;
+                  this.selectedSubCategoryIndex = undefined;
+                  this.getCategoryList(this.activeCategory);
+                  console.log('Subcategory deleted successfully.');
+                },
+                (error) => {
+                  console.error('Error deleting subcategory:', error);
+                }
+              );
+            }
+          }
         }
       }
     }
-    this.selectedCategoryIndex = undefined;
-    this.selectedSubCategoryIndex = undefined;
   }
   onCancelDeleteSubCategory() {
     this.selectedCategoryIndex = undefined;
@@ -227,15 +162,6 @@ export class CategoryManagementComponent implements OnInit {
     this.editingSubCategoryIndex = null;
     this.isEditingCategory = false;
     this.isEditingSubCategory = false;
-    // if (this.activeCategory === '1') {
-    //   this.getRestaurantCategory();
-    // } else if (this.activeCategory === '2') {
-    //   this.getBarCategory();
-    // } else if (this.activeCategory === '3') {
-    //   this.getLaundryCategory();
-    // } else if (this.activeCategory === '4') {
-    //   this.getSpaCategory();
-    // }
     this.getCategoryList(this.activeCategory);
   }
 

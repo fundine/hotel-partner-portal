@@ -95,7 +95,7 @@ export class MenuEditorComponent implements OnInit {
       (error) => {
         console.error('Error fetching data:', error);
       },
-      () => { 
+      () => {
         this.innerLoading = false;
       }
     );
@@ -119,10 +119,23 @@ export class MenuEditorComponent implements OnInit {
     this.selectedUnitIndex = index;
     this.unitId = selectedUnit.unitId;
     this.getUnitWiseMenuList(this.unitId);
-  }
-  
+  };
   getOpenUnitsCount(): number {
     return this.assignedUnits.filter((unit: { isUnitOpen: any; }) => unit.isUnitOpen).length;
+  }
+  toggleUnitStatus(selectedUnit: any, index: number) {
+    const unitId = this.assignedUnits[index].unitId;
+    const isUnitOpen = !selectedUnit.isUnitOpen;
+    this.apiService.changeUnitStatus(unitId, isUnitOpen).subscribe(
+      () => {
+        this.assignedUnits[index].isUnitOpen = isUnitOpen;
+        const openUnitsCount = this.getOpenUnitsCount();
+        console.log('Unit status changed successfully.');
+      },
+      (error) => {
+        console.error('Error in unit status changed:', error);
+      }
+    );
   }
 
   // general
@@ -506,42 +519,42 @@ export class MenuEditorComponent implements OnInit {
   onEditSubCategoryItem(categoryIndex: number, subcategoryIndex: number, subItemIndex: number): void { }
 
   // delete category item
-  requestDeleteCategoryItem(categoryIndex: number, itemIndex: number | undefined) {
-    this.deleteMode = 'category';
-    this.selectedCategoryIndex = categoryIndex;
-    this.selectedItemIndex = itemIndex;
-  }
-  onConfirmDeleteCategoryItem(categoryIndex: number, itemIndex: number | undefined): void {
-    if (itemIndex !== undefined) {
-      this.menuItems[categoryIndex].items.splice(itemIndex, 1);
-    }
-    this.selectedCategoryIndex = undefined;
-    this.selectedItemIndex = undefined;
-  }
-  onCancelDeleteCategoryItem() {
-    this.selectedCategoryIndex = undefined;
-  }
+  // requestDeleteCategoryItem(categoryIndex: number, itemIndex: number | undefined) {
+  //   this.deleteMode = 'category';
+  //   this.selectedCategoryIndex = categoryIndex;
+  //   this.selectedItemIndex = itemIndex;
+  // }
+  // onConfirmDeleteCategoryItem(categoryIndex: number, itemIndex: number | undefined): void {
+  //   if (itemIndex !== undefined) {
+  //     this.menuItems[categoryIndex].items.splice(itemIndex, 1);
+  //   }
+  //   this.selectedCategoryIndex = undefined;
+  //   this.selectedItemIndex = undefined;
+  // }
+  // onCancelDeleteCategoryItem() {
+  //   this.selectedCategoryIndex = undefined;
+  // }
 
   // delete sub category item
-  requestDeleteSubcategoryItem(categoryIndex: number, subcategoryIndex: number, subItemIndex: number | undefined): void {
-    this.deleteMode = 'subcategory';
-    this.selectedCategoryIndex = categoryIndex;
-    this.selectedSubCategoryIndex = subcategoryIndex;
-    this.selectedSubItemIndex = subItemIndex;
-  }
-  onConfirmDeleteSubCategoryItem(categoryIndex: number, subcategoryIndex: number, subItemIndex: number | undefined): void {
-    if (subItemIndex !== undefined) {
-      const subcategory = this.menuItems[categoryIndex].subCategories[subcategoryIndex];
-      subcategory.items.splice(subItemIndex, 1);
-    }
-    this.selectedCategoryIndex = undefined;
-    this.selectedSubCategoryIndex = undefined;
-    this.selectedSubItemIndex = undefined;
-  }
-  onCancelDeleteSubCategoryItem() {
-    this.selectedCategoryIndex = undefined;
-    this.selectedSubCategoryIndex = undefined;
-  }
+  // requestDeleteSubcategoryItem(categoryIndex: number, subcategoryIndex: number, subItemIndex: number | undefined): void {
+  //   this.deleteMode = 'subcategory';
+  //   this.selectedCategoryIndex = categoryIndex;
+  //   this.selectedSubCategoryIndex = subcategoryIndex;
+  //   this.selectedSubItemIndex = subItemIndex;
+  // }
+  // onConfirmDeleteSubCategoryItem(categoryIndex: number, subcategoryIndex: number, subItemIndex: number | undefined): void {
+  //   if (subItemIndex !== undefined) {
+  //     const subcategory = this.menuItems[categoryIndex].subCategories[subcategoryIndex];
+  //     subcategory.items.splice(subItemIndex, 1);
+  //   }
+  //   this.selectedCategoryIndex = undefined;
+  //   this.selectedSubCategoryIndex = undefined;
+  //   this.selectedSubItemIndex = undefined;
+  // }
+  // onCancelDeleteSubCategoryItem() {
+  //   this.selectedCategoryIndex = undefined;
+  //   this.selectedSubCategoryIndex = undefined;
+  // }
 
   // add new menu item
   onAddNewMenuItem() {
