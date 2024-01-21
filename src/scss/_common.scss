@@ -1,3 +1,4 @@
+// general
 .relative {
     position: relative;
 }
@@ -8,6 +9,12 @@
     float: none;
     display: block;
     margin: 0 auto;
+}
+.none {
+    display: none;
+}
+.block {
+    display: block;
 }
 .pl-pr-0 {
     padding-left: 0 !important;
@@ -79,6 +86,21 @@
     padding-bottom: 5px;
     margin-bottom: 20px;
     border-bottom: 1px solid #dadada;
+}
+
+// icon colors
+i {
+    &.vi {
+        &.vi-veg {
+            color: #12c612 !important;
+        }
+        &.vi-veg-egg {
+            color: #ffbf00 !important;
+        }
+        &.vi-non-veg {
+            color: #ff0000 !important;
+        }
+    }
 }
 
 // card

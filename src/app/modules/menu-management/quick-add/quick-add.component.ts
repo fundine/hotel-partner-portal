@@ -22,6 +22,7 @@ export class QuickAddComponent implements OnInit {
   selectedImage: string | ArrayBuffer | null = null;
   selectedOption: string = 'cafe';
   itemPriceInfo: any = [];
+  outletFormArrayMap: Map<any, FormGroup> = new Map<any, FormGroup>(); 
 
   // select control and api
   selectedCategoryId: any;
@@ -29,6 +30,7 @@ export class QuickAddComponent implements OnInit {
   categoryOptions: any;
   categoryList: { id: string; categoryName: string; }[] | undefined;
   selectedOutlets: any;
+  
   getCategory() {
     const id = this.route.snapshot.queryParams['categoryTypeId'];
     this.apiService.getItemCategoryData(id).subscribe(
@@ -107,8 +109,8 @@ export class QuickAddComponent implements OnInit {
   itemUnitItem: any[] = [];
   itemUnitOptions: any;
   itemUnitList: { unitId: string; unitName: string; unitTypeName: string }[] | undefined;
-  getAllUnits() {
-    this.apiService.getUnitListData().subscribe(
+  getAllUnits(categoryTypeId: any) {
+    this.apiService.getUnitListData(categoryTypeId).subscribe(
       (data) => {
         this.itemUnitList = data.results;
         this.itemUnitOptions = this.itemUnitList!.map(option => option.unitName);
@@ -119,6 +121,7 @@ export class QuickAddComponent implements OnInit {
       }
     );
   }
+
   // selectUnitType(event: any) {
   //   const selectedUnitName = event as string;
   //   const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);
@@ -128,6 +131,7 @@ export class QuickAddComponent implements OnInit {
   //     this.itemUnitItem = selectedUnitItem.unitName;
   //   }
   // }
+
   selectUnitType(event: any) {
     const selectedUnitName = event as string;
     const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);
@@ -151,9 +155,13 @@ export class QuickAddComponent implements OnInit {
     itemName: ['', [Validators.required, Validators.maxLength(100)]],
     itemTypeId: [''],
     itemTypeName: ['', [Validators.required]],
+
+
     // allowedOutlets: [[], [Validators.required]],
     allowedOutletsId: [this.fb.array([]), [Validators.required]],
     allowedOutlets: [this.fb.array([]), [Validators.required]],
+
+
     categoryId: [''],
     categoryName: ['', [Validators.required]],
     subCategoryId: [''],
@@ -162,13 +170,14 @@ export class QuickAddComponent implements OnInit {
 
     differentPricing: [false],
 
-    itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-    itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-    itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+    // itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+    // itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
+    // itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
 
-    // itemPriceArray: this.fb.array([]),
+    itemPriceArray: this.fb.array([]),
 
     isAvailable: [true],
+    isDisplayInMenu: [true],
     isBestSeller: [false],
     isDisabled: [false],
   })
@@ -184,9 +193,9 @@ export class QuickAddComponent implements OnInit {
   //     this.itemPriceInfo.push(newItemPrice);
   //   }
   // }
-  // get priceInfoArray() {
-  //   return this.itemQuickAddForm.get('itemPriceArray') as FormArray;
-  // }
+  get priceInfoArray() {
+    return this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+  }
 
   controlClass(controlName: string) {
     return { 'is-invalid': this.itemQuickAddForm?.get(controlName)?.invalid && this.itemQuickAddForm?.get(controlName)?.touched };
@@ -194,72 +203,97 @@ export class QuickAddComponent implements OnInit {
   get itemInfo() {
     return this.itemQuickAddForm;
   }
+  // selectCategoryType(categoryTypeId: string): void {
+  //   if (this.categoryTypeId === '1') {
+  //     this.itemQuickAddForm.reset();
+  //     this.itemQuickAddForm.get('categoryTypeId')?.setValue('1');
+  //     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
+  //     this.itemQuickAddForm.get('isAvailable')?.setValue(true);
+  //     this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
+  //     this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
+  //     this.itemQuickAddForm.get('isDisabled')?.setValue(false);
+
+  //   } else if (this.categoryTypeId === '2') {
+  //     this.itemQuickAddForm.reset();
+  //     this.selectedTypeId = '4';
+  //     this.itemTypeItem = 'None';
+  //     this.itemQuickAddForm.get('categoryTypeId')?.setValue('2');
+  //     this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
+  //     this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
+  //     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
+  //     this.itemQuickAddForm.get('isAvailable')?.setValue(true);
+  //     this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
+  //     this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
+  //     this.itemQuickAddForm.get('isDisabled')?.setValue(false);
+
+  //   } else if (this.categoryTypeId === '3') {
+  //     this.itemQuickAddForm.reset();
+  //     this.selectedTypeId = '4';
+  //     this.itemTypeItem = 'None';
+  //     this.itemQuickAddForm.get('categoryTypeId')?.setValue('3');
+  //     this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
+  //     this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
+  //     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
+  //     this.itemQuickAddForm.get('isAvailable')?.setValue(true);
+  //     this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
+  //     this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
+  //     this.itemQuickAddForm.get('isDisabled')?.setValue(false);
+
+  //   } else if (this.categoryTypeId === '4') {
+  //     this.itemQuickAddForm.reset();
+  //     this.selectedTypeId = '4';
+  //     this.itemTypeItem = 'None';
+  //     this.itemQuickAddForm.get('categoryTypeId')?.setValue('4');
+  //     this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
+  //     this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
+  //     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
+  //     this.itemQuickAddForm.get('isAvailable')?.setValue(true);
+  //     this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
+  //     this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
+  //     this.itemQuickAddForm.get('isDisabled')?.setValue(false);
+  //   }
+
+  // }
+
+
   selectCategoryType(categoryTypeId: string): void {
-    if (this.categoryTypeId === '1') {
-      this.itemQuickAddForm.reset();
-      this.itemQuickAddForm.get('categoryTypeId')?.setValue('1');
-      this.itemQuickAddForm.get('differentPricing')?.setValue(false);
-      this.itemQuickAddForm.get('isAvailable')?.setValue(true);
-      this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
-      this.itemQuickAddForm.get('isDisabled')?.setValue(false);
-
-    } else if (this.categoryTypeId === '2') {
-      this.itemQuickAddForm.reset();
-      this.selectedTypeId = '4';
-      this.itemTypeItem = 'None';
-      this.itemQuickAddForm.get('categoryTypeId')?.setValue('2');
-      this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
-      this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
-      this.itemQuickAddForm.get('differentPricing')?.setValue(false);
-      this.itemQuickAddForm.get('isAvailable')?.setValue(true);
-      this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
-      this.itemQuickAddForm.get('isDisabled')?.setValue(false);
-
-    } else if (this.categoryTypeId === '3') {
-      this.itemQuickAddForm.reset();
-      this.selectedTypeId = '4';
-      this.itemTypeItem = 'None';
-      this.itemQuickAddForm.get('categoryTypeId')?.setValue('3');
-      this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
-      this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
-      this.itemQuickAddForm.get('differentPricing')?.setValue(false);
-      this.itemQuickAddForm.get('isAvailable')?.setValue(true);
-      this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
-      this.itemQuickAddForm.get('isDisabled')?.setValue(false);
-
-    } else if (this.categoryTypeId === '4') {
-      this.itemQuickAddForm.reset();
-      this.selectedTypeId = '4';
-      this.itemTypeItem = 'None';
-      this.itemQuickAddForm.get('categoryTypeId')?.setValue('4');
-      this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
-      this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
-      this.itemQuickAddForm.get('differentPricing')?.setValue(false);
-      this.itemQuickAddForm.get('isAvailable')?.setValue(true);
-      this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
-      this.itemQuickAddForm.get('isDisabled')?.setValue(false);
+    this.itemQuickAddForm.reset();
+    this.selectedTypeId = '4';
+    this.itemTypeItem = 'None';
+  
+    if (categoryTypeId === '1' || categoryTypeId === '2' || categoryTypeId === '3' || categoryTypeId === '4') {
+      this.itemQuickAddForm.get('categoryTypeId')?.setValue(categoryTypeId);
     }
-
+  
+    this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
+    this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
+    this.itemQuickAddForm.get('differentPricing')?.setValue(false);
+    this.itemQuickAddForm.get('isAvailable')?.setValue(true);
+    this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
+    this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
+    this.itemQuickAddForm.get('isDisabled')?.setValue(false);
   }
+  
 
   ngOnInit(): void {
     this.getCategory();
     this.getItemType();
-    this.getAllUnits();
+
     this.route.queryParams.subscribe(params => {
       this.categoryTypeId = params['categoryTypeId'];
+      this.getAllUnits(this.categoryTypeId);
     });
     this.selectCategoryType(this.categoryTypeId);
 
     this.itemQuickAddForm.get('itemPrice')?.valueChanges.subscribe(() => this.calculateFinalPrice());
     this.itemQuickAddForm.get('itemTax')?.valueChanges.subscribe(() => this.calculateFinalPrice());
 
-    // this.priceInfoArray.controls.forEach((itemControl: AbstractControl) => {
-    //   if (itemControl instanceof FormGroup) {
-    //     itemControl.get('itemPrice')?.valueChanges.subscribe(() => this.calculateFinalPrice());
-    //     itemControl.get('itemTax')?.valueChanges.subscribe(() => this.calculateFinalPrice());
-    //   }
-    // });
+    this.priceInfoArray.controls.forEach((itemControl: AbstractControl) => {
+      if (itemControl instanceof FormGroup) {
+        itemControl.get('itemPrice')?.valueChanges.subscribe(() => this.calculateFinalPrice());
+        itemControl.get('itemTax')?.valueChanges.subscribe(() => this.calculateFinalPrice());
+      }
+    });
 
     // this.itemQuickAddForm.get('allowedOutlets')?.valueChanges.subscribe((selectedOutlets) => {
     //   console.log('Selected Outlets:', selectedOutlets);
@@ -268,40 +302,124 @@ export class QuickAddComponent implements OnInit {
     //     this.addNewPriceItem(1);
     //   } else { }
     // });
+    this.itemQuickAddForm.get('allowedOutlets')?.valueChanges.subscribe((selectedOutlets) => {
+      console.log('Selected Outlets:', selectedOutlets);
+      const atLeastOneOutletSelected = selectedOutlets && selectedOutlets.length > 0;
 
-
+      // If at least one outlet is selected, add a new form array item
+      if (atLeastOneOutletSelected) {
+        this.addNewPriceItem(selectedOutlets);
+      } else {
+        // If no outlets are selected, clear the form array
+        this.clearOutletsFormArray();
+      }
+    });
   }
+
+
+  addNewPriceItem(selectedOutlets: any[]): void {
+    const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+
+    // Remove form array items that are no longer selected
+    this.removeUnselectedItems(selectedOutlets);
+
+    // Add new form array items for the selected outlets
+    for (const outlet of selectedOutlets) {
+      if (!this.outletFormArrayMap.has(outlet)) {
+        const newOutletFormGroup = this.fb.group({
+          itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+          itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
+          itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]]
+        });
+
+        outletsFormArray.push(newOutletFormGroup);
+        this.outletFormArrayMap.set(outlet, newOutletFormGroup);
+      }
+    }
+  }
+
+  // Function to remove unselected form array items
+  removeUnselectedItems(selectedOutlets: any[]): void {
+    const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+
+    // Iterate through the existing form array items
+    for (const outletFormGroup of outletsFormArray.controls as FormGroup[]) {
+      const outlet = this.getKeyByValue(this.outletFormArrayMap, outletFormGroup);
+
+      // If the outlet is not in the selected outlets array, remove the form array item
+      if (!selectedOutlets.includes(outlet)) {
+        outletsFormArray.removeAt(outletsFormArray.controls.indexOf(outletFormGroup));
+        this.outletFormArrayMap.delete(outlet);
+      }
+    }
+  }
+
+  // Function to clear the outletsFormArray
+  clearOutletsFormArray(): void {
+    const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+    outletsFormArray.clear();
+    this.outletFormArrayMap.clear();
+  }
+
+  // Helper function to get a key from a Map by its value
+  getKeyByValue(map: Map<any, FormGroup>, value: FormGroup): any | undefined {
+    for (const [key, val] of map.entries()) {
+      if (val === value) {
+        return key;
+      }
+    }
+    return undefined;
+  }
+
+  // addNewPriceItem(selectedOutlets: any[]): void {
+  //   const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+
+  //   // Add your logic to create a new form group or control based on selectedOutlets
+  //   const newOutletFormGroup = this.fb.group({
+  //     itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+  //     itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
+  //     itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]]
+  //   });
+
+  //   outletsFormArray.push(newOutletFormGroup);
+  // }
+
+  // // Function to clear the outletsFormArray
+  // clearOutletsFormArray(): void {
+  //   const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+  //   outletsFormArray.clear();
+  // }
 
   // general
   onRadioChange(option: string): void {
     this.selectedOption = option;
   }
-  calculateFinalPrice() {
-    const itemPriceControl = this.itemQuickAddForm.get('itemPrice');
-    const itemTaxControl = this.itemQuickAddForm.get('itemTax');
-    const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
-    const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
-    const finalPrice = price + (price * (tax / 100));
-    this.itemQuickAddForm.get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
-  }
-
   // calculateFinalPrice() {
-  //   const itemPriceArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
-  //   itemPriceArray.controls.forEach((itemControl: AbstractControl) => {
-  //     if (itemControl instanceof FormGroup) {
-  //       const itemPriceControl = itemControl.get('itemPrice');
-  //       const itemTaxControl = itemControl.get('itemTax');
-
-  //       const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
-  //       const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
-  //       const finalPrice = price + (price * (tax / 100));
-
-  //       itemControl.get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
-  //       console.log('calculated value', finalPrice.toFixed(2));
-
-  //     }
-  //   });
+  //   const itemPriceControl = this.itemQuickAddForm.get('itemPrice');
+  //   const itemTaxControl = this.itemQuickAddForm.get('itemTax');
+  //   const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
+  //   const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
+  //   const finalPrice = price + (price * (tax / 100));
+  //   this.itemQuickAddForm.get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
   // }
+
+  calculateFinalPrice() {
+    const itemPriceArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+    itemPriceArray.controls.forEach((itemControl: AbstractControl) => {
+      if (itemControl instanceof FormGroup) {
+        const itemPriceControl = itemControl.get('itemPrice');
+        const itemTaxControl = itemControl.get('itemTax');
+
+        const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
+        const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
+        const finalPrice = price + (price * (tax / 100));
+
+        itemControl.get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
+        console.log('calculated value', finalPrice.toFixed(2));
+
+      }
+    });
+  }
 
 
 
@@ -348,7 +466,7 @@ export class QuickAddComponent implements OnInit {
       if (Array.isArray(allowedOutletsValue) && allowedOutletsValue.length > 0) {
         this.itemQuickAddForm.get('allowedOutletsId')?.setValue(this.selectedUnitId);
       }
-      
+
 
       this.loading = true;
       this.apiService.saveMenuItem(this.itemQuickAddForm.value, this.categoryTypeId).subscribe(
@@ -359,6 +477,7 @@ export class QuickAddComponent implements OnInit {
           this.isUniquNameShow = false;
           this.itemQuickAddForm.get('differentPricing')?.setValue(false);
           this.itemQuickAddForm.get('isAvailable')?.setValue(true);
+          this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
           this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
           this.itemQuickAddForm.get('isDisabled')?.setValue(false);
           if (this.categoryTypeId === '2' || this.categoryTypeId === '3' || this.categoryTypeId === '4') {

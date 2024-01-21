@@ -10,8 +10,8 @@ import { environment } from 'src/environment';
 export class PartnerProfileComponent  implements OnInit {
 
   // global variables
-  public categoryTypeId: string[] = environment.categoryTypeId;
   public roleId: string = environment.roleId;
+  public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
   currentPage: string = 'outlet-management';

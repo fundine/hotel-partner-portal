@@ -11,8 +11,8 @@ import { environment } from 'src/environment';
 export class CategoryManagementComponent implements OnInit {
 
   // global variables
-  public categoryTypeId: string[] = environment.categoryTypeId;
   public roleId: string = environment.roleId;
+  public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
   //@Output() cancelClicked = new EventEmitter<void>();
@@ -35,54 +35,70 @@ export class CategoryManagementComponent implements OnInit {
   editingSubCategoryIndex!: number | null;
 
   // api 
-  getRestaurantCategory() {
+  // getRestaurantCategory() {
+  //   this.innerLoading = true;
+  //   this.apiService.getRestaurantCategoryData().subscribe(
+  //     (data) => {
+  //       this.categories = data.results;
+  //       console.log('Data from API:', data);
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching data:', error);
+  //     },
+  //     () => {
+  //       this.innerLoading = false;
+  //     }
+  //   );
+  // }
+  // getBarCategory() {
+  //   this.innerLoading = true;
+  //   this.apiService.getBarCategoryData().subscribe(
+  //     (data) => {
+  //       this.categories = data.results;
+  //       console.log('Data from API:', data);
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching data:', error);
+  //     },
+  //     () => {
+  //       this.innerLoading = false;
+  //     }
+  //   );
+  // }
+  // getLaundryCategory() {
+  //   this.innerLoading = true;
+  //   this.apiService.getLaundryCategoryData().subscribe(
+  //     (data) => {
+  //       this.categories = data.results;
+  //       console.log('Data from API:', data);
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching data:', error);
+  //     },
+  //     () => {
+  //       this.innerLoading = false;
+  //     }
+  //   );
+  // }
+  // getSpaCategory() {
+  //   this.innerLoading = true;
+  //   this.apiService.getSpaCategoryData().subscribe(
+  //     (data) => {
+  //       this.categories = data.results;
+  //       console.log('Data from API:', data);
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching data:', error);
+  //     },
+  //     () => {
+  //       this.innerLoading = false;
+  //     }
+  //   );
+  // }
+
+  getCategoryList(activeCategory: string) {
     this.innerLoading = true;
-    this.apiService.getRestaurantCategoryData().subscribe(
-      (data) => {
-        this.categories = data.results;
-        console.log('Data from API:', data);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      },
-      () => {
-        this.innerLoading = false;
-      }
-    );
-  }
-  getBarCategory() {
-    this.innerLoading = true;
-    this.apiService.getBarCategoryData().subscribe(
-      (data) => {
-        this.categories = data.results;
-        console.log('Data from API:', data);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      },
-      () => {
-        this.innerLoading = false;
-      }
-    );
-  }
-  getLaundryCategory() {
-    this.innerLoading = true;
-    this.apiService.getLaundryCategoryData().subscribe(
-      (data) => {
-        this.categories = data.results;
-        console.log('Data from API:', data);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      },
-      () => {
-        this.innerLoading = false;
-      }
-    );
-  }
-  getSpaCategory() {
-    this.innerLoading = true;
-    this.apiService.getSpaCategoryData().subscribe(
+    this.apiService.getCategoryData(activeCategory).subscribe(
       (data) => {
         this.categories = data.results;
         console.log('Data from API:', data);
@@ -99,38 +115,41 @@ export class CategoryManagementComponent implements OnInit {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    if (this.categoryTypeId.includes('1')) {
-      this.getRestaurantCategory();
-      this.activeCategory = '1';
-    } else if (this.categoryTypeId.includes('2')) {
-      this.getBarCategory();
-      this.activeCategory = '2';
-    } else if (this.categoryTypeId.includes('3')) {
-      this.getLaundryCategory();
-      this.activeCategory = '3';
-    } else if (this.categoryTypeId.includes('4')) {
-      this.getSpaCategory();
-      this.activeCategory = '4';
-    } else {
-      this.getRestaurantCategory();
-    }
+    // if (this.categoryTypeId.includes('1')) {
+    //   this.getRestaurantCategory();
+    //   this.activeCategory = '1';
+    // } else if (this.categoryTypeId.includes('2')) {
+    //   this.getBarCategory();
+    //   this.activeCategory = '2';
+    // } else if (this.categoryTypeId.includes('3')) {
+    //   this.getLaundryCategory();
+    //   this.activeCategory = '3';
+    // } else if (this.categoryTypeId.includes('4')) {
+    //   this.getSpaCategory();
+    //   this.activeCategory = '4';
+    // } else {
+    //   this.getRestaurantCategory();
+    // }
+
+    this.getCategoryList(this.activeCategory);
   }
 
   selectCategoryType(categoryTypeId: string): void {
     this.activeCategory = categoryTypeId;
-    if (categoryTypeId === '1') {
-      this.getRestaurantCategory();
-      this.activeCategory = '1';
-    } else if (categoryTypeId === '2') {
-      this.getBarCategory();
-      this.activeCategory = '2';
-    } else if (categoryTypeId === '3') {
-      this.getLaundryCategory();
-      this.activeCategory = '3';
-    } else if (categoryTypeId === '4') {
-      this.getSpaCategory();
-      this.activeCategory = '4';
-    }
+    // if (categoryTypeId === '1') {
+    //   this.getRestaurantCategory();
+    //   this.activeCategory = '1';
+    // } else if (categoryTypeId === '2') {
+    //   this.getBarCategory();
+    //   this.activeCategory = '2';
+    // } else if (categoryTypeId === '3') {
+    //   this.getLaundryCategory();
+    //   this.activeCategory = '3';
+    // } else if (categoryTypeId === '4') {
+    //   this.getSpaCategory();
+    //   this.activeCategory = '4';
+    // }
+    this.getCategoryList(this.activeCategory);
   }
 
   // add new category
@@ -208,15 +227,16 @@ export class CategoryManagementComponent implements OnInit {
     this.editingSubCategoryIndex = null;
     this.isEditingCategory = false;
     this.isEditingSubCategory = false;
-    if (this.activeCategory === '1') {
-      this.getRestaurantCategory();
-    } else if (this.activeCategory === '2') {
-      this.getBarCategory();
-    } else if (this.activeCategory === '3') {
-      this.getLaundryCategory();
-    } else if (this.activeCategory === '4') {
-      this.getSpaCategory();
-    }
+    // if (this.activeCategory === '1') {
+    //   this.getRestaurantCategory();
+    // } else if (this.activeCategory === '2') {
+    //   this.getBarCategory();
+    // } else if (this.activeCategory === '3') {
+    //   this.getLaundryCategory();
+    // } else if (this.activeCategory === '4') {
+    //   this.getSpaCategory();
+    // }
+    this.getCategoryList(this.activeCategory);
   }
 
   onDrop(event: CdkDragDrop<string[]>) {

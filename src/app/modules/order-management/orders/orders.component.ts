@@ -96,8 +96,8 @@ export class OrdersComponent implements OnInit {
   ];
 
   // global variables
-  public categoryTypeId: string[] = environment.categoryTypeId;
   public roleId: string = environment.roleId;
+  public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
   defaultInputValue = 25;

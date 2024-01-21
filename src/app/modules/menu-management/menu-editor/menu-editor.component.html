@@ -1,7 +1,7 @@
 <div class="filter-bar">
     <div class="filter-controls">
         <div class="left-group">
-            <div class="unit-sel" (click)="onUnitListDisplay()">
+            <div class="unit-sel" (click)="innerLoading ? null : onUnitListDisplay()">
                 <div class="unit-name">{{ selectedUnitName }} <i class="vi vi-chevron-down"></i></div>
                 <div class="unit-status">ON - <span class="count">{{ getOpenUnitsCount() }}</span></div>
             </div>
@@ -173,7 +173,7 @@
                             </div>
                             <div class="">Still facing any troubles?</div>
                             <div>Visit <a href="https://anamikawedsvenu.in/"
-                                    target="_blank">www.fundine.com/help/addmenu</a></div>
+                                    target="_blank">www.fundine.com/help/additem</a></div>
                         </div>
                     </ng-container>
                 </div>
@@ -237,8 +237,7 @@
                                                             </ng-container>
                                                             <ng-container
                                                                 *ngIf="item.itemTypeId === '3' && !(item.itemTypeId === '1' || item.itemTypeId === '2')">
-                                                                <i class="vi vi-veg"></i>
-                                                                <i class="vi vi-non-veg"></i>
+                                                                <i class="vi vi-veg-egg"></i>
                                                             </ng-container>
                                                         </ng-container>
                                                     </label>
@@ -316,8 +315,7 @@
                                                                     </ng-container>
                                                                     <ng-container
                                                                         *ngIf="item.itemTypeId === '3' && !(item.itemTypeId === '1' || item.itemTypeId === '2')">
-                                                                        <i class="vi vi-veg"></i>
-                                                                        <i class="vi vi-non-veg"></i>
+                                                                        <i class="vi vi-veg-egg"></i>
                                                                     </ng-container>
                                                                 </ng-container>
                                                             </label>

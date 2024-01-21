@@ -12,9 +12,9 @@ import { environment } from 'src/environment';
 export class MenuEditorComponent implements OnInit {
 
   // global variables
-  public categoryTypeId: string[] = environment.categoryTypeId;
   public roleId: string = environment.roleId;
   public unitId: string = environment.unitId;
+  public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
   @ViewChild('rightContainer') rightContainer!: ElementRef;
@@ -63,9 +63,9 @@ export class MenuEditorComponent implements OnInit {
 
   // api
   menuItems: any = [];
-  getAllRestaurantMenuList(unitId: any) {
+  getUnitWiseMenuList(unitId: any) {
     this.innerLoading = true;
-    this.apiService.getRestaurantMenuData().subscribe(
+    this.apiService.getUnitMenuData(unitId).subscribe(
       (data) => {
         this.menuItems = data.results;
         console.log('Data from API:', data);
@@ -81,18 +81,23 @@ export class MenuEditorComponent implements OnInit {
 
   assignedUnits: any = [];
   getAssignedUnitsList() {
+    this.innerLoading = true;
     this.apiService.getUnitsList().subscribe(
       (data) => {
         this.assignedUnits = data.results;
         this.selectedUnitName = this.assignedUnits[0].unitName;
-        this.getAllRestaurantMenuList(this.unitId);
-        // this.getAllRestaurantMenuList();
+        console.log('Assigned Units Data:', data);
+
+        this.unitId = this.assignedUnits[0].unitId;
+        this.getUnitWiseMenuList(this.unitId);
         console.log('Data from API:', data);
       },
       (error) => {
         console.error('Error fetching data:', error);
       },
-      () => { }
+      () => { 
+        this.innerLoading = false;
+      }
     );
   }
 
@@ -103,6 +108,21 @@ export class MenuEditorComponent implements OnInit {
       this.selectedCategoryIndexValue = 0;
       this.scrollRightContainer();
     }
+  }
+
+  // unit switching
+  onUnitListDisplay() {
+    this.unitListModal = true;
+  }
+  switchUnit(selectedUnit: any, index: number) {
+    this.selectedUnitName = selectedUnit.unitName;
+    this.selectedUnitIndex = index;
+    this.unitId = selectedUnit.unitId;
+    this.getUnitWiseMenuList(this.unitId);
+  }
+  
+  getOpenUnitsCount(): number {
+    return this.assignedUnits.filter((unit: { isUnitOpen: any; }) => unit.isUnitOpen).length;
   }
 
   // general
@@ -117,18 +137,6 @@ export class MenuEditorComponent implements OnInit {
         selectedCategoryElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
-  }
-
-  // unit switching
-  onUnitListDisplay() {
-    this.unitListModal = true;
-  }
-  switchUnit(selectedUnit: any, index: number) {
-    this.selectedUnitName = selectedUnit.unitName;
-    this.selectedUnitIndex = index;
-  }
-  getOpenUnitsCount(): number {
-    return this.assignedUnits.filter((unit: { isUnitOpen: any; }) => unit.isUnitOpen).length;
   }
 
   // counts

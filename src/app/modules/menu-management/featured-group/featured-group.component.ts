@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
+import { environment } from 'src/environment';
 
 @Component({
   selector: 'app-featured-group',
@@ -9,6 +10,11 @@ import { ApiService } from 'src/app/api.service';
   styleUrls: ['./featured-group.component.scss']
 })
 export class FeaturedGroupComponent implements OnInit {
+
+    // global variables
+    public roleId: string = environment.roleId;
+    public unitId: string = environment.unitId;
+    // end global variables
 
   categoryTypeId: string = '';
 
@@ -34,9 +40,9 @@ export class FeaturedGroupComponent implements OnInit {
 
   // feature group api
   featureGroups: any = [];
-  getAllRestaurantFeatureGroups() {
+  getCategoryWiseFeatureGroups(categoryTypeId: any) {
     this.innerLoading = true;
-    this.apiService.getRestaurantFeatureGroup().subscribe(
+    this.apiService.getFeatureGroupData(categoryTypeId).subscribe(
       (data) => {
         this.featureGroups = data.results;
         console.log('Data from API:', data);
@@ -49,38 +55,12 @@ export class FeaturedGroupComponent implements OnInit {
       }
     );
   }
-  getAllBarFeatureGroups() {
-    this.innerLoading = true;
-    this.apiService.getBarFeatureGroup().subscribe(
-      (data) => {
-        this.featureGroups = data.results;
-        console.log('Data from API:', data);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      },
-      () => {
-        this.innerLoading = false;
-      }
-    );
-  }
-  triggerFeatureGroupApi() {
-    if (this.categoryTypeId.includes('1')) {
-      this.getAllRestaurantFeatureGroups();
-    }
-    else if (this.categoryTypeId.includes('2')) {
-      this.getAllBarFeatureGroups();
-    }
-    else {
-      this.getAllRestaurantFeatureGroups();
-    }
-  }
-  // menu items api
+  
   menuItems: any = [];
-  getAllRestaurantMenuitems() {
+  getCategoryWiseMenuitems(categoryTypeId: any, unitId: any) {
     this.menuItemsLoading = true;
     this.innerLoading = true;
-    this.apiService.getRestaurantMenuItems().subscribe(
+    this.apiService.getCategoryMenuItems(categoryTypeId, unitId).subscribe(
       (data) => {
         this.menuItems = data.results;
         console.log('Data from API:', data);
@@ -90,23 +70,6 @@ export class FeaturedGroupComponent implements OnInit {
       },
       () => {
         this.menuItemsLoading = true;
-        this.innerLoading = false;
-      }
-    );
-  }
-  getAllBarMenuitems() {
-    this.menuItemsLoading = true;
-    this.innerLoading = true;
-    this.apiService.getBarMenuItems().subscribe(
-      (data) => {
-        this.menuItems = data.results;
-        console.log('Data from API:', data);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      },
-      () => {
-        this.menuItemsLoading = false;
         this.innerLoading = false;
       }
     );
@@ -150,7 +113,7 @@ export class FeaturedGroupComponent implements OnInit {
       this.categoryTypeId = params['categoryTypeId'];
     });
     this.selectCategoryType(this.categoryTypeId);
-    this.triggerFeatureGroupApi();
+    this.getCategoryWiseFeatureGroups(this.categoryTypeId);
 
     // if (this.isUniquNameShow === true) {
     // this.featureMenuItemsForm.get('itemGroupName')?.valueChanges.subscribe(() => {
@@ -172,16 +135,9 @@ export class FeaturedGroupComponent implements OnInit {
   // general
   addNewFeatureGroup() {
     this.featureGroupsList = false;
-    if (this.categoryTypeId.includes('1')) {
-      this.getAllRestaurantMenuitems();
-    }
-    else if (this.categoryTypeId.includes('2')) {
-      this.getAllBarMenuitems();
-    }
-    else {
-      this.getAllRestaurantMenuitems();
-    }
+    this.getCategoryWiseMenuitems(this.categoryTypeId, this.unitId);
   }
+  
   cancelAddfeatureGroup() {
     const itemsArray = this.featureMenuItemsForm.get('items') as FormArray;
     if (this.featureMenuItemsForm.dirty || itemsArray.length > 0) {
@@ -201,7 +157,7 @@ export class FeaturedGroupComponent implements OnInit {
     const itemsArray = this.featureMenuItemsForm.get('items') as FormArray;
     itemsArray.clear();
     this.formChangeIdentifiedDialog = false;
-    this.triggerFeatureGroupApi();
+    this.getCategoryWiseFeatureGroups(this.categoryTypeId);
     this.featureGroupsList = true;
   }
   onAddNewMenuItem() {
@@ -272,7 +228,7 @@ export class FeaturedGroupComponent implements OnInit {
             itemsArray.clear();
             this.alertSuccess = true;
             this.featureGroupsList = true;
-            this.triggerFeatureGroupApi();
+            this.getCategoryWiseFeatureGroups(this.categoryTypeId);
           },
           (error) => {
             this.loading = false;

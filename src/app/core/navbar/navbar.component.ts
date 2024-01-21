@@ -12,8 +12,8 @@ export class NavbarComponent implements OnInit {
   @Output() tabClicked: EventEmitter<string> = new EventEmitter<string>();
 
   // global variables
-  public categoryTypeId: string[] = environment.categoryTypeId;
   public roleId: string = environment.roleId;
+  public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
   activeTab: string = '';
@@ -49,7 +49,7 @@ export class NavbarComponent implements OnInit {
       { tabName: 'guest checkin', route: '/core/guestcheckin', iconClass: 'vi vi-reception-o', name: 'Check-In' },
       { tabName: 'orders', route: '/core/orders', iconClass: 'vi vi-list-o', name: 'Orders' },
       { tabName: 'dine track', route: '/core/dinetrack', iconClass: 'vi vi-dine-o', name: 'Dine-Track' },
-      { tabName: 'room cleaning', route: '/core/roomcleaning', iconClass: 'vi vi-room-cleaning-o', name: 'Cleaning' },
+      // { tabName: 'room cleaning', route: '/core/roomcleaning', iconClass: 'vi vi-room-cleaning-o', name: 'Cleaning' },
       { tabName: 'valet parking', route: '/core/valetparking', iconClass: 'vi vi-parking-o', name: 'Parking' },
       { tabName: 'room editor', route: '/core/roomeditor', iconClass: 'vi vi-bed-o', name: 'Rooms' },
       (this.categoryTypeId.includes('1') ? { tabName: 'menu editor', route: '/core/menueditor', iconClass: 'vi vi-book-o', name: 'Menu' } : null),
@@ -75,8 +75,8 @@ export class NavbarComponent implements OnInit {
       this.activeTab = 'insights';
       this.router.navigate(['/core/insights']);
     } else if (this.roleId === '4') {
-      this.activeTab = 'room editor';
-      this.router.navigate(['/core/roomeditor']);
+      this.activeTab = 'menu editor';
+      this.router.navigate(['/core/menueditor']);
     }
     this.tabClicked.emit(this.activeTab);
   }

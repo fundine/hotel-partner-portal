@@ -8,6 +8,11 @@
                     *ngIf="(categoryTypeId === '1' || categoryTypeId === '2')">Featured Group</div>
             </div>
         </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="nav-item btn-back" (click)="onCancelClick()">Back To Menu <i class="vi vi-chevron-left block"></i></div>
+            </div>
+        </div>
     </div>
     <div class="aside-right">
         <form [formGroup]="itemQuickAddForm" autocomplete="off">
@@ -66,11 +71,10 @@
                                 <div class="row">
                                     <div class="col-lg-5">
                                         <multi-select-control [title]="'Allowed Outlets'" validation="required"
-                                            formControlName="allowedOutlets" [options]="itemUnitOptions" [selectedItems]="itemUnitItem"
-                                            (optionSelected)="selectUnitType($event)"
+                                            formControlName="allowedOutlets" [options]="itemUnitOptions"
+                                            [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
                                             [validationClass]="(itemQuickAddForm.get('allowedOutlets')?.invalid && itemQuickAddForm.get('allowedOutlets')?.touched) ?? false">
                                         </multi-select-control>
-
                                     </div>
                                     <div class="col-lg-4">
                                         <select-control title="Category" validation="required"
@@ -131,9 +135,10 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <multi-select-control [title]="'Allowed Outlets'" validation="required"
-                                            formControlName="allowedOutlets"
-                                            [options]="['Outlet 1', 'Outlet 2', 'Outlet 3', 'Outlet 4']"
-                                            [validationClass]="(itemQuickAddForm.get('allowedOutlets')?.invalid && itemQuickAddForm.get('allowedOutlets')?.touched) ?? false"></multi-select-control>
+                                            formControlName="allowedOutlets" [options]="itemUnitOptions"
+                                            [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
+                                            [validationClass]="(itemQuickAddForm.get('allowedOutlets')?.invalid && itemQuickAddForm.get('allowedOutlets')?.touched) ?? false">
+                                        </multi-select-control>
                                     </div>
                                     <div class="col-lg-6">
                                         <select-control title="Category" validation="required"
@@ -192,7 +197,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+
+
+                        <!-- <div class="row">
                             <div class="col-lg-3">
                                 <div class="form-group">
                                     <label class="inp-label required">Price</label>
@@ -231,14 +238,14 @@
                                         Allowed</label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
 
-                        <!-- <div formArrayName="itemPriceArray">
+                        <div formArrayName="itemPriceArray">
                             <div *ngFor="let item of priceInfoArray.controls; let i = index;">
                                 <div [formGroupName]="i">
                                     <div class="item-price-wrap">
-                                        <div class="outlet-name">Price For Outlet A</div>
+                                        <div class="outlet-name">Price For Outlet {{ item.get('outlet')?.value }}</div>
                                         <div class="row">
                                             <div class="col-lg-3">
                                                 <div class="form-group">
@@ -287,7 +294,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
 
                     </ng-container>
 
@@ -372,6 +379,10 @@
                             <label class="checkbox-container clear-bottom">
                                 <input type="checkbox" formControlName="isAvailable" />
                                 <span class="checkmark"></span>Available
+                            </label>
+                            <label class="checkbox-container clear-bottom">
+                                <input type="checkbox" formControlName="isDisplayInMenu" />
+                                <span class="checkmark"></span>Display In Menu
                             </label>
                             <label class="checkbox-container clear-bottom"
                                 *ngIf="(categoryTypeId === '1' || categoryTypeId === '2')">

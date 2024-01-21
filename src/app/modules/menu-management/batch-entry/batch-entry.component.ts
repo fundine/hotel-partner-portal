@@ -22,10 +22,10 @@ export class BatchEntryComponent implements OnInit {
   featuredGroupClicked: boolean = false;
   selectedImage: (string | null)[] = [];
   // selectedImage: string | ArrayBuffer | null = null;
+  // selectedOption: string = 'cafe';
+  // activeCategory: string = '1';
 
   // select control and api
-  selectedOption: string = 'cafe';
-  activeCategory: string = '1';
   selectedCategoryId: any;
   categoryItem: string = '';
   categoryOptions: any;
@@ -136,6 +136,7 @@ export class BatchEntryComponent implements OnInit {
         itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         description: ['', [Validators.maxLength(500)]],
         isAvailable: [true],
+        isDisplayInMenu: [true],
         isDisabled: [false],
         isBestSeller: [false]
       });
@@ -166,6 +167,7 @@ export class BatchEntryComponent implements OnInit {
       this.menuBatchEntryForm.get('categoryTypeId')?.setValue('1');
       menuArray.controls.forEach((control: AbstractControl) => {
         (control as FormGroup).get('isAvailable')?.setValue(true);
+        (control as FormGroup).get('isDisplayInMenu')?.setValue(true);
         (control as FormGroup).get('isBestSeller')?.setValue(false);
         (control as FormGroup).get('isDisabled')?.setValue(false);
       });
@@ -177,6 +179,7 @@ export class BatchEntryComponent implements OnInit {
         (control as FormGroup).get('itemTypeId')?.setValue('4');
         (control as FormGroup).get('itemTypeName')?.setValue('None');
         (control as FormGroup).get('isAvailable')?.setValue(true);
+        (control as FormGroup).get('isDisplayInMenu')?.setValue(true);
         (control as FormGroup).get('isBestSeller')?.setValue(false);
         (control as FormGroup).get('isDisabled')?.setValue(false);
       });
@@ -188,6 +191,7 @@ export class BatchEntryComponent implements OnInit {
         (control as FormGroup).get('itemTypeId')?.setValue('4');
         (control as FormGroup).get('itemTypeName')?.setValue('None');
         (control as FormGroup).get('isAvailable')?.setValue(true);
+        (control as FormGroup).get('isDisplayInMenu')?.setValue(true);
         (control as FormGroup).get('isBestSeller')?.setValue(false);
         (control as FormGroup).get('isDisabled')?.setValue(false);
       });
@@ -198,6 +202,7 @@ export class BatchEntryComponent implements OnInit {
         (control as FormGroup).get('itemTypeId')?.setValue('4');
         (control as FormGroup).get('itemTypeName')?.setValue('None');
         (control as FormGroup).get('isAvailable')?.setValue(true);
+        (control as FormGroup).get('isDisplayInMenu')?.setValue(true);
         (control as FormGroup).get('isBestSeller')?.setValue(false);
         (control as FormGroup).get('isDisabled')?.setValue(false);
       });
@@ -298,6 +303,7 @@ export class BatchEntryComponent implements OnInit {
 
             menuArray.controls.forEach((control: AbstractControl) => {
               (control as FormGroup).get('isAvailable')?.setValue(true);
+              (control as FormGroup).get('isDisplayInMenu')?.setValue(true);
               (control as FormGroup).get('isBestSeller')?.setValue(false);
               (control as FormGroup).get('isDisabled')?.setValue(false);
               

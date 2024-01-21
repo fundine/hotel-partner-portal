@@ -26,6 +26,14 @@
                         color: inherit;
                         font-size: 0.9em;
                     }
+                    &.btn-back {
+                        flex-direction: row-reverse;
+                        justify-content: flex-end;
+                        i {
+                            display: block;
+                            padding-right: 10px;
+                        }
+                    }
                     &.active {
                         color: #99012a;
                         background: #faebd7;
