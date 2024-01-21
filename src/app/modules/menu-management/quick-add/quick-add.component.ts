@@ -22,7 +22,7 @@ export class QuickAddComponent implements OnInit {
   selectedImage: string | ArrayBuffer | null = null;
   selectedOption: string = 'cafe';
   itemPriceInfo: any = [];
-  outletFormArrayMap: Map<any, FormGroup> = new Map<any, FormGroup>(); 
+  outletFormArrayMap: Map<any, FormGroup> = new Map<any, FormGroup>();
 
   // select control and api
   selectedCategoryId: any;
@@ -30,7 +30,8 @@ export class QuickAddComponent implements OnInit {
   categoryOptions: any;
   categoryList: { id: string; categoryName: string; }[] | undefined;
   selectedOutlets: any;
-  
+  finalPrice: any;
+
   getCategory() {
     const id = this.route.snapshot.queryParams['categoryTypeId'];
     this.apiService.getItemCategoryData(id).subscribe(
@@ -122,16 +123,6 @@ export class QuickAddComponent implements OnInit {
     );
   }
 
-  // selectUnitType(event: any) {
-  //   const selectedUnitName = event as string;
-  //   const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);
-
-  //   if (selectedUnitItem) {
-  //     this.selectedUnitId = selectedUnitItem.unitId;
-  //     this.itemUnitItem = selectedUnitItem.unitName;
-  //   }
-  // }
-
   selectUnitType(event: any) {
     const selectedUnitName = event as string;
     const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);
@@ -157,8 +148,6 @@ export class QuickAddComponent implements OnInit {
     itemTypeName: ['', [Validators.required]],
 
 
-    // allowedOutlets: [[], [Validators.required]],
-    allowedOutletsId: [this.fb.array([]), [Validators.required]],
     allowedOutlets: [this.fb.array([]), [Validators.required]],
 
 
@@ -170,10 +159,6 @@ export class QuickAddComponent implements OnInit {
 
     differentPricing: [false],
 
-    // itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-    // itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-    // itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-
     itemPriceArray: this.fb.array([]),
 
     isAvailable: [true],
@@ -182,17 +167,6 @@ export class QuickAddComponent implements OnInit {
     isDisabled: [false],
   })
 
-  // addNewPriceItem(defaultItemCount: number = 1) {
-  //   this.itemPriceInfo = this.priceInfoArray;
-  //   for (let i = 0; i < defaultItemCount; i++) {
-  //     const newItemPrice = this.fb.group({
-  //       itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-  //       itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-  //       itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-  //     });
-  //     this.itemPriceInfo.push(newItemPrice);
-  //   }
-  // }
   get priceInfoArray() {
     return this.itemQuickAddForm.get('itemPriceArray') as FormArray;
   }
@@ -203,68 +177,17 @@ export class QuickAddComponent implements OnInit {
   get itemInfo() {
     return this.itemQuickAddForm;
   }
-  // selectCategoryType(categoryTypeId: string): void {
-  //   if (this.categoryTypeId === '1') {
-  //     this.itemQuickAddForm.reset();
-  //     this.itemQuickAddForm.get('categoryTypeId')?.setValue('1');
-  //     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
-  //     this.itemQuickAddForm.get('isAvailable')?.setValue(true);
-  //     this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
-  //     this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
-  //     this.itemQuickAddForm.get('isDisabled')?.setValue(false);
-
-  //   } else if (this.categoryTypeId === '2') {
-  //     this.itemQuickAddForm.reset();
-  //     this.selectedTypeId = '4';
-  //     this.itemTypeItem = 'None';
-  //     this.itemQuickAddForm.get('categoryTypeId')?.setValue('2');
-  //     this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
-  //     this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
-  //     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
-  //     this.itemQuickAddForm.get('isAvailable')?.setValue(true);
-  //     this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
-  //     this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
-  //     this.itemQuickAddForm.get('isDisabled')?.setValue(false);
-
-  //   } else if (this.categoryTypeId === '3') {
-  //     this.itemQuickAddForm.reset();
-  //     this.selectedTypeId = '4';
-  //     this.itemTypeItem = 'None';
-  //     this.itemQuickAddForm.get('categoryTypeId')?.setValue('3');
-  //     this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
-  //     this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
-  //     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
-  //     this.itemQuickAddForm.get('isAvailable')?.setValue(true);
-  //     this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
-  //     this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
-  //     this.itemQuickAddForm.get('isDisabled')?.setValue(false);
-
-  //   } else if (this.categoryTypeId === '4') {
-  //     this.itemQuickAddForm.reset();
-  //     this.selectedTypeId = '4';
-  //     this.itemTypeItem = 'None';
-  //     this.itemQuickAddForm.get('categoryTypeId')?.setValue('4');
-  //     this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
-  //     this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
-  //     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
-  //     this.itemQuickAddForm.get('isAvailable')?.setValue(true);
-  //     this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
-  //     this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
-  //     this.itemQuickAddForm.get('isDisabled')?.setValue(false);
-  //   }
-
-  // }
 
 
   selectCategoryType(categoryTypeId: string): void {
     this.itemQuickAddForm.reset();
     this.selectedTypeId = '4';
     this.itemTypeItem = 'None';
-  
+
     if (categoryTypeId === '1' || categoryTypeId === '2' || categoryTypeId === '3' || categoryTypeId === '4') {
       this.itemQuickAddForm.get('categoryTypeId')?.setValue(categoryTypeId);
     }
-  
+
     this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
     this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
@@ -273,7 +196,7 @@ export class QuickAddComponent implements OnInit {
     this.itemQuickAddForm.get('isBestSeller')?.setValue(false);
     this.itemQuickAddForm.get('isDisabled')?.setValue(false);
   }
-  
+
 
   ngOnInit(): void {
     this.getCategory();
@@ -285,23 +208,9 @@ export class QuickAddComponent implements OnInit {
     });
     this.selectCategoryType(this.categoryTypeId);
 
-    this.itemQuickAddForm.get('itemPrice')?.valueChanges.subscribe(() => this.calculateFinalPrice());
-    this.itemQuickAddForm.get('itemTax')?.valueChanges.subscribe(() => this.calculateFinalPrice());
+    const itemPriceArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+    itemPriceArray.valueChanges.subscribe(() => this.calculateFinalPrice());
 
-    this.priceInfoArray.controls.forEach((itemControl: AbstractControl) => {
-      if (itemControl instanceof FormGroup) {
-        itemControl.get('itemPrice')?.valueChanges.subscribe(() => this.calculateFinalPrice());
-        itemControl.get('itemTax')?.valueChanges.subscribe(() => this.calculateFinalPrice());
-      }
-    });
-
-    // this.itemQuickAddForm.get('allowedOutlets')?.valueChanges.subscribe((selectedOutlets) => {
-    //   console.log('Selected Outlets:', selectedOutlets);
-    //   const atLeastOneOutletSelected = selectedOutlets && selectedOutlets.length > 0;
-    //   if (atLeastOneOutletSelected) {
-    //     this.addNewPriceItem(1);
-    //   } else { }
-    // });
     this.itemQuickAddForm.get('allowedOutlets')?.valueChanges.subscribe((selectedOutlets) => {
       console.log('Selected Outlets:', selectedOutlets);
       const atLeastOneOutletSelected = selectedOutlets && selectedOutlets.length > 0;
@@ -328,8 +237,9 @@ export class QuickAddComponent implements OnInit {
       if (!this.outletFormArrayMap.has(outlet)) {
         const newOutletFormGroup = this.fb.group({
           itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+          packageCost:['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
           itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-          itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]]
+          itemFinalPrice: [''],
         });
 
         outletsFormArray.push(newOutletFormGroup);
@@ -371,52 +281,29 @@ export class QuickAddComponent implements OnInit {
     return undefined;
   }
 
-  // addNewPriceItem(selectedOutlets: any[]): void {
-  //   const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
-
-  //   // Add your logic to create a new form group or control based on selectedOutlets
-  //   const newOutletFormGroup = this.fb.group({
-  //     itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-  //     itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-  //     itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]]
-  //   });
-
-  //   outletsFormArray.push(newOutletFormGroup);
-  // }
-
-  // // Function to clear the outletsFormArray
-  // clearOutletsFormArray(): void {
-  //   const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
-  //   outletsFormArray.clear();
-  // }
-
   // general
   onRadioChange(option: string): void {
     this.selectedOption = option;
   }
-  // calculateFinalPrice() {
-  //   const itemPriceControl = this.itemQuickAddForm.get('itemPrice');
-  //   const itemTaxControl = this.itemQuickAddForm.get('itemTax');
-  //   const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
-  //   const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
-  //   const finalPrice = price + (price * (tax / 100));
-  //   this.itemQuickAddForm.get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
-  // }
 
   calculateFinalPrice() {
     const itemPriceArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
     itemPriceArray.controls.forEach((itemControl: AbstractControl) => {
       if (itemControl instanceof FormGroup) {
         const itemPriceControl = itemControl.get('itemPrice');
+        const itemPackageCostControl = itemControl.get('packageCost');
         const itemTaxControl = itemControl.get('itemTax');
 
         const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
+        const packageCost = (typeof itemPackageCostControl?.value === 'string' ? parseFloat(itemPackageCostControl.value) : 0) || 0;
         const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
-        const finalPrice = price + (price * (tax / 100));
+        const finalPrice = price + packageCost + (price * (tax / 100));
+        //const finalPrice = price + tax;
+
+        //this.finalPrice = price + packageCost + (price * (tax / 100));
 
         itemControl.get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
-        console.log('calculated value', finalPrice.toFixed(2));
-
+        //console.log('calculated value', finalPrice.toFixed(2));
       }
     });
   }
@@ -445,34 +332,55 @@ export class QuickAddComponent implements OnInit {
   }
 
   // save item
+
   onSaveMenuItem() {
+
+    const outletsFormArray = this.itemQuickAddForm.get('allowedOutlets') as FormArray;
+
+    const selectedOutletItems = outletsFormArray.value.map((unitName: string) => {
+      const unit = this.itemUnitList?.find((item) => item.unitName === unitName);
+      if (unit) {
+        return { unitId: unit.unitId };
+      } else {
+        return null;
+      }
+    });
+
+    const itemPriceArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+    const transformedArray = itemPriceArray.value.map((item: any, index: number) => {
+      const unitId = selectedOutletItems[index]?.unitId;
+
+      return {
+        unitId: unitId || '',
+        itemPrice: item.itemPrice
+      };
+    });
+
+    console.log(transformedArray);
+
+
+
     if (this.itemQuickAddForm.valid) {
-      console.log('Item Info', this.itemQuickAddForm)
-      if (this.itemQuickAddForm.get('categoryName')?.value !== '') {
-        this.itemQuickAddForm.get('categoryId')?.setValue(this.selectedCategoryId);
-      }
-      if (this.itemQuickAddForm.get('subCategoryName')?.value !== '') {
-        this.itemQuickAddForm.get('subCategoryId')?.setValue(this.selectedSubCategoryId);
-      }
-      if (this.itemQuickAddForm.get('itemTypeName')?.value !== '') {
-        this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
-      }
-      // if (this.itemQuickAddForm.get('allowedOutlets')?.value !== '') {
-      //   this.itemQuickAddForm.get('allowedOutletsId')?.setValue(this.selectedUnitId);
-      // }
 
-      const allowedOutletsValue = this.itemQuickAddForm.get('allowedOutlets')?.value;
-
-      if (Array.isArray(allowedOutletsValue) && allowedOutletsValue.length > 0) {
-        this.itemQuickAddForm.get('allowedOutletsId')?.setValue(this.selectedUnitId);
-      }
-
+      const requestBody = {
+        categoryId: this.selectedCategoryId,
+        subCategoryId: this.selectedSubCategoryId,
+        itemName: this.itemQuickAddForm.get('itemName')?.value,
+        itemTypeId: this.selectedTypeId,
+        description: this.itemQuickAddForm.get('description')?.value,
+        isBestSeller: this.itemQuickAddForm.get('isBestSeller')?.value,
+        isDisplayInMenu: this.itemQuickAddForm.get('isDisplayInMenu')?.value,
+        isAvailable: this.itemQuickAddForm.get('isAvailable')?.value,
+        isDisabled: this.itemQuickAddForm.get('isDisabled')?.value,
+        imageUrl: null,
+        itemUnits: selectedOutletItems,
+        itemPriceList: transformedArray,
+      };
 
       this.loading = true;
-      this.apiService.saveMenuItem(this.itemQuickAddForm.value, this.categoryTypeId).subscribe(
+      this.apiService.saveMenuItem(requestBody, this.categoryTypeId).subscribe(
         (response: any) => {
           console.log('Quickadd saved successfully', response);
-          // this.itemQuickAddForm.get('allowedOutlets')?.setValue([]);
           this.itemQuickAddForm.reset();
           this.isUniquNameShow = false;
           this.itemQuickAddForm.get('differentPricing')?.setValue(false);
@@ -503,6 +411,19 @@ export class QuickAddComponent implements OnInit {
     }
     this.alertSuccess = false;
   }
+
+  getItemOutletValue(index: number): string {
+    const allowedOutlets: any = this.itemQuickAddForm.get('allowedOutlets')?.value;
+    if (Array.isArray(allowedOutlets) && allowedOutlets.length > index) {
+      return allowedOutlets[index];
+    } else {
+      return 'N/A';
+    }
+  }
+
+
+
+
 
   // navigation
   navigateToBatchEntry() {
