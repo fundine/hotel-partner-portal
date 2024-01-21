@@ -245,9 +245,9 @@
                             <div *ngFor="let item of priceInfoArray.controls; let i = index;">
                                 <div [formGroupName]="i">
                                     <div class="item-price-wrap">
-                                        <div class="outlet-name">Price For Outlet {{ item.get('outlet')?.value }}</div>
+                                        <div class="outlet-name">Price for {{ getItemOutletValue(i) }}</div>
                                         <div class="row">
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-2">
                                                 <div class="form-group">
                                                     <label class="inp-label required">Price</label>
                                                     <input type="text" class="form-control price-input"
@@ -262,7 +262,22 @@
                                                         Allowed</label>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-2">
+                                                <div class="form-group">
+                                                    <label class="inp-label required">Package Cost</label>
+                                                    <input type="text" class="form-control price-input"
+                                                        formControlName="packageCost"
+                                                        [ngClass]="controlClass('packageCost')" />
+                                                    <span class="focus-border"></span>
+                                                    <label class="price-icon"><i class="vi vi-rupee"></i></label>
+                                                    <label class="val-msg"
+                                                        *ngIf="itemQuickAddForm.get('packageCost')?.errors?.['pattern']">Only
+                                                        Numbers
+                                                        Are
+                                                        Allowed</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-2">
                                                 <div class="form-group">
                                                     <label class="inp-label required">Tax</label>
                                                     <input type="text" class="form-control" formControlName="itemTax"
@@ -277,7 +292,7 @@
                                             <div class="col-lg-1 align-self-center ta-c">=</div>
                                             <div class="col-lg-3">
                                                 <div class="form-group">
-                                                    <label class="inp-label required">Final Price</label>
+                                                    <label>Final Price</label>
                                                     <input type="number" class="form-control price-input"
                                                         formControlName="itemFinalPrice"
                                                         [ngClass]="controlClass('itemFinalPrice')" readonly />
