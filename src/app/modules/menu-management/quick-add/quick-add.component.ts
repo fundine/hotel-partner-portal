@@ -171,9 +171,28 @@ export class QuickAddComponent implements OnInit {
     return this.itemQuickAddForm.get('itemPriceArray') as FormArray;
   }
 
-  controlClass(controlName: string) {
-    return { 'is-invalid': this.itemQuickAddForm?.get(controlName)?.invalid && this.itemQuickAddForm?.get(controlName)?.touched };
+  // controlClass(controlName: string) {
+  //   return { 'is-invalid': this.itemQuickAddForm?.get(controlName)?.invalid && this.itemQuickAddForm?.get(controlName)?.touched };
+  // }
+
+
+  controlClass(formArrayName: string, index?: number, innerControlName?: string) {
+    if (index !== undefined && innerControlName) {
+      const control = this.itemQuickAddForm?.get(formArrayName) as FormArray;
+      const innerControl = control.at(index)?.get(innerControlName);
+      return {
+        'is-invalid': innerControl?.invalid && (innerControl?.dirty || innerControl?.touched),
+      };
+    } else {
+      const control = this.itemQuickAddForm?.get(formArrayName);
+      return {
+        'is-invalid': control?.invalid && (control?.dirty || control?.touched),
+      };
+    }
   }
+  
+  
+
   get itemInfo() {
     return this.itemQuickAddForm;
   }
@@ -187,9 +206,10 @@ export class QuickAddComponent implements OnInit {
     if (categoryTypeId === '1' || categoryTypeId === '2' || categoryTypeId === '3' || categoryTypeId === '4') {
       this.itemQuickAddForm.get('categoryTypeId')?.setValue(categoryTypeId);
     }
-
-    this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
-    this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
+    if (categoryTypeId === '2' || categoryTypeId === '3' || categoryTypeId === '4') {
+      this.itemQuickAddForm.get('itemTypeId')?.setValue(this.selectedTypeId);
+      this.itemQuickAddForm.get('itemTypeName')?.setValue(this.itemTypeItem);
+    }
     this.itemQuickAddForm.get('differentPricing')?.setValue(false);
     this.itemQuickAddForm.get('isAvailable')?.setValue(true);
     this.itemQuickAddForm.get('isDisplayInMenu')?.setValue(true);
@@ -237,7 +257,8 @@ export class QuickAddComponent implements OnInit {
       if (!this.outletFormArrayMap.has(outlet)) {
         const newOutletFormGroup = this.fb.group({
           itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-          packageCost:['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+          packageCost: ['', [Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+          taxId: [''],
           itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
           itemFinalPrice: [''],
         });
@@ -352,19 +373,20 @@ export class QuickAddComponent implements OnInit {
 
       return {
         unitId: unitId || '',
-        itemPrice: item.itemPrice
+        itemPrice: item.itemPrice,
+        packageCost: item.packageCost,
+        taxId: item.taxId
       };
     });
 
     console.log(transformedArray);
-
-
-
+    console.log('Form State:', this.itemQuickAddForm);
+    
     if (this.itemQuickAddForm.valid) {
 
       const requestBody = {
         categoryId: this.selectedCategoryId,
-        subCategoryId: this.selectedSubCategoryId,
+        subCategoryId: this.selectedSubCategoryId || '',
         itemName: this.itemQuickAddForm.get('itemName')?.value,
         itemTypeId: this.selectedTypeId,
         description: this.itemQuickAddForm.get('description')?.value,

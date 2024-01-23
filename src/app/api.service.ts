@@ -98,7 +98,26 @@ export class ApiService {
     };
     return this.http.post(url, body, requestOptions);
   };
-
+  editCategory(formBody: any, categoryId: string) {
+    const url = `${this.apiUrl}/itemcategory/update/${categoryId}`;
+    const body = formBody;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.put(url, body, requestOptions);
+  };
+  editSubCategory(formBody: any, categoryId: string, subCategoryId: string) {
+    const url = `${this.apiUrl}/itemcategory/${categoryId}/itemsubcategory/update/${subCategoryId}`;
+    const body = formBody;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.put(url, body, requestOptions);
+  };
 
   // menu editor : unit wise menu tree structure, quick add save, batch entry save
   getUnitMenuData(unitId: any): Observable<any> {
@@ -115,8 +134,7 @@ export class ApiService {
     const body = formBody;
     const requestOptions = {
       headers: {
-        'partnerId': this.partnerId,
-        'unitId': this.unitId,
+        'partnerId': this.partnerId
       }
     };
     return this.http.post(url, body, requestOptions);
