@@ -192,7 +192,8 @@
                             <div class="col-lg-12">
                                 <div class="checkbox-list">
                                     <label class="checkbox-container">
-                                        <input type="checkbox" formControlName="differentPricing" />
+                                        <input (click)="toggleDifferentPricing()" type="checkbox"
+                                            formControlName="differentPricing" />
                                         <span class="checkmark"></span>Different Pricing Across Outlets
                                     </label>
                                 </div>
@@ -200,49 +201,93 @@
                         </div>
 
 
-                        <!-- <div class="row">
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label class="inp-label required">Price</label>
-                                    <input type="text" class="form-control price-input" formControlName="itemPrice"
-                                        [ngClass]="controlClass('itemPrice')" />
-                                    <span class="focus-border"></span>
-                                    <label class="price-icon"><i class="vi vi-rupee"></i></label>
-                                    <label class="val-msg"
-                                        *ngIf="itemQuickAddForm.get('itemPrice')?.errors?.['pattern']">Only Numbers Are
-                                        Allowed</label>
+                        <div *ngIf="!differentPricingFlag" formArrayName="itemPriceArray">
+                            <div *ngFor="let item of priceInfoArray.controls; let i = index;">
+                                <div [formGroupName]="i">
+                                    <div class="item-price-wrap">
+                                        <div class="outlet-name">Price</div>
+                                        <div class="row">
+                                            <div class="col-lg-8 pl-pr-0">
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="inp-label required">Price</label>
+                                                            <input type="text" class="form-control price-input"
+                                                                formControlName="itemPrice"
+                                                                [ngClass]="controlClass('itemPriceArray, i, itemPrice')" />
+                                                            <span class="focus-border"></span>
+                                                            <label class="price-icon"><i
+                                                                    class="vi vi-rupee"></i></label>
+                                                            <!-- <label class="val-msg"
+                                                                *ngIf="itemQuickAddForm.get('itemPrice')?.errors?.['pattern']">Only
+                                                                Numbers Are Allowed</label> -->
+                                                            <label class="val-msg"
+                                                                *ngIf="itemQuickAddForm.get('itemPriceArray')?.get(i.toString())?.get('itemPrice')?.errors?.['pattern']">Only
+                                                                Numbers Are Allowed</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="inp-label">Package Cost</label>
+                                                            <input type="text" class="form-control price-input"
+                                                                formControlName="packageCost"
+                                                                [ngClass]="controlClass('itemPriceArray, i, packageCost')" />
+                                                            <span class="focus-border"></span>
+                                                            <label class="price-icon"><i
+                                                                    class="vi vi-rupee"></i></label>
+                                                            <!-- <label class="val-msg"
+                                                                *ngIf="itemQuickAddForm.get('packageCost')?.errors?.['pattern']">Only
+                                                                Numbers Are Allowed</label> -->
+                                                            <label class="val-msg"
+                                                                *ngIf="itemQuickAddForm.get('itemPriceArray')?.get(i.toString())?.get('packageCost')?.errors?.['pattern']">Only
+                                                                Numbers Are Allowed</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div class="form-group">
+                                                            <label class="inp-label required">Tax</label>
+                                                            <input type="text" class="form-control"
+                                                                formControlName="itemTax"
+                                                                [ngClass]="controlClass('itemPriceArray, i, itemTax')" />
+                                                            <span class="focus-border"></span>
+                                                            <!-- <label class="val-msg"
+                                                                *ngIf="itemQuickAddForm.get('itemTax')?.errors?.['pattern']">Invalid
+                                                                Tax Format</label> -->
+                                                            <label class="val-msg"
+                                                                *ngIf="itemQuickAddForm.get('itemPriceArray')?.get(i.toString())?.get('itemTax')?.errors?.['pattern']">Invalid
+                                                                Tax Format</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-1 align-self-center ta-c">=</div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label>Final Price</label>
+                                                    <input type="number" class="form-control price-input"
+                                                        formControlName="itemFinalPrice"
+                                                        [ngClass]="controlClass('itemPriceArray, i, itemFinalPrice')"
+                                                        readonly />
+                                                    <span class="focus-border"></span>
+                                                    <label class="price-icon"><i class="vi vi-rupee"></i></label>
+                                                    <!-- <label class="val-msg"
+                                                        *ngIf="itemQuickAddForm.get('itemFinalPrice')?.errors?.['pattern']">Only
+                                                        Numbers
+                                                        Are
+                                                        Allowed</label> -->
+                                                    <label class="val-msg"
+                                                        *ngIf="itemQuickAddForm.get('itemPriceArray')?.get(i.toString())?.get('itemFinalPrice')?.errors?.['pattern']">Only
+                                                        Numbers Are Allowed</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label class="inp-label required">Tax</label>
-                                    <input type="text" class="form-control" formControlName="itemTax"
-                                        [ngClass]="controlClass('itemTax')" />
-                                    <span class="focus-border"></span>
-                                    <label class="val-msg"
-                                        *ngIf="itemQuickAddForm.get('itemTax')?.errors?.['pattern']">Invalid Tax
-                                        Format</label>
-                                </div>
-                            </div>
-                            <div class="col-lg-1 align-self-center ta-c">=</div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label class="inp-label required">Final Price</label>
-                                    <input type="number" class="form-control price-input"
-                                        formControlName="itemFinalPrice" [ngClass]="controlClass('itemFinalPrice')"
-                                        readonly />
-                                    <span class="focus-border"></span>
-                                    <label class="price-icon"><i class="vi vi-rupee"></i></label>
-                                    <label class="val-msg"
-                                        *ngIf="itemQuickAddForm.get('itemFinalPrice')?.errors?.['pattern']">Only Numbers
-                                        Are
-                                        Allowed</label>
-                                </div>
-                            </div>
-                        </div> -->
+                        </div>
 
 
-                        <div formArrayName="itemPriceArray">
+                        <div *ngIf="differentPricingFlag" formArrayName="itemPriceArray">
                             <div *ngFor="let item of priceInfoArray.controls; let i = index;">
                                 <div [formGroupName]="i">
                                     <div class="item-price-wrap">

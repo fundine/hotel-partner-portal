@@ -32,6 +32,8 @@ export class QuickAddComponent implements OnInit {
   selectedOutlets: any;
   finalPrice: any;
 
+  differentPricingFlag: boolean = false;
+
   getCategory() {
     const id = this.route.snapshot.queryParams['categoryTypeId'];
     this.apiService.getItemCategoryData(id).subscribe(
@@ -171,10 +173,6 @@ export class QuickAddComponent implements OnInit {
     return this.itemQuickAddForm.get('itemPriceArray') as FormArray;
   }
 
-  // controlClass(controlName: string) {
-  //   return { 'is-invalid': this.itemQuickAddForm?.get(controlName)?.invalid && this.itemQuickAddForm?.get(controlName)?.touched };
-  // }
-
 
   controlClass(formArrayName: string, index?: number, innerControlName?: string) {
     if (index !== undefined && innerControlName) {
@@ -190,8 +188,7 @@ export class QuickAddComponent implements OnInit {
       };
     }
   }
-  
-  
+
 
   get itemInfo() {
     return this.itemQuickAddForm;
@@ -229,24 +226,77 @@ export class QuickAddComponent implements OnInit {
     this.selectCategoryType(this.categoryTypeId);
 
     const itemPriceArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+    if (!this.differentPricingFlag) {
+      this.addSinglePriceItem({});
+    }
     itemPriceArray.valueChanges.subscribe(() => this.calculateFinalPrice());
 
     this.itemQuickAddForm.get('allowedOutlets')?.valueChanges.subscribe((selectedOutlets) => {
       console.log('Selected Outlets:', selectedOutlets);
       const atLeastOneOutletSelected = selectedOutlets && selectedOutlets.length > 0;
-
+     
       // If at least one outlet is selected, add a new form array item
-      if (atLeastOneOutletSelected) {
-        this.addNewPriceItem(selectedOutlets);
-      } else {
-        // If no outlets are selected, clear the form array
+      if (atLeastOneOutletSelected && !this.differentPricingFlag) {
+        this.addSinglePriceItem(selectedOutlets);
+      } else if (atLeastOneOutletSelected && this.differentPricingFlag) {
+        if (selectedOutlets.length > 0) {
+          this.addNewPriceItem(selectedOutlets);
+        }
+      }
+      else {
         this.clearOutletsFormArray();
       }
     });
   }
 
+  toggleDifferentPricing() {
+    this.differentPricingFlag = !this.differentPricingFlag;
 
-  addNewPriceItem(selectedOutlets: any[]): void {
+    if (this.differentPricingFlag) {
+      const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+      if (outletsFormArray.length > 1) {
+        while (outletsFormArray.length > 1) {
+          outletsFormArray.removeAt(1);
+        }
+      }
+    } else {
+      // Retain removed values in a separate array
+      this.selectedOutlets = (this.itemQuickAddForm.get('itemPriceArray') as FormArray).controls.slice(1);
+
+      // Clear the FormArray (remove all elements except the first one)
+      const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+      while (outletsFormArray.length > 1) {
+        outletsFormArray.removeAt(1);
+      }
+    }
+
+  }
+  addSinglePriceItem(selectedOutlet: any): void {
+    const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+  
+    // If the FormArray is empty, create a default item
+    if (outletsFormArray.length === 0) {
+      const defaultOutletFormGroup = this.fb.group({
+        itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+        packageCost: ['', [Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+        taxId: [''],
+        itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
+        itemFinalPrice: [''],
+      });
+  
+      outletsFormArray.push(defaultOutletFormGroup);
+    }
+  
+    // If selectedOutlet is provided, update the default item with its values
+    if (selectedOutlet) {
+      const defaultOutletFormGroup = outletsFormArray.at(0) as FormGroup;
+      defaultOutletFormGroup.patchValue(selectedOutlet);
+    }
+  }
+  
+
+
+  addNewPriceItem(selectedOutlets: any): void {
     const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
 
     // Remove form array items that are no longer selected
@@ -285,14 +335,12 @@ export class QuickAddComponent implements OnInit {
     }
   }
 
-  // Function to clear the outletsFormArray
   clearOutletsFormArray(): void {
     const outletsFormArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
     outletsFormArray.clear();
     this.outletFormArrayMap.clear();
   }
 
-  // Helper function to get a key from a Map by its value
   getKeyByValue(map: Map<any, FormGroup>, value: FormGroup): any | undefined {
     for (const [key, val] of map.entries()) {
       if (val === value) {
@@ -319,12 +367,8 @@ export class QuickAddComponent implements OnInit {
         const packageCost = (typeof itemPackageCostControl?.value === 'string' ? parseFloat(itemPackageCostControl.value) : 0) || 0;
         const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
         const finalPrice = price + packageCost + (price * (tax / 100));
-        //const finalPrice = price + tax;
-
-        //this.finalPrice = price + packageCost + (price * (tax / 100));
 
         itemControl.get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
-        //console.log('calculated value', finalPrice.toFixed(2));
       }
     });
   }
@@ -355,9 +399,7 @@ export class QuickAddComponent implements OnInit {
   // save item
 
   onSaveMenuItem() {
-
     const outletsFormArray = this.itemQuickAddForm.get('allowedOutlets') as FormArray;
-
     const selectedOutletItems = outletsFormArray.value.map((unitName: string) => {
       const unit = this.itemUnitList?.find((item) => item.unitName === unitName);
       if (unit) {
@@ -366,22 +408,26 @@ export class QuickAddComponent implements OnInit {
         return null;
       }
     });
-
+    
     const itemPriceArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
-    const transformedArray = itemPriceArray.value.map((item: any, index: number) => {
+    const transformedArray = [];
+    
+    for (let index = 0; index < selectedOutletItems.length; index++) {
       const unitId = selectedOutletItems[index]?.unitId;
-
-      return {
+      const item = itemPriceArray.at(index % itemPriceArray.length).value;
+    
+      transformedArray.push({
         unitId: unitId || '',
         itemPrice: item.itemPrice,
         packageCost: item.packageCost,
         taxId: item.taxId
-      };
-    });
+      });
+    }
+   
 
     console.log(transformedArray);
     console.log('Form State:', this.itemQuickAddForm);
-    
+
     if (this.itemQuickAddForm.valid) {
 
       const requestBody = {
