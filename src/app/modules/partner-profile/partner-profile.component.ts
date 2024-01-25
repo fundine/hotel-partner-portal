@@ -14,7 +14,7 @@ export class PartnerProfileComponent  implements OnInit {
   public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
-  currentPage: string = 'outlet-management';
+  currentPage: string = 'user-management';
 
   constructor(private location: Location) { }
 

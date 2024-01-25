@@ -48,9 +48,11 @@ export class NavbarComponent implements OnInit {
     (this.roleId === '4' ? [
       { tabName: 'guest checkin', route: '/core/guestcheckin', iconClass: 'vi vi-reception-o', name: 'Check-In' },
       { tabName: 'orders', route: '/core/orders', iconClass: 'vi vi-list-o', name: 'Orders' },
-      { tabName: 'dine track', route: '/core/dinetrack', iconClass: 'vi vi-dine-o', name: 'Dine-Track' },
+      // { tabName: 'dine track', route: '/core/dinetrack', iconClass: 'vi vi-dine-o', name: 'Dine-Track' },
       // { tabName: 'room cleaning', route: '/core/roomcleaning', iconClass: 'vi vi-room-cleaning-o', name: 'Cleaning' },
       { tabName: 'valet parking', route: '/core/valetparking', iconClass: 'vi vi-parking-o', name: 'Parking' },
+      { tabName: 'partner profile', route: '/core/partnerprofile', iconClass: 'vi vi-outlet-o', name: 'Profile' },
+
       { tabName: 'room editor', route: '/core/roomeditor', iconClass: 'vi vi-bed-o', name: 'Rooms' },
       (this.categoryTypeId.includes('1') ? { tabName: 'menu editor', route: '/core/menueditor', iconClass: 'vi vi-book-o', name: 'Menu' } : null),
       { tabName: 'categories', route: '/core/categorymanagement', iconClass: 'vi vi-category-o', name: 'Categories' },
@@ -75,8 +77,8 @@ export class NavbarComponent implements OnInit {
       this.activeTab = 'insights';
       this.router.navigate(['/core/insights']);
     } else if (this.roleId === '4') {
-      this.activeTab = 'menu editor';
-      this.router.navigate(['/core/menueditor']);
+      this.activeTab = 'partner profile';
+      this.router.navigate(['/core/partnerprofile']);
     }
     this.tabClicked.emit(this.activeTab);
   }

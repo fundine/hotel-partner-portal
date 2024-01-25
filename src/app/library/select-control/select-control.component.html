@@ -4,7 +4,7 @@
         [value]="selectedItem" [disabled]="disabled" (click)="toggleDropdown()" readonly />
     <span class="focus-border"></span>
     <label class="arrow"><i class="vi vi-chevron-down"></i></label>
-    <label class="close" *ngIf="isDropdownOpen" (click)="resetSelection()">
+    <label class="close" *ngIf="isDropdownOpen && selectedItem" (click)="resetSelection()">
         <i class="vi vi-close"></i>
     </label>
     <div class="option-list" *ngIf="isDropdownOpen">

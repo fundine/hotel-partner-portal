@@ -8,11 +8,11 @@
         <i class="vi vi-close"></i>
     </label>
     <div class="option-list" *ngIf="isDropdownOpen">
-        <div class="list-item" *ngFor="let option of options">
-            <label class="checkbox-container multi-select">
-                <input type="checkbox" [checked]="isSelected(option)" (change)="toggleCheckbox(option)" />
+        <div class="list-item" *ngFor="let option of options" (change)="toggleCheckbox(option)">
+            <label class="checkbox-container multi-select" >
+                <input type="checkbox" [checked]="isSelected(option)" />
                 <span class="checkmark"></span>{{ option }}
             </label>
         </div>
     </div>
-</div> 
+</div>

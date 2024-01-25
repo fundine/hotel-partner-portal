@@ -88,6 +88,28 @@
     border-bottom: 1px solid #dadada;
 }
 
+.form-title-group {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    margin-bottom: 1.25rem;
+    border-top: 1px solid #dadada;
+    .form-title {
+        color: #0f7d8b;
+        font-weight: 600;
+        font-size: 1.1em;
+    }
+    .form-sub-title {
+        line-height: 1.4;
+        color: #939893;
+        font-size: 0.9em;
+    }
+    &.first {
+        border-top: 0;
+        margin-top: 0;
+        padding-top: 0;
+    }
+}
+
 // icon colors
 i {
     &.vi {
@@ -119,6 +141,9 @@ i {
         padding: 1rem;
         border-radius: 0;
         min-height: 50px;
+    }
+    &.full-height {
+        height: 100%;
     }
 }
 

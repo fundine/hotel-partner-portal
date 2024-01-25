@@ -1,15 +1,14 @@
 <div class="page-wrap">
     <div class="page-nav">
-        <div class="nav-item" (click)="loadPage('outlet-management')" *ngIf="roleId === '3'"
+        <div class="nav-item" (click)="loadPage('outlet-management')"
             [class.active]="currentPage === 'outlet-management'">Outlet Management</div>
-        <div class="nav-item" (click)="loadPage('user-management')" [class.active]="currentPage === 'user-management'"
-            *ngIf="roleId === '3'">User Management</div>
-        <div class="nav-item" (click)="loadPage('finance-settings')" [class.active]="currentPage === 'finance-settings'"
-            *ngIf="roleId === '3'">Finance Settings</div>
-        <div class="nav-item" (click)="loadPage('discount-coupons')" [class.active]="currentPage === 'discount-coupons'"
-            *ngIf="roleId === '3'">Discount Coupons</div>
-        <div class="nav-item" (click)="loadPage('settings')" [class.active]="currentPage === 'settings'"
-            *ngIf="roleId === '3'">Settings</div>
+        <div class="nav-item" (click)="loadPage('user-management')" [class.active]="currentPage === 'user-management'">
+            User Management</div>
+        <div class="nav-item" (click)="loadPage('finance-settings')"
+            [class.active]="currentPage === 'finance-settings'">Finance Settings</div>
+        <div class="nav-item" (click)="loadPage('discount-coupons')"
+            [class.active]="currentPage === 'discount-coupons'">Discount Coupons</div>
+        <div class="nav-item" (click)="loadPage('settings')" [class.active]="currentPage === 'settings'">Settings</div>
     </div>
 
     <div class="page-preview">

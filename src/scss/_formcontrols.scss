@@ -117,7 +117,7 @@
     &.select,
     &.multi-select {
         .form-control {
-            padding-right: 3rem;
+            padding-right: 2rem;
         }
         .form-control[readonly] {
             opacity: 1;
@@ -156,6 +156,7 @@
             cursor: pointer;
             padding: 0px 8px;
             position: absolute;
+            background: #eff2f9;
             i {
                 font-size: 11px;
                 color: #ff0000;
@@ -217,6 +218,18 @@
             }
             .option-list {
                 top: 44px;
+            }
+        }
+        &.list-lg {
+            .option-list {
+                width: 225px;
+            }
+        }
+    }
+    &.multi-select {
+        .option-list {
+            .list-item {
+                padding: 0;
             }
         }
     }
@@ -357,9 +370,28 @@
         display: flex;
         .first-control,
         .second-control {
+            height: 42px;
             position: relative;
             &.lg-25 {
                 width: 25%;
+            }
+            &.lg-30 {
+                width: 30%;
+            }
+            &.lg-35 {
+                width: 35%;
+            }
+            &.lg-40 {
+                width: 40%;
+            }
+            &.lg-60 {
+                width: calc(60% - 10px);
+            }
+            &.lg-65 {
+                width: calc(65% - 10px);
+            }
+            &.lg-70 {
+                width: calc(70% - 10px);
             }
             &.lg-75 {
                 width: calc(75% - 10px);
@@ -523,11 +555,17 @@ input[type="datetime-local"] {
         }
     }
     &.multi-select {
-        margin-bottom: 0;
+        width: 100%;
         font-size: 1em;
+        margin-bottom: 0;
         font-weight: 400;
         color: #584e4e;
         letter-spacing: 0.015rem;
+        padding: 10px 10px 10px 40px;
+        .checkmark {
+            top: 10px;
+            left: 10px;
+        }
     }
 }
 .checkbox-list {

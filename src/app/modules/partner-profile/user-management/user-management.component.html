@@ -1,3 +1,4 @@
+<!-- <ng-container>
 <div class="page-header">
     <div>
         <div>User Management</div>
@@ -8,39 +9,350 @@
     </div>
 </div>
 <div class="page-content">
-    <ng-container *ngFor="let role of users">
-        <div class="content-group">
-            <div class="lt-content">
-                <div class="title-group">
-                    <div class="title-lg">{{ role.userRole }}</div>
-                    <div class="title-info">Admin users can add, edit, disable and remove organizational level
-                        settings</div>
+    
+  
+        <ng-container *ngFor="let role of users">
+            <div class="content-group">
+                <div class="lt-content">
+                    <div class="title-group">
+                        <div class="title-lg">{{ role.userRole }}</div>
+                        <div class="title-info">Admin users can add, edit, disable and remove organizational level
+                            settings</div>
+                    </div>
+                </div>
+                <div class="rt-content">
+                    <table class="table user-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Assigned Outlets</th>
+                                <th>Last Active</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let user of role.items">
+                                <td>{{ user.userName }}</td>
+                                <td>{{ user.assignedUnits }}</td>
+                                <td>{{ user.lastActive }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="rt-content">
-                <table class="table user-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Assigned Outlets</th>
-                            <th>Last Active</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let user of role.items">
-                            <td>{{ user.userName }}</td>
-                            <td>{{ user.assignedUnits }}</td>
-                            <td>{{ user.lastActive }}</td>
-                            <td>
+        </ng-container>
+    
+</div>
+</ng-container> -->
+<ng-container>
+    <div class="page-content">
+        <div class="row">
+            <div class="col-lg-12 col-center">
+                <form [formGroup]="userRegistrationForm" autocomplete="off">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-title-group first">
+                                        <div class="form-title">Basic Information</div>
+                                        <div class="form-sub-title">A high-quality image is mandatory. Choose the
+                                            relevant category, and sub-category is optional. Specify outlets where the
+                                            item will be available. You can select 'None' if the item doesn't belong to
+                                            any type.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">First Name</label>
+                                        <input type="text" class="form-control" formControlName="userFirstName"
+                                            [ngClass]="controlClass('userFirstName')" />
+                                        <span class="focus-border"></span>
+                                        <label class="val-msg"
+                                            *ngIf="userRegistrationForm.get('userFirstName')?.errors?.['maxlength']">Max
+                                            Length is 20</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Last Name</label>
+                                        <input type="text" class="form-control" formControlName="userLastName"
+                                            [ngClass]="controlClass('userLastName')" />
+                                        <span class="focus-border"></span>
+                                        <label class="val-msg"
+                                            *ngIf="userRegistrationForm.get('userLastName')?.errors?.['maxlength']">Max
+                                            Length is 30</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <select-control [title]="'Gender'" validation="required" formControlName="gender"
+                                        [validationClass]="(userRegistrationForm.get('gender')?.invalid && userRegistrationForm.get('gender')?.touched) ?? false"
+                                        [options]="['Male', 'Female', 'Transgender', 'Prefer not to say','Others']"></select-control>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label">Date of Birth</label>
+                                        <input type="date" class="form-control cal-input" formControlName="dateOfBirth"
+                                            [ngClass]="controlClass('dateOfBirth')" />
+                                        <span class="focus-border"></span>
+                                        <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label">Age</label>
+                                        <input type="number" class="form-control" formControlName="age"
+                                            [ngClass]="controlClass('age')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <select-control title="Nationality" formControlName="nationality"
+                                        [selectedItem]="nationality" [options]="countryNameOptions"
+                                        (optionSelected)="selectNationality($event)"
+                                        [validationClass]="(userRegistrationForm.get('nationality')?.invalid && userRegistrationForm.get('nationality')?.touched) ?? false">
+                                    </select-control>
+                                </div>
+                            </div>
+                            <div class=" row">
+                                <div class="col-lg-12">
+                                    <div class="form-title-group">
+                                        <div class="form-title">Contact Information</div>
+                                        <div class="form-sub-title">Adding contact informations of the
+                                            employee will
+                                            helps you to call them at any circumstances.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Phone Number</label>
+                                        <div class="input-group">
+                                            <div class="first-control lg-30">
+                                                <select-control title="Phone Code" [noLabel]="true"
+                                                    formControlName="phoneCode" [selectedItem]="countryCode"
+                                                    [options]="countryCodeOptions"
+                                                    (optionSelected)="selectCountryCode($event)"
+                                                    customClass="no-label list-lg"
+                                                    [validationClass]="(userRegistrationForm.get('phoneCode')?.invalid && userRegistrationForm.get('phoneCode')?.touched) ?? false">
+                                                </select-control>
+                                            </div>
+                                            <div class="second-control lg-70">
+                                                <input type="number" class="form-control" formControlName="phoneNumber"
+                                                    [ngClass]="controlClass('phoneNumber')" />
+                                                <span class="focus-border"></span>
+                                                <label class="val-msg"
+                                                    *ngIf="userRegistrationForm.get('phoneNumber')?.errors?.['pattern']">Only
+                                                    Numbers Are Allowed</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Alternate Phone Number</label>
+                                        <div class="input-group">
+                                            <div class="first-control lg-30">
+                                                <select-control title="Alt Phone Code" [noLabel]="true"
+                                                    formControlName="altPhoneCode" [selectedItem]="countryCode"
+                                                    [options]="countryCodeOptions"
+                                                    (optionSelected)="selectCountryCode($event)"
+                                                    customClass="no-label list-lg"
+                                                    [validationClass]="(userRegistrationForm.get('altPhoneCode')?.invalid && userRegistrationForm.get('altPhoneCode')?.touched) ?? false">
+                                                </select-control>
+                                            </div>
+                                            <div class="second-control lg-70">
+                                                <input type="number" class="form-control"
+                                                    formControlName="altPhoneNumber"
+                                                    [ngClass]="controlClass('altPhoneNumber')" />
+                                                <span class="focus-border"></span>
+                                                <label class="val-msg"
+                                                    *ngIf="userRegistrationForm.get('altPhoneNumber')?.errors?.['pattern']">Only
+                                                    Numbers Are Allowed</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Email Id</label>
+                                        <input type="email" class="form-control" formControlName="emailId"
+                                            [ngClass]="controlClass('emailId')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Emergency / Sponsor Contact
+                                            Number</label>
+                                        <input type="email" class="form-control"
+                                            formControlName="emergencyContactNumber"
+                                            [ngClass]="controlClass('emergencyContactNumber')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
 
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-title-group">
+                                        <div class="form-title">Official Information</div>
+                                        <div class="form-sub-title">A high-quality image is mandatory.
+                                            Choose the
+                                            relevant category, and sub-category is optional. Specify
+                                            outlets where the
+                                            item will be available. You can select 'None' if the item
+                                            doesn't belong to
+                                            any type.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label">Job Title / Designation</label>
+                                        <input type="text" class="form-control" formControlName="jobTitle"
+                                            [ngClass]="controlClass('jobTitle')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label">Job Grade</label>
+                                        <input type="text" class="form-control" formControlName="jobGrade"
+                                            [ngClass]="controlClass('jobGrade')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label">Date of Join</label>
+                                        <input type="date" class="form-control cal-input" formControlName="dateOfJoining"
+                                            [ngClass]="controlClass('dateOfJoining')" />
+                                        <span class="focus-border"></span>
+                                        <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label">Employee ID</label>
+                                        <input type="text" class="form-control" formControlName="employeeId"
+                                            [ngClass]="controlClass('employeeId')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label">Reporting Manager</label>
+                                        <input type="text" class="form-control" formControlName="reportingManager"
+                                            [ngClass]="controlClass('reportingManager')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label class="inp-label">Remarks</label>
+                                        <textarea class="form-control" formControlName="remarks"
+                                            [ngClass]="controlClass('remarks')"
+                                            placeholder="Provide a brief about the employee if required."></textarea>
+                                        <span class="focus-border"></span>
+                                        <label class="val-msg"
+                                            *ngIf="userRegistrationForm.get('remarks')?.errors?.['maxlength']">Max
+                                            Length is 500</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class=" row">
+                                <div class="col-lg-12">
+                                    <div class="form-title-group">
+                                        <div class="form-title">Outlets & Role Allocation</div>
+                                        <div class="form-sub-title">Assign roles to individuals for specific outlets,
+                                            defining responsibilities and access levels within the organization for
+                                            efficient management and operations.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Job Role</label>
+                                        <input type="text" class="form-control" formControlName="jobRole"
+                                            [ngClass]="controlClass('jobRole')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <multi-select-control [title]="'Allowed Outlets'" validation="required"
+                                        formControlName="allowedOutlets"
+                                        [validationClass]="(userRegistrationForm.get('allowedOutlets')?.invalid && userRegistrationForm.get('allowedOutlets')?.touched) ?? false"
+                                        [options]="['Outlet 1', 'Outlet 2', 'Outlet 3','Outlet 4']"></multi-select-control>
+                                </div>
+                            </div>
+                            <div class=" row">
+                                <div class="col-lg-12">
+                                    <div class="form-title-group">
+                                        <div class="form-title">User Status & Credentials</div>
+                                        <div class="form-sub-title">Create a temporary password for users. Users can
+                                            either create a new password or choose to change their existing password.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <select-control [title]="'User Status'" validation="required"
+                                        formControlName="userStatus"
+                                        [validationClass]="(userRegistrationForm.get('userStatus')?.invalid && userRegistrationForm.get('userStatus')?.touched) ?? false"
+                                        [options]="['Active User', 'Inactive User', 'Suspended']"></select-control>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Password</label>
+                                        <input type="text" class="form-control" formControlName="password"
+                                            [ngClass]="controlClass('password')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Confirm Password</label>
+                                        <input type="text" class="form-control" formControlName="confirmPassword"
+                                            [ngClass]="controlClass('confirmPassword')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="action-panel">
+                                        <div class="action-title danger">Delete User?</div>
+                                        <div>Deleting user account is a permanent action, and it cannot be reversed. you
+                                            can
+                                            click here to <a class="action-delete">Delete User Permanently</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div></div>
+                            <div class="btn-list">
+                                <button class="btn btn-sm btn-success" (click)="onRegisterUser()">REGISTER</button>
+                                <button class="btn btn-sm btn-danger" (click)="onCancelClick()">CANCEL</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </ng-container>
-</div>
+    </div>
+</ng-container>
+
+
+<app-dialog *ngIf="formChangeWarningDialog" type="confirm" [customClass]="'delete justify'" [title]="'Discard Changes?'"
+    [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
+    (confirmClick)="onBackConfirmClick()" (cancelClick)="onCancelClearChanges()"></app-dialog>
+
+<app-toaster *ngIf="alertSuccess" type="success" position="top-right" customClass="" [title]="false"
+    message="Great, there's a new user added!"></app-toaster>

@@ -29,9 +29,14 @@
 
     <div class="aside-right">
         <ng-container *ngIf="!showAllRoomsList">
-           <div class="card">
-            
-           </div>
+            <div class="card">
+                <div *ngFor="let item of CountryCode; let i = index"
+                    style="display: flex; align-items: center; gap: 15px; padding: 5px 15px;">
+                    <!-- <div>{{i+1}}</div> -->
+                    <div><i class="fl fl-{{item.countryCode.toLowerCase()}}"></i></div>
+                    <div>{{item.countryCode}}</div>
+                </div>
+            </div>
         </ng-container>
         <ng-container *ngIf="showAllRoomsList">
             <app-room-availabilty></app-room-availabilty>

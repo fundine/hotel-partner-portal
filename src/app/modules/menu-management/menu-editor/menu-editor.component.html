@@ -184,7 +184,8 @@
     <div class="aside-right" #rightContainer>
         <ng-container *ngIf="!innerLoading && menuItems.length > 0">
             <div *ngFor="let category of menuItems; let i = index">
-                <div class="card" [ngClass]="{'selected': selectedCategoryIndexValue === i}"
+                <div class="card"
+                    [ngClass]="{'selected': selectedCategoryIndexValue === i, 'full-card': menuItems.length === 1}"
                     *ngIf="((categoryVegItemCount(i) > 0) || (!checkItemTypeVeg && !checkItemTypeNonVeg) || (categoryNonVegItemCount(i) > 0) || (!checkItemTypeVeg && !checkItemTypeNonVeg)) && (!notAvailableItems || (notAvailableItems && categoryNotAvailableItemCount(i) > 0)) && (!disabledItems || (disabledItems && categoryDisabledItemCount(i) > 0)) && (!bestsellerItems || (bestsellerItems && categoryBestSellerItemCount(i) > 0)) && (!emptyImageItems || (emptyImageItems && categoryEmptyImageUrlItemCount(i) > 0))">
                     <div class="card-body">
                         <div class="category">

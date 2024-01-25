@@ -14,6 +14,27 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  // general : countries, food item type
+  getAllCountries(): Observable<any> {
+    const url = `${this.apiUrl}/countries`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
+  getItemTypeData(): Observable<any> {
+    const url = `${this.apiUrl}/itemtype`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
+
+
   // assigned unit list for users
   getUnitsList(): Observable<any> {
     const url = `${this.apiUrl}/userunits`;
@@ -27,7 +48,7 @@ export class ApiService {
   };
 
 
-  // select control : category, subcategory, itemtype, allowed outlets 
+  // select control : category, subcategory, allowed outlets 
   getItemCategoryData(categoryTypeId: string): Observable<any> {
     const url = `${this.apiUrl}/itemcategory/${categoryTypeId}`;
     const requestOptions = {
@@ -40,15 +61,6 @@ export class ApiService {
   getItemSubCategoryData(categoryId: string): Observable<any> {
     const url = `${this.apiUrl}/itemcategory/${categoryId}/itemsubcategory`;
 
-    const requestOptions = {
-      headers: {
-        'partnerId': this.partnerId
-      }
-    };
-    return this.http.get(url, requestOptions);
-  };
-  getItemTypeData(): Observable<any> {
-    const url = `${this.apiUrl}/itemtype`;
     const requestOptions = {
       headers: {
         'partnerId': this.partnerId
@@ -241,7 +253,7 @@ export class ApiService {
     const requestBody = { isUnitOpen };
     return this.http.put(url, requestBody, requestOptions);
   }
-  
+
   // outofstock : menu item
   changeMenuItemStatus(itemId: string): Observable<any> {
     const url = `${this.apiUrl}/item/update/status/${itemId}`;
