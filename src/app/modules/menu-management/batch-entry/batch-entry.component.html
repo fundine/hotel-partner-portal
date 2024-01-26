@@ -22,7 +22,7 @@
                     <div class="item-outlets">
                         <multi-select-control [title]="'Allowed Outlets'" validation="required"
                             formControlName="allowedOutlets" [noLabel]="true" placeholder="Allowed Outlets"
-                            [options]="['Outlet 1', 'Outlet 2', 'Outlet 3','Outlet 4']"
+                            [options]="itemUnitOptions"
                             customClass="clear-bottom no-label"
                             [validationClass]="(menuBatchEntryForm.get('allowedOutlets')?.invalid && menuBatchEntryForm.get('allowedOutlets')?.touched) ?? false"></multi-select-control>
                     </div>

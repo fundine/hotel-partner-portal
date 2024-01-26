@@ -21,6 +21,9 @@ export class BatchEntryComponent implements OnInit {
   itemAdditionalInfo: boolean[] = [];
   featuredGroupClicked: boolean = false;
   selectedImage: (string | null)[] = [];
+
+  itemUnitList: { unitId: string; unitName: string; unitTypeName: string }[] | undefined;
+  itemUnitOptions: any;
   // selectedImage: string | ArrayBuffer | null = null;
   // selectedOption: string = 'cafe';
   // activeCategory: string = '1';
@@ -54,6 +57,19 @@ export class BatchEntryComponent implements OnInit {
       this.selectedCategoryId = selectedCategory.id;
       this.categoryItem = selectedCategory.categoryName;
     }
+  }
+
+  getAllUnits(categoryTypeId: any) {
+    this.apiService.getUnitListData(categoryTypeId).subscribe(
+      (data) => {
+        this.itemUnitList = data.results;
+        this.itemUnitOptions = this.itemUnitList!.map(option => option.unitName);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
   }
 
   selectedSubCategoryId: any;
@@ -116,12 +132,13 @@ export class BatchEntryComponent implements OnInit {
   // batch entry form
   menuBatchEntryForm = this.fb.group({
     categoryTypeId: [''],
-    allowedOutlets: [[], [Validators.required]],
+    allowedOutlets: [this.fb.array([]), [Validators.required]],
+    itemPriceArray: this.fb.array([]),
     categoryId: [''],
     categoryName: ['', [Validators.required]],
     subCategoryId: [''],
     subCategoryName: [''],
-    menuArray: this.fb.array([]), 
+    menuArray: this.fb.array([]),
   })
   addNewMenuItem(defaultItemCount: number = 1) {
     this.newMenuInfo = this.menuInfoArray;
@@ -171,7 +188,7 @@ export class BatchEntryComponent implements OnInit {
         (control as FormGroup).get('isBestSeller')?.setValue(false);
         (control as FormGroup).get('isDisabled')?.setValue(false);
       });
-     
+
     } else if (categoryTypeId === '2') {
       this.menuBatchEntryForm.reset();
       this.menuBatchEntryForm.get('categoryTypeId')?.setValue('2');
@@ -221,10 +238,12 @@ export class BatchEntryComponent implements OnInit {
   ngOnInit(): void {
     this.getCategory();
     this.getItemType();
+
     this.route.queryParams.subscribe(params => {
       this.categoryTypeId = params['categoryTypeId'];
     });
-    
+    this.getAllUnits(this.categoryTypeId);
+
     this.addNewMenuItem(5);
     this.selectCategoryType(this.categoryTypeId);
 
@@ -239,8 +258,10 @@ export class BatchEntryComponent implements OnInit {
     const itemPriceControl = this.newMenuInfo.at(index).get('itemPrice');
     const itemTaxControl = this.newMenuInfo.at(index).get('itemTax');
     const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
+    // const packageCost = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
     const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
     const finalPrice = price + (price * (tax / 100));
+    //const finalPrice = price + packageCost + (price * (tax / 100));
     this.newMenuInfo.at(index).get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
   }
   onCancelInfo() {
@@ -289,12 +310,44 @@ export class BatchEntryComponent implements OnInit {
           }
         }
 
+        const outletsFormArray = this.menuBatchEntryForm.get('allowedOutlets') as FormArray;
+        const selectedOutletItems = outletsFormArray.value.map((unitName: string) => {
+          const unit = this.itemUnitList?.find((item) => item.unitName === unitName);
+          if (unit) {
+            return { unitId: unit.unitId };
+          } else {
+            return null;
+          }
+        });
+
+        const itemPriceArray = this.menuBatchEntryForm.get('menuArray') as FormArray;
+        const transformedArray = [];
+
+        for (let index = 0; index < selectedOutletItems.length; index++) {
+          const unitId = selectedOutletItems[index]?.unitId;
+          for (let itemIndex = 0; itemIndex < itemPriceArray.length; itemIndex++) {
+            const item = itemPriceArray.at(itemIndex).value;
+            transformedArray.push({
+              unitId: unitId || '',
+              itemPrice: item.itemPrice,
+              //packageCost: item.packageCost,
+              taxId: item.taxId == undefined ? '' : item.taxId
+            });
+          }
+        }
+
+        console.log(transformedArray);
+
+
         console.log('All Items Info', this.menuBatchEntryForm)
         const requestBody = {
           categoryId: this.menuBatchEntryForm.get('categoryId')?.value,
           subCategoryId: this.menuBatchEntryForm.get('subCategoryId')?.value,
-          items: this.menuBatchEntryForm.value.menuArray
+          items: this.menuBatchEntryForm.value.menuArray,
+          itemUnits: selectedOutletItems,
+          itemPriceList: transformedArray,
         };
+        console.log('request body', requestBody)
         this.apiService.saveBatchItem(requestBody, this.categoryTypeId).subscribe(
           (response: any) => {
             this.menuBatchEntryForm.reset();
@@ -306,7 +359,7 @@ export class BatchEntryComponent implements OnInit {
               (control as FormGroup).get('isDisplayInMenu')?.setValue(true);
               (control as FormGroup).get('isBestSeller')?.setValue(false);
               (control as FormGroup).get('isDisabled')?.setValue(false);
-              
+
               if (this.categoryTypeId === '2' || this.categoryTypeId === '3' || this.categoryTypeId === '4') {
                 (control as FormGroup).get('itemTypeId')?.setValue('4');
                 (control as FormGroup).get('itemTypeName')?.setValue('None');
