@@ -14,7 +14,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  // general : countries, food item type
+  // general : countries, food item type, gender
   getAllCountries(): Observable<any> {
     const url = `${this.apiUrl}/countries`;
     const requestOptions = {
@@ -33,24 +33,8 @@ export class ApiService {
     };
     return this.http.get(url, requestOptions);
   };
-
-
-  // assigned unit list for users
-  getUnitsList(): Observable<any> {
-    const url = `${this.apiUrl}/userunits`;
-    const requestOptions = {
-      headers: {
-        'userId': this.userId,
-        'partnerId': this.partnerId,
-      }
-    };
-    return this.http.get(url, requestOptions);
-  };
-
-
-  // select control : category, subcategory, allowed outlets 
-  getItemCategoryData(categoryTypeId: string): Observable<any> {
-    const url = `${this.apiUrl}/itemcategory/${categoryTypeId}`;
+  getGenders(): Observable<any> {
+    const url = `${this.apiUrl}/genders`;
     const requestOptions = {
       headers: {
         'partnerId': this.partnerId
@@ -58,9 +42,8 @@ export class ApiService {
     };
     return this.http.get(url, requestOptions);
   };
-  getItemSubCategoryData(categoryId: string): Observable<any> {
-    const url = `${this.apiUrl}/itemcategory/${categoryId}/itemsubcategory`;
-
+  getUserStatus(): Observable<any> {
+    const url = `${this.apiUrl}/userstatus`;
     const requestOptions = {
       headers: {
         'partnerId': this.partnerId
@@ -68,6 +51,27 @@ export class ApiService {
     };
     return this.http.get(url, requestOptions);
   };
+  getIdentifiableDocument(): Observable<any> {
+    const url = `${this.apiUrl}/identifiabledocument`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
+  getMaritalStatus(): Observable<any> {
+    const url = `${this.apiUrl}/maritalstatus`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
+
+
+  // outlets :  allowed outlets, assigned unit list for users, disable outlet
   getUnitListData(categoryTypeId: string): Observable<any> {
     const url = `${this.apiUrl}/categorytypeunits/${categoryTypeId}`;
     const requestOptions = {
@@ -78,9 +82,39 @@ export class ApiService {
     };
     return this.http.get(url, requestOptions);
   };
+  getUnitsList(): Observable<any> {
+    const url = `${this.apiUrl}/userunits`;
+    const requestOptions = {
+      headers: {
+        'userId': this.userId,
+        'partnerId': this.partnerId,
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
+  changeUnitStatus(unitId: string, isUnitOpen: boolean): Observable<any> {
+    const url = `${this.apiUrl}/unit/update/status/${unitId}`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId,
+        'unitId': this.unitId,
+      }
+    };
+    const requestBody = { isUnitOpen };
+    return this.http.put(url, requestBody, requestOptions);
+  }
 
 
-  // categories : category & subcategory list, category & subcategory save
+  // category : subcategory list, category & subcategory save
+  getItemCategoryData(categoryTypeId: string): Observable<any> {
+    const url = `${this.apiUrl}/itemcategory/${categoryTypeId}`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
   getCategoryData(activeCategory: any): Observable<any> {
     const url = `${this.apiUrl}/itemcategory-subcategory/${activeCategory}`;
     const requestOptions = {
@@ -100,16 +134,6 @@ export class ApiService {
     };
     return this.http.post(url, body, requestOptions);
   };
-  saveSubCategory(formBody: any, categoryId: string) {
-    const url = `${this.apiUrl}/itemcategory/${categoryId}/itemsubcategory/create`;
-    const body = formBody;
-    const requestOptions = {
-      headers: {
-        'partnerId': this.partnerId,
-      }
-    };
-    return this.http.post(url, body, requestOptions);
-  };
   editCategory(formBody: any, categoryId: string) {
     const url = `${this.apiUrl}/itemcategory/update/${categoryId}`;
     const body = formBody;
@@ -119,6 +143,39 @@ export class ApiService {
       }
     };
     return this.http.put(url, body, requestOptions);
+  };
+  deleteCategory(categoryId: string): Observable<any> {
+    const url = `${this.apiUrl}/itemcategory/delete/${categoryId}`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId,
+        'unitId': this.unitId,
+      }
+    };
+    return this.http.delete(url, requestOptions);
+  };
+
+
+  // subcategory : subcategory list, category & subcategory save
+  getItemSubCategoryData(categoryId: string): Observable<any> {
+    const url = `${this.apiUrl}/itemcategory/${categoryId}/itemsubcategory`;
+
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
+  saveSubCategory(formBody: any, categoryId: string) {
+    const url = `${this.apiUrl}/itemcategory/${categoryId}/itemsubcategory/create`;
+    const body = formBody;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId,
+      }
+    };
+    return this.http.post(url, body, requestOptions);
   };
   editSubCategory(formBody: any, categoryId: string, subCategoryId: string) {
     const url = `${this.apiUrl}/itemcategory/${categoryId}/itemsubcategory/update/${subCategoryId}`;
@@ -130,41 +187,19 @@ export class ApiService {
     };
     return this.http.put(url, body, requestOptions);
   };
-
-  // menu editor : unit wise menu tree structure, quick add save, batch entry save
-  getUnitMenuData(unitId: any): Observable<any> {
-    const url = `${this.apiUrl}/menumanagement/${unitId}`;
-    const requestOptions = {
-      headers: {
-        'partnerId': this.partnerId
-      }
-    };
-    return this.http.get(url, requestOptions);
-  };
-  saveMenuItem(formBody: any, categoryId: string) {
-    const url = `${this.apiUrl}/item/create/${categoryId}`;
-    const body = formBody;
-    const requestOptions = {
-      headers: {
-        'partnerId': this.partnerId
-      }
-    };
-    return this.http.post(url, body, requestOptions);
-  };
-  saveBatchItem(formBody: any, categoryId: string) {
-    const url = `${this.apiUrl}/item/create/batch/${categoryId}`;
-    const body = formBody;
+  deleteSubCategory(categoryId: string, subCategoryId: string): Observable<any> {
+    const url = `${this.apiUrl}/itemcategory/${categoryId}/itemsubcategory/delete/${subCategoryId}`;
     const requestOptions = {
       headers: {
         'partnerId': this.partnerId,
         'unitId': this.unitId,
       }
     };
-    return this.http.post(url, body, requestOptions);
+    return this.http.delete(url, requestOptions);
   };
 
 
-  // feature group : menu items list, feature group list, feature grup save
+  // feature group : menu items list, feature group list, feature group save, feature group edit, feature group delete
   getCategoryMenuItems(categoryTypeId: string, unitId: any): Observable<any> {
     const url = `${this.apiUrl}/item/${categoryTypeId}/${unitId}`;
     const requestOptions = {
@@ -195,38 +230,16 @@ export class ApiService {
     };
     return this.http.post(url, body, requestOptions);
   };
-
-
-  // delete : category, subcategory, menu item, feature group
-  deleteCategory(categoryId: string): Observable<any> {
-    const url = `${this.apiUrl}/itemcategory/delete/${categoryId}`;
+  editFeatureGroup(formBody: any, groupId: string) {
+    const url = `${this.apiUrl}/itemgroup/update/${groupId}`;
+    const body = formBody;
     const requestOptions = {
       headers: {
         'partnerId': this.partnerId,
         'unitId': this.unitId,
       }
     };
-    return this.http.delete(url, requestOptions);
-  };
-  deleteSubCategory(categoryId: string, subCategoryId: string): Observable<any> {
-    const url = `${this.apiUrl}/itemcategory/${categoryId}/itemsubcategory/delete/${subCategoryId}`;
-    const requestOptions = {
-      headers: {
-        'partnerId': this.partnerId,
-        'unitId': this.unitId,
-      }
-    };
-    return this.http.delete(url, requestOptions);
-  };
-  deleteMenuItem(itemId: string): Observable<any> {
-    const url = `${this.apiUrl}/item/delete/${itemId}`;
-    const requestOptions = {
-      headers: {
-        'partnerId': this.partnerId,
-        'unitId': this.unitId,
-      }
-    };
-    return this.http.delete(url, requestOptions);
+    return this.http.put(url, body, requestOptions);
   };
   deleteFeatureGroup(groupId: string): Observable<any> {
     const url = `${this.apiUrl}/itemgroup/delete/${groupId}`;
@@ -239,22 +252,47 @@ export class ApiService {
     return this.http.delete(url, requestOptions);
   };
 
-  // 412 missing on abouve apis
-
-  // disable : outlet
-  changeUnitStatus(unitId: string, isUnitOpen: boolean): Observable<any> {
-    const url = `${this.apiUrl}/unit/update/status/${unitId}`;
+  
+  // menu editor : unit wise menu tree structure, quick add save, batch entry save, make outofstock menu item
+  getUnitMenuData(unitId: any): Observable<any> {
+    const url = `${this.apiUrl}/menumanagement/${unitId}`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
+  saveMenuItem(formBody: any, categoryId: string) {
+    const url = `${this.apiUrl}/item/create/${categoryId}`;
+    const body = formBody;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.post(url, body, requestOptions);
+  };
+  saveBatchItem(formBody: any, categoryId: string) {
+    const url = `${this.apiUrl}/item/create/batch/${categoryId}`;
+    const body = formBody;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId,
+      }
+    };
+    return this.http.post(url, body, requestOptions);
+  };
+  deleteMenuItem(itemId: string): Observable<any> {
+    const url = `${this.apiUrl}/item/delete/${itemId}`;
     const requestOptions = {
       headers: {
         'partnerId': this.partnerId,
         'unitId': this.unitId,
       }
     };
-    const requestBody = { isUnitOpen };
-    return this.http.put(url, requestBody, requestOptions);
-  }
-
-  // outofstock : menu item
+    return this.http.delete(url, requestOptions);
+  };
   changeMenuItemStatus(itemId: string): Observable<any> {
     const url = `${this.apiUrl}/item/update/status/${itemId}`;
     const requestOptions = {
@@ -267,4 +305,4 @@ export class ApiService {
   };
 }
 
-
+// 412 missing in category sub category delete

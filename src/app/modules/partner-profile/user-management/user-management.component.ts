@@ -44,6 +44,84 @@ export class UserManagementComponent implements OnInit {
   employeeRegForm: boolean = false;
 
   // api
+  selectedGenderId: any;
+  genderItem: string = '';
+  genderOptions: any;
+  genderList: { id: string; genderName: string }[] | undefined;
+  getUserGender() {
+    this.apiService.getGenders().subscribe(
+      (data) => {
+        this.genderList = data.results;
+        this.genderOptions = this.genderList!.map(option => option.genderName);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectGender(event: any) {
+    const selectedGenderName = event as string;
+    const selectedGender = this.genderList!.find(item => item.genderName === selectedGenderName);
+
+    if (selectedGender) {
+      this.selectedGenderId = selectedGender.id;
+      this.genderItem = selectedGender.genderName;
+    }
+  }
+
+  selectedDocumentId: any;
+  documentItem: string = '';
+  documentOptions: any;
+  documentList: { id: string; idDocType: string }[] | undefined;
+  getUserDocument() {
+    this.apiService.getIdentifiableDocument().subscribe(
+      (data) => {
+        this.documentList = data.results;
+        this.documentOptions = this.documentList!.map(option => option.idDocType);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectDocument(event: any) {
+    const selectedDocumentName = event as string;
+    const selectedDocument = this.documentList!.find(item => item.idDocType === selectedDocumentName);
+
+    if (selectedDocument) {
+      this.selectedDocumentId = selectedDocument.id;
+      this.documentItem = selectedDocument.idDocType;
+    }
+  }
+
+  selectedMaritalStatusId: any;
+  maritalStatusItem: string = '';
+  maritalStatusOptions: any;
+  maritalStatusList: { id: string; maritalStatus: string }[] | undefined;
+  getUserMaritalStatus() {
+    this.apiService.getMaritalStatus().subscribe(
+      (data) => {
+        this.maritalStatusList = data.results;
+        this.maritalStatusOptions = this.maritalStatusList!.map(option => option.maritalStatus);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectMaritalStatus(event: any) {
+    const selectedMaritalStatusName = event as string;
+    const selectedMaritalStatus = this.maritalStatusList!.find(item => item.maritalStatus === selectedMaritalStatusName);
+
+    if (selectedMaritalStatus) {
+      this.selectedMaritalStatusId = selectedMaritalStatus.id;
+      this.maritalStatusItem = selectedMaritalStatus.maritalStatus;
+    }
+  }
+
   selectedISOCode: any;
   countryCode: string = '';
   countryName: string = '';
@@ -86,12 +164,39 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
+  selectedUserStatusId: any;
+  userStatusItem: string = '';
+  userStatusOptions: any;
+  userStatusList: { id: string; statusVal: string }[] | undefined;
+  getUserStatus() {
+    this.apiService.getMaritalStatus().subscribe(
+      (data) => {
+        this.userStatusList = data.results;
+        this.userStatusOptions = this.userStatusList!.map(option => option.statusVal);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectUserStatus(event: any) {
+    const selectedUserStatusName = event as string;
+    const selectedUserStatus = this.userStatusList!.find(item => item.statusVal === selectedUserStatusName);
+
+    if (selectedUserStatus) {
+      this.selectedUserStatusId = selectedUserStatus.id;
+      this.userStatusItem = selectedUserStatus.statusVal;
+    }
+  }
+
   constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) {
   }
 
   userRegistrationForm = this.fb.group({
     userFirstName: ['', [Validators.required, Validators.maxLength(20)]],
     userLastName: ['', [Validators.required, Validators.maxLength(30)]],
+    genderId: [''],
     gender: ['', [Validators.required]],
     dateOfBirth: ['', [Validators.required, this.validateDateOfBirth]],
     age: ['', [Validators.required, this.validateAge]],
@@ -117,10 +222,9 @@ export class UserManagementComponent implements OnInit {
     languagesKnown: [''],
     dateOfJoining: [''],
     remarks: ['', [Validators.maxLength(500)]],
-    jobRole: ['', [Validators.required]],
+    userRole: ['', [Validators.required]],
     allowedOutlets: [this.fb.array([])],
     password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/\-]{6,}$/),],],
-
     confirmPassword: [''],
     userStatusId: [''],
     userStatus: ['', [Validators.required]],
@@ -137,7 +241,11 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUserGender();
     this.getCountryList();
+    this.getUserDocument();
+    this.getUserMaritalStatus();
+    this.getUserStatus();
   }
 
   // general
@@ -187,7 +295,7 @@ export class UserManagementComponent implements OnInit {
       this.confirmPasswordHide = !this.confirmPasswordHide;
     }
   }
- 
+
   // register user
   onRegisterUser() {
     if (this.userRegistrationForm.valid) {
