@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
 
@@ -35,8 +35,13 @@ export class UserManagementComponent implements OnInit {
     },
   ];
 
+  passwordHide = false;
+  confirmPasswordHide = false;
   alertSuccess: boolean = false;
   formChangeWarningDialog: boolean = false;
+  allemployeeList: boolean = true;
+  employeeProfile: boolean = false;
+  employeeRegForm: boolean = false;
 
   // api
   selectedISOCode: any;
@@ -61,28 +66,6 @@ export class UserManagementComponent implements OnInit {
       }
     );
   }
-
-
-  // selectNationality(event: any) {
-  //   const selectedNationality = event as string;
-  //   const selectedCountryItem = this.countryNameList!.find(item => item.countryName === selectedNationality);
-
-  //   if (selectedCountryItem) {
-  //     this.selectedISOCode = selectedCountryItem.nationality;
-  //     this.countryName = selectedCountryItem.countryName;
-  //   }
-  // }
-  // selectCountryCode(event: any) {
-  //   const selectedCountryCode = event as string;
-  //   const selectedCountryItem = this.countryCodeList!.find(item => item.countryCode === selectedCountryCode);
-
-  //   if (selectedCountryItem) {
-  //     this.selectedISOCode = selectedCountryItem.isoCode;
-  //     this.countryName = selectedCountryItem.countryName;
-  //     this.countryCode = selectedCountryItem.countryCode;
-  //   }
-  // }
-
   selectNationality(event: any) {
     const selectedNationality = event as string;
     const selectedCountryItem = this.countryNameList!.find(item => item.countryName === selectedNationality);
@@ -90,10 +73,8 @@ export class UserManagementComponent implements OnInit {
     if (selectedCountryItem) {
       this.selectedISOCode = selectedCountryItem.nationality;
       this.countryName = selectedCountryItem.countryName;
-      this.nationality = selectedCountryItem.countryName; // Show country name in the control
     }
   }
-
   selectCountryCode(event: any) {
     const selectedCountryCode = event as string;
     const selectedCountryItem = this.countryCodeList!.find(item => item.countryCode === selectedCountryCode);
@@ -101,71 +82,57 @@ export class UserManagementComponent implements OnInit {
     if (selectedCountryItem) {
       this.selectedISOCode = selectedCountryItem.isoCode;
       this.countryName = selectedCountryItem.countryName;
-      this.countryCode = selectedCountryItem.countryCode; // Show country code in the control
+      this.countryCode = selectedCountryItem.countryCode;
     }
   }
 
-
-
-  // selectedISOCode: any;
-  // countryName: string = '';
-  // countryNameOptions: any;
-  // countryNameList: { isoCode: string; countryName: string }[] | undefined;
-  // getCountryList() {
-  //   this.apiService.getAllCountries().subscribe(
-  //     (data) => {
-  //       this.countryNameList = data.results;
-  //       // this.countryNameOptions = this.countryNameList!.map(option => option.countryName);
-  //       this.countryNameOptions = this.countryNameList!.map(option => `${option.isoCode} ${option.countryName}`);
-  //       console.log('Data from API:', data);
-  //     },
-  //     (error) => {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   );
-  // }
-  // selectCountryName(event: any) {
-  //   const selectedCountryName = event as string;
-  //   const selectedCountryItem = this.countryNameList!.find(item => item.countryName === selectedCountryName);
-
-  //   if (selectedCountryItem) {
-  //     this.selectedISOCode = selectedCountryItem.isoCode;
-  //     this.countryName = selectedCountryItem.countryName;
-  //   }
-  // }
-
-  constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) { }
+  constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) {
+  }
 
   userRegistrationForm = this.fb.group({
     userFirstName: ['', [Validators.required, Validators.maxLength(20)]],
     userLastName: ['', [Validators.required, Validators.maxLength(30)]],
     gender: ['', [Validators.required]],
-    dateOfBirth: [''],
-    age: [''],
+    dateOfBirth: ['', [Validators.required, this.validateDateOfBirth]],
+    age: ['', [Validators.required, this.validateAge]],
+    maritalStatus: [''],
     nationality: [''],
+    identifyingDocument: [''],
+    documentNumber: [''],
     phoneCode: ['', [Validators.required]],
     phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-    altPhoneCode: ['', [Validators.required]],
-    altPhoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+    altPhoneCode: [''],
+    altPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
     emergencyContactNumber: [''],
+    sponsorName: [''],
+    sponsorPhoneCode: [''],
+    sponsorPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
     emailId: ['', [Validators.required, Validators.email]],
     jobTitle: [''],
-    employeeId: [''],
-    dateOfJoining: [''],
     jobGrade: [''],
+    employeeId: [''],
+    highestQualification: [''],
+    relevantExperience: [''],
     reportingManager: [''],
+    languagesKnown: [''],
+    dateOfJoining: [''],
     remarks: ['', [Validators.maxLength(500)]],
     jobRole: ['', [Validators.required]],
-    allowedOutlets: [this.fb.array([]), [Validators.required]],
-    password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}$/)]],
-    confirmPassword: ['', Validators.required],
-    userStatusId: ['', [Validators.required]],
+    allowedOutlets: [this.fb.array([])],
+    password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/\-]{6,}$/),],],
+
+    confirmPassword: [''],
+    userStatusId: [''],
     userStatus: ['', [Validators.required]],
+    suspendedDate: [''],
+    suspendedReason: [''],
+    resignationDate: [''],
+    resignationReason: [''],
   })
   controlClass(controlName: string) {
     return { 'is-invalid': this.userRegistrationForm?.get(controlName)?.invalid && this.userRegistrationForm?.get(controlName)?.touched };
   }
-  get itemInfo() {
+  get employeeInfo() {
     return this.userRegistrationForm;
   }
 
@@ -173,14 +140,61 @@ export class UserManagementComponent implements OnInit {
     this.getCountryList();
   }
 
-
-
+  // general
+  registerNewUser() {
+    this.allemployeeList = false;
+    this.employeeRegForm = true;
+  }
+  validateDateOfBirth(control: { value: string | number | Date; }) {
+    const currentDate = new Date();
+    const selectedDate = new Date(control.value);
+    const age = currentDate.getFullYear() - selectedDate.getFullYear() -
+      ((currentDate.getMonth() > selectedDate.getMonth() ||
+        (currentDate.getMonth() === selectedDate.getMonth() &&
+          currentDate.getDate() >= selectedDate.getDate())) ? 0 : 1);
+    if (age < 18) {
+      return { invalidAge: true };
+    }
+    return null;
+  }
+  calculateAge() {
+    const birthdateValue = this.userRegistrationForm.controls.dateOfBirth.value;
+    if (birthdateValue !== null) {
+      const birthdate = new Date(birthdateValue);
+      if (isNaN(birthdate.getTime())) {
+        this.userRegistrationForm.controls.age.setValue('');
+      } else {
+        const timeDiff = Math.abs(Date.now() - birthdate.getTime());
+        const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+        this.userRegistrationForm.controls.age.setValue(age.toString());
+      }
+    } else {
+      this.userRegistrationForm.controls.age.setValue('');
+    }
+  }
+  validateAge(control: AbstractControl) {
+    const age = control.value;
+    if (age >= 18 && age < 100) {
+      return null;
+    } else {
+      return { invalidAge: true };
+    }
+  }
+  togglePasswordVisibility(controlName: string) {
+    if (controlName === 'password') {
+      this.passwordHide = !this.passwordHide;
+    } else if (controlName === 'confirmPassword') {
+      this.confirmPasswordHide = !this.confirmPasswordHide;
+    }
+  }
+ 
   // register user
   onRegisterUser() {
     if (this.userRegistrationForm.valid) {
       this.alertSuccess = true;
 
       // this.userRegistrationForm.reset();
+      console.log('Form Values:', this.userRegistrationForm.value);
     }
     else {
       this.userRegistrationForm.markAllAsTouched();
@@ -196,7 +210,8 @@ export class UserManagementComponent implements OnInit {
     else {
       this.alertSuccess = false;
       this.userRegistrationForm.reset();
-      this.router.navigate(['/core']);
+      this.allemployeeList = true;
+      this.employeeRegForm = false;
     }
   }
   onCancelClearChanges() {
@@ -205,7 +220,9 @@ export class UserManagementComponent implements OnInit {
   onBackConfirmClick() {
     this.alertSuccess = false;
     this.userRegistrationForm.reset();
-    this.router.navigate(['/core']);
+    this.formChangeWarningDialog = false;
+    this.allemployeeList = true;
+    this.employeeRegForm = false;
   }
 
 
