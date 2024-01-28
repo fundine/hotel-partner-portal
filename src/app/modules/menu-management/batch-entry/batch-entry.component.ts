@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormArray, FormGroup, FormControl, Validators, AbstractControl, FormControlState } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
 @Component({
@@ -321,32 +321,38 @@ export class BatchEntryComponent implements OnInit {
         });
 
         const itemPriceArray = this.menuBatchEntryForm.get('menuArray') as FormArray;
-        const transformedArray = [];
+        const transformedArray: any[] = [];
 
-        for (let index = 0; index < selectedOutletItems.length; index++) {
-          const unitId = selectedOutletItems[index]?.unitId;
-          for (let itemIndex = 0; itemIndex < itemPriceArray.length; itemIndex++) {
-            const item = itemPriceArray.at(itemIndex).value;
-            transformedArray.push({
-              unitId: unitId || '',
-              itemPrice: item.itemPrice,
-              //packageCost: item.packageCost,
-              taxId: item.taxId == undefined ? '' : item.taxId
-            });
-          }
+        
+        for (let index = 0; index < itemPriceArray.length; index++) {
+          const item = itemPriceArray.at(index).value;
+
+          const updatedItemPriceList = selectedOutletItems.map((unit: { unitId: any }) => ({
+            unitId: unit.unitId,
+            itemPrice: item.itemPrice, 
+            taxId: '',
+            packageCost: item.packageCost == undefined ? '' : item.packageCost
+          }));
+
+          transformedArray.push({
+            ...item, 
+            itemPriceList: updatedItemPriceList,
+            itemUnits: selectedOutletItems,
+          });
         }
 
         console.log(transformedArray);
 
+        console.log('All Items Info', this.menuBatchEntryForm);
 
-        console.log('All Items Info', this.menuBatchEntryForm)
         const requestBody = {
           categoryId: this.menuBatchEntryForm.get('categoryId')?.value,
           subCategoryId: this.menuBatchEntryForm.get('subCategoryId')?.value,
-          items: this.menuBatchEntryForm.value.menuArray,
-          itemUnits: selectedOutletItems,
-          itemPriceList: transformedArray,
+          items: transformedArray, 
         };
+
+        console.log('Request Body:', requestBody);
+
         console.log('request body', requestBody)
         this.apiService.saveBatchItem(requestBody, this.categoryTypeId).subscribe(
           (response: any) => {
