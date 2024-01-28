@@ -85,9 +85,11 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
-                                    <select-control [title]="'Gender'" validation="required" formControlName="gender"
-                                        [validationClass]="(userRegistrationForm.get('gender')?.invalid && userRegistrationForm.get('gender')?.touched) ?? false"
-                                        [options]="['Male', 'Female', 'Transgender', 'Prefer not to say','Others']"></select-control>
+                                    <select-control title="Gender" validation="required" formControlName="gender"
+                                        [selectedItem]="genderItem" [options]="genderOptions"
+                                        (optionSelected)="selectGender($event)"
+                                        [validationClass]="(userRegistrationForm.get('gender')?.invalid && userRegistrationForm.get('gender')?.touched) ?? false">
+                                    </select-control>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
@@ -113,9 +115,11 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
-                                    <select-control [title]="'Marital Status'" formControlName="maritalStatus"
-                                        [validationClass]="(userRegistrationForm.get('maritalStatus')?.invalid && userRegistrationForm.get('maritalStatus')?.touched) ?? false"
-                                        [options]="['Single', 'Married', 'Widowed', 'Divorced', 'Prefer not to say']"></select-control>
+                                    <select-control title="Marital Status" formControlName="maritalStatus"
+                                        [selectedItem]="maritalStatusItem" [options]="maritalStatusOptions"
+                                        (optionSelected)="selectMaritalStatus($event)"
+                                        [validationClass]="(userRegistrationForm.get('maritalStatus')?.invalid && userRegistrationForm.get('maritalStatus')?.touched) ?? false">
+                                    </select-control>
                                 </div>
                                 <div class="col-lg-4">
                                     <select-control title="Nationality" formControlName="nationality"
@@ -125,10 +129,11 @@
                                     </select-control>
                                 </div>
                                 <div class="col-lg-4">
-                                    <select-control [title]="'Identifying Document'"
-                                        formControlName="identifyingDocument"
-                                        [validationClass]="(userRegistrationForm.get('identifyingDocument')?.invalid && userRegistrationForm.get('identifyingDocument')?.touched) ?? false"
-                                        [options]="['National ID Card', 'Voter ID Card', 'Passport', 'Aadhaar Card','Drivers License']"></select-control>
+                                    <select-control title="Identifying Document" formControlName="identifyingDocument"
+                                        [selectedItem]="documentItem" [options]="documentOptions"
+                                        (optionSelected)="selectDocument($event)"
+                                        [validationClass]="(userRegistrationForm.get('identifyingDocument')?.invalid && userRegistrationForm.get('identifyingDocument')?.touched) ?? false">
+                                    </select-control>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
@@ -349,9 +354,9 @@
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="inp-label required">Job Role</label>
-                                        <input type="text" class="form-control" formControlName="jobRole"
-                                            [ngClass]="controlClass('jobRole')" />
+                                        <label class="inp-label required">Role</label>
+                                        <input type="text" class="form-control" formControlName="userRole"
+                                            [ngClass]="controlClass('userRole')" />
                                         <span class="focus-border"></span>
                                     </div>
                                 </div>
