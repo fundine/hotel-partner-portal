@@ -39,6 +39,8 @@ export class UserManagementComponent implements OnInit {
   confirmPasswordHide = false;
   alertSuccess: boolean = false;
   formChangeWarningDialog: boolean = false;
+  userSuspendedModal: boolean = false;
+  userResignedModal: boolean = false;
   allemployeeList: boolean = true;
   employeeProfile: boolean = false;
   employeeRegForm: boolean = false;
@@ -169,7 +171,7 @@ export class UserManagementComponent implements OnInit {
   userStatusOptions: any;
   userStatusList: { id: string; statusVal: string }[] | undefined;
   getUserStatus() {
-    this.apiService.getMaritalStatus().subscribe(
+    this.apiService.getUserStatus().subscribe(
       (data) => {
         this.userStatusList = data.results;
         this.userStatusOptions = this.userStatusList!.map(option => option.statusVal);
@@ -187,6 +189,12 @@ export class UserManagementComponent implements OnInit {
     if (selectedUserStatus) {
       this.selectedUserStatusId = selectedUserStatus.id;
       this.userStatusItem = selectedUserStatus.statusVal;
+
+      if (selectedUserStatus.id === '3') {
+        this.userSuspendedModal = true;
+      } else if (selectedUserStatus.id === '4') {
+        this.userResignedModal = true;
+      }
     }
   }
 

@@ -379,10 +379,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <select-control [title]="'User Status'" validation="required"
-                                        formControlName="userStatus"
-                                        [validationClass]="(userRegistrationForm.get('userStatus')?.invalid && userRegistrationForm.get('userStatus')?.touched) ?? false"
-                                        [options]="['Active User', 'Inactive User', 'Suspended']"></select-control>
+                                    <select-control title="User Status" validation="required"
+                                        formControlName="userStatus" [selectedItem]="userStatusItem"
+                                        [options]="userStatusOptions" (optionSelected)="selectUserStatus($event)"
+                                        [validationClass]="(userRegistrationForm.get('userStatus')?.invalid && userRegistrationForm.get('userStatus')?.touched) ?? false">
+                                    </select-control>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
