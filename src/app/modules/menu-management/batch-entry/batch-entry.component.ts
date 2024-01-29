@@ -149,6 +149,7 @@ export class BatchEntryComponent implements OnInit {
         itemTypeId: [''],
         itemTypeName: ['', [Validators.required]],
         itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+        packageCost: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
         itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         description: ['', [Validators.maxLength(500)]],

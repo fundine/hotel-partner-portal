@@ -22,8 +22,7 @@
                     <div class="item-outlets">
                         <multi-select-control [title]="'Allowed Outlets'" validation="required"
                             formControlName="allowedOutlets" [noLabel]="true" placeholder="Allowed Outlets"
-                            [options]="itemUnitOptions"
-                            customClass="clear-bottom no-label"
+                            [options]="itemUnitOptions" customClass="clear-bottom no-label"
                             [validationClass]="(menuBatchEntryForm.get('allowedOutlets')?.invalid && menuBatchEntryForm.get('allowedOutlets')?.touched) ?? false"></multi-select-control>
                     </div>
                     <div class="item-category">
@@ -94,6 +93,18 @@
                                             <label class="price-icon"><i class="vi vi-rupee"></i></label>
                                             <label class="val-msg"
                                                 *ngIf="menuBatchEntryForm.get('menuArray')?.get(i.toString())?.get('itemPrice')?.errors?.['pattern']">
+                                                Only Numbers Are Allowed</label>
+                                        </div>
+                                    </div>
+                                    <div class="item-package-cost">
+                                        <div class="form-group clear-bottom">
+                                            <input type="text" class="form-control price-input"
+                                                placeholder="Package Cost" formControlName="packageCost"
+                                                [ngClass]="controlClass('menuArray, i, packageCost')" />
+                                            <span class="focus-border"></span>
+                                            <label class="price-icon"><i class="vi vi-rupee"></i></label>
+                                            <label class="val-msg"
+                                                *ngIf="menuBatchEntryForm.get('menuArray')?.get(i.toString())?.get('packageCost')?.errors?.['pattern']">
                                                 Only Numbers Are Allowed</label>
                                         </div>
                                     </div>
