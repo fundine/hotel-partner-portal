@@ -383,34 +383,45 @@ button[disabled] {
 }
 
 // table
-table {
-    margin-bottom: 0;
-    border: 1px solid #dee2e6;
-    thead {
-        tr {
-            th {
-                font-weight: 500;
-                color: #44494e;
-                font-size: 0.95em;
-                background: #f0f1f7;
-                vertical-align: middle;
-                padding: 0.5rem 1rem !important;
-            }
-        }
-    }
-    tbody {
-        tr {
-            td {
-                font-size: 0.95em;
-                vertical-align: middle;
-                padding: 0.75rem 1rem !important;
-            }
-            &:last-child {
-                td {
-                    border-bottom: 0;
+@mixin thead {
+    color: #44494e;
+    vertical-align: middle;
+    padding: 0.5rem 0.75rem;
+}
+.table-container {
+    table {
+        margin-bottom: 0;
+        border: 1px solid #dee2e6;
+        thead {
+            tr {
+                th {
+                    @include thead;
+                    font-weight: 500;
+                    font-size: 0.95em;
+                    background: #f0f1f7 !important;
                 }
             }
         }
+        tbody {
+            tr {
+                td {
+                    font-size: 0.9em;
+                    vertical-align: middle;
+                    padding: 0.75rem 0.75rem !important;
+                }
+                &:last-child {
+                    td {
+                        border-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+    .table > :not(caption) > * > * {
+        @include thead;
+    }
+    &::-webkit-scrollbar {
+        height: 7px;
     }
 }
 

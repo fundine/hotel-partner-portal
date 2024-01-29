@@ -201,45 +201,73 @@ export class UserManagementComponent implements OnInit {
   constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) {
   }
 
+  // registration form
   userRegistrationForm = this.fb.group({
     userFirstName: ['', [Validators.required, Validators.maxLength(20)]],
     userLastName: ['', [Validators.required, Validators.maxLength(30)]],
-    genderId: [''],
-    gender: ['', [Validators.required]],
-    dateOfBirth: ['', [Validators.required, this.validateDateOfBirth]],
-    age: ['', [Validators.required, this.validateAge]],
-    maritalStatus: [''],
-    nationality: [''],
-    identifyingDocument: [''],
-    documentNumber: [''],
-    phoneCode: ['', [Validators.required]],
-    phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-    altPhoneCode: [''],
-    altPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
-    emergencyContactNumber: [''],
-    sponsorName: [''],
-    sponsorPhoneCode: [''],
-    sponsorPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
-    emailId: ['', [Validators.required, Validators.email]],
-    jobTitle: [''],
-    jobGrade: [''],
-    employeeId: [''],
-    highestQualification: [''],
-    relevantExperience: [''],
-    reportingManager: [''],
-    languagesKnown: [''],
-    dateOfJoining: [''],
-    remarks: ['', [Validators.maxLength(500)]],
-    userRole: ['', [Validators.required]],
-    allowedOutlets: [this.fb.array([])],
-    password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/\-]{6,}$/),],],
-    confirmPassword: [''],
+
+    personalInfo: this.fb.group({
+      genderId: [''],
+      gender: ['', [Validators.required]],
+      dateOfBirth: ['', [Validators.required, this.validateDateOfBirth]],
+      age: ['', [Validators.required, this.validateAge]],
+      maritalStatus: [''],
+      nationality: [''],
+      identifyingDocument: [''],
+      documentNumber: [''],
+    }),
+
+    contactInfo: this.fb.group({
+      phoneCode: ['', [Validators.required]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      altPhoneCode: [''],
+      altPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
+      emailId: ['', [Validators.required, Validators.email]],
+      emergencyContactNumber: [''],
+    }),
+
+    sponsorInfo: this.fb.group({
+      sponsorName: [''],
+      sponsorPhoneCode: [''],
+      sponsorPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
+    }),
+
+    communicationAddress: this.fb.group({
+      addressLine1: ['', Validators.required],
+      addressLine2: ['', Validators.required],
+      addressLine3: [''],
+      city: [''],
+      pincode: ['', Validators.required],
+      district: ['', Validators.required],
+      state: ['', Validators.required],
+      country: ['', Validators.required],
+    }),
+
+    professionalInfo: this.fb.group({
+      jobTitle: [''],
+      employeeId: [''],
+      dateOfJoining: [''],
+      remarks: ['', [Validators.maxLength(500)]],
+    }),
+
+    userRole: this.fb.group({
+      role: ['', [Validators.required]],
+    }),
+
+    userOutlets: this.fb.group({
+      allowedOutlets: [this.fb.array([])],
+    }),
+
     userStatusId: [''],
     userStatus: ['', [Validators.required]],
-    suspendedDate: [''],
-    suspendedReason: [''],
-    resignationDate: [''],
-    resignationReason: [''],
+    password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/\-]{6,}$/),],],
+    confirmPassword: [''],
+
+    suspendedReason: this.fb.group({
+      date: [''],
+      reason: [''],
+    })
+
   })
   controlClass(controlName: string) {
     return { 'is-invalid': this.userRegistrationForm?.get(controlName)?.invalid && this.userRegistrationForm?.get(controlName)?.touched };
@@ -261,6 +289,10 @@ export class UserManagementComponent implements OnInit {
     this.allemployeeList = false;
     this.employeeRegForm = true;
   }
+  showUserProfie() {
+    this.allemployeeList = false;
+    this.employeeProfile = true;
+  }
   validateDateOfBirth(control: { value: string | number | Date; }) {
     const currentDate = new Date();
     const selectedDate = new Date(control.value);
@@ -274,19 +306,19 @@ export class UserManagementComponent implements OnInit {
     return null;
   }
   calculateAge() {
-    const birthdateValue = this.userRegistrationForm.controls.dateOfBirth.value;
-    if (birthdateValue !== null) {
-      const birthdate = new Date(birthdateValue);
-      if (isNaN(birthdate.getTime())) {
-        this.userRegistrationForm.controls.age.setValue('');
-      } else {
-        const timeDiff = Math.abs(Date.now() - birthdate.getTime());
-        const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
-        this.userRegistrationForm.controls.age.setValue(age.toString());
-      }
-    } else {
-      this.userRegistrationForm.controls.age.setValue('');
-    }
+    // const birthdateValue = this.userRegistrationForm.controls.dateOfBirth.value;
+    // if (birthdateValue !== null) {
+    //   const birthdate = new Date(birthdateValue);
+    //   if (isNaN(birthdate.getTime())) {
+    //     this.userRegistrationForm.controls.age.setValue('');
+    //   } else {
+    //     const timeDiff = Math.abs(Date.now() - birthdate.getTime());
+    //     const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+    //     this.userRegistrationForm.controls.age.setValue(age.toString());
+    //   }
+    // } else {
+    //   this.userRegistrationForm.controls.age.setValue('');
+    // }
   }
   validateAge(control: AbstractControl) {
     const age = control.value;

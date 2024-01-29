@@ -19,23 +19,32 @@
                     </div>
                 </div>
                 <div class="rt-content">
-                    <table class="table user-table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Assigned Outlets</th>
-                                <th>Last Active</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let user of role.items">
-                                <td>{{ user.userName }}</td>
-                                <td>{{ user.assignedUnits }}</td>
-                                <td>{{ user.lastActive }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-container">
+                        <table class="table user-table">
+                            <thead>
+                                <tr>
+                                    <th style="min-width: 165px; max-width: 25%;">Name</th>
+                                    <th style="min-width: 235px; max-width: 35%;">Assigned Outlets</th>
+                                    <th style="min-width: 165px; max-width: 25%;">Last Active</th>
+                                    <th style="min-width: 100px; max-width: 15%; text-align: center;">Status</th>
+                                    <!-- <th style="width: 50px;"></th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let user of role.items" (click)="showUserProfie()">
+                                    <td style="min-width: 165px; max-width: 25%;">{{ user.userName }}</td>
+                                    <td style="min-width: 235px; max-width: 35%;">{{ user.assignedUnits }}</td>
+                                    <td style="min-width: 165px; max-width: 25%;">{{ user.lastActive }}</td>
+                                    <td style="min-width: 100px; max-width: 15%; text-align: center;">Active</td>
+                                    <!-- <td style="width: 50px;" class="item-actions">
+                                    <label class="btn-action">
+                                        <i class="vi vi-eye"></i>
+                                    </label>
+                                </td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </ng-container>
@@ -43,7 +52,23 @@
     </div>
 </ng-container>
 <ng-container *ngIf="employeeProfile">
+    <div class="page-content">
+        <div class="row">
+            <div class="col-lg-12 col-center">
+                <div class="card">
+                    <div class="card-header">
 
+                    </div>
+                    <div class="card-body">
+
+                    </div>
+                    <div class="card-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </ng-container>
 <ng-container *ngIf="employeeRegForm">
     <div class="page-content">
@@ -84,65 +109,69 @@
                                             Length is 30</label>
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
-                                    <select-control title="Gender" validation="required" formControlName="gender"
-                                        [selectedItem]="genderItem" [options]="genderOptions"
-                                        (optionSelected)="selectGender($event)"
-                                        [validationClass]="(userRegistrationForm.get('gender')?.invalid && userRegistrationForm.get('gender')?.touched) ?? false">
-                                    </select-control>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label">Date of Birth</label>
-                                        <input type="date" class="form-control cal-input" formControlName="dateOfBirth"
-                                            [ngClass]="controlClass('dateOfBirth')" (change)="calculateAge()" />
-                                        <span class="focus-border"></span>
-                                        <label class="cal-icon"><i class="vi vi-calendar"></i></label>
-                                        <label class="val-msg"
-                                            *ngIf="userRegistrationForm.get('dateOfBirth')?.errors?.['invalidAge'] && userRegistrationForm.get('dateOfBirth')?.value !== '' && userRegistrationForm.get('dateOfBirth')?.value !== null">Under
-                                            Age</label>
+                                <ng-container formGroupName="personalInfo">
+                                    <div class="col-lg-4">
+                                        <select-control title="Gender" validation="required" formControlName="gender"
+                                            [selectedItem]="genderItem" [options]="genderOptions"
+                                            (optionSelected)="selectGender($event)"
+                                            [validationClass]="(userRegistrationForm.get('personalInfo.gender')?.invalid && userRegistrationForm.get('personalInfo.gender')?.touched) ?? false">
+                                        </select-control>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label">Age</label>
-                                        <input type="number" class="form-control" formControlName="age"
-                                            [ngClass]="{'is-invalid': (userRegistrationForm.get('age')?.errors?.['invalidAge'] && userRegistrationForm.get('age')?.value !== '' && userRegistrationForm.get('age')?.value !== null) || (userRegistrationForm.get('age')?.errors?.['invalidAge'] && userRegistrationForm.get('age')?.touched)}" />
-                                        <span class="focus-border"></span>
-                                        <label class="val-msg"
-                                            *ngIf="userRegistrationForm.get('age')?.errors?.['invalidAge'] && userRegistrationForm.get('age')?.value !== '' && userRegistrationForm.get('age')?.value !== null">Must
-                                            be 18 or older</label>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="inp-label">Date of Birth</label>
+                                            <input type="date" class="form-control cal-input"
+                                                formControlName="dateOfBirth"
+                                                [ngClass]="controlClass('personalInfo.dateOfBirth')"
+                                                (change)="calculateAge()" />
+                                            <span class="focus-border"></span>
+                                            <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                                            <label class="val-msg"
+                                                *ngIf="userRegistrationForm.get('personalInfo.dateOfBirth')?.errors?.['invalidAge'] && userRegistrationForm.get('personalInfo.dateOfBirth')?.value !== '' && userRegistrationForm.get('personalInfo.dateOfBirth')?.value !== null">Under
+                                                Age</label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <select-control title="Marital Status" formControlName="maritalStatus"
-                                        [selectedItem]="maritalStatusItem" [options]="maritalStatusOptions"
-                                        (optionSelected)="selectMaritalStatus($event)"
-                                        [validationClass]="(userRegistrationForm.get('maritalStatus')?.invalid && userRegistrationForm.get('maritalStatus')?.touched) ?? false">
-                                    </select-control>
-                                </div>
-                                <div class="col-lg-4">
-                                    <select-control title="Nationality" formControlName="nationality"
-                                        [selectedItem]="nationality" [options]="countryNameOptions"
-                                        (optionSelected)="selectNationality($event)"
-                                        [validationClass]="(userRegistrationForm.get('nationality')?.invalid && userRegistrationForm.get('nationality')?.touched) ?? false">
-                                    </select-control>
-                                </div>
-                                <div class="col-lg-4">
-                                    <select-control title="Identifying Document" formControlName="identifyingDocument"
-                                        [selectedItem]="documentItem" [options]="documentOptions"
-                                        (optionSelected)="selectDocument($event)"
-                                        [validationClass]="(userRegistrationForm.get('identifyingDocument')?.invalid && userRegistrationForm.get('identifyingDocument')?.touched) ?? false">
-                                    </select-control>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label">Document Number</label>
-                                        <input type="text" class="form-control" formControlName="documentNumber"
-                                            [ngClass]="controlClass('documentNumber')" />
-                                        <span class="focus-border"></span>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="inp-label">Age</label>
+                                            <input type="number" class="form-control" formControlName="age"
+                                                [ngClass]="{'is-invalid': (userRegistrationForm.get('personalInfo.age')?.errors?.['invalidAge'] && userRegistrationForm.get('personalInfo.age')?.value !== '' && userRegistrationForm.get('personalInfo.age')?.value !== null) || (userRegistrationForm.get('personalInfo.age')?.errors?.['invalidAge'] && userRegistrationForm.get('personalInfo.age')?.touched)}" />
+                                            <span class="focus-border"></span>
+                                            <label class="val-msg"
+                                                *ngIf="userRegistrationForm.get('personalInfo.age')?.errors?.['invalidAge'] && userRegistrationForm.get('personalInfo.age')?.value !== '' && userRegistrationForm.get('personalInfo.age')?.value !== null">Must
+                                                be 18 or older</label>
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="col-lg-4">
+                                        <select-control title="Marital Status" formControlName="maritalStatus"
+                                            [selectedItem]="maritalStatusItem" [options]="maritalStatusOptions"
+                                            (optionSelected)="selectMaritalStatus($event)"
+                                            [validationClass]="(userRegistrationForm.get('personalInfo.maritalStatus')?.invalid && userRegistrationForm.get('personalInfo.maritalStatus')?.touched) ?? false">
+                                        </select-control>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <select-control title="Nationality" formControlName="nationality"
+                                            [selectedItem]="nationality" [options]="countryNameOptions"
+                                            (optionSelected)="selectNationality($event)"
+                                            [validationClass]="(userRegistrationForm.get('personalInfo.nationality')?.invalid && userRegistrationForm.get('personalInfo.nationality')?.touched) ?? false">
+                                        </select-control>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <select-control title="Identifying Document"
+                                            formControlName="identifyingDocument" [selectedItem]="documentItem"
+                                            [options]="documentOptions" (optionSelected)="selectDocument($event)"
+                                            [validationClass]="(userRegistrationForm.get('personalInfo.identifyingDocument')?.invalid && userRegistrationForm.get('personalInfo.identifyingDocument')?.touched) ?? false">
+                                        </select-control>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="inp-label">Document Number</label>
+                                            <input type="text" class="form-control" formControlName="documentNumber"
+                                                [ngClass]="controlClass('personalInfo.documentNumber')" />
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                </ng-container>
                             </div>
                             <div class=" row">
                                 <div class="col-lg-12">
@@ -155,103 +184,184 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label required">Phone Number</label>
-                                        <div class="input-group">
-                                            <div class="first-control lg-30">
-                                                <select-control title="Phone Code" [noLabel]="true"
-                                                    formControlName="phoneCode" [selectedItem]="countryCode"
-                                                    [options]="countryCodeOptions"
-                                                    (optionSelected)="selectCountryCode($event)"
-                                                    customClass="no-label list-lg"
-                                                    [validationClass]="(userRegistrationForm.get('phoneCode')?.invalid && userRegistrationForm.get('phoneCode')?.touched) ?? false">
-                                                </select-control>
-                                            </div>
-                                            <div class="second-control lg-70">
-                                                <input type="number" class="form-control" formControlName="phoneNumber"
-                                                    [ngClass]="controlClass('phoneNumber')" />
-                                                <span class="focus-border"></span>
-                                                <label class="val-msg"
-                                                    *ngIf="userRegistrationForm.get('phoneNumber')?.errors?.['pattern']">Only
-                                                    Numbers Are Allowed</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label">Alternate Phone Number</label>
-                                        <div class="input-group">
-                                            <div class="first-control lg-30">
-                                                <select-control title="Alt Phone Code" [noLabel]="true"
-                                                    formControlName="altPhoneCode" [selectedItem]="countryCode"
-                                                    [options]="countryCodeOptions"
-                                                    (optionSelected)="selectCountryCode($event)"
-                                                    customClass="no-label list-lg"
-                                                    [validationClass]="(userRegistrationForm.get('altPhoneCode')?.invalid && userRegistrationForm.get('altPhoneCode')?.touched) ?? false">
-                                                </select-control>
-                                            </div>
-                                            <div class="second-control lg-70">
-                                                <input type="number" class="form-control"
-                                                    formControlName="altPhoneNumber"
-                                                    [ngClass]="controlClass('altPhoneNumber')" />
-                                                <span class="focus-border"></span>
-                                                <label class="val-msg"
-                                                    *ngIf="userRegistrationForm.get('altPhoneNumber')?.errors?.['pattern']">Only
-                                                    Numbers Are Allowed</label>
+                                <ng-container formGroupName="contactInfo">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="inp-label required">Phone Number</label>
+                                            <div class="input-group">
+                                                <div class="first-control lg-30">
+                                                    <select-control title="Phone Code" [noLabel]="true"
+                                                        formControlName="phoneCode" [selectedItem]="countryCode"
+                                                        [options]="countryCodeOptions"
+                                                        (optionSelected)="selectCountryCode($event)"
+                                                        customClass="no-label list-lg"
+                                                        [validationClass]="(userRegistrationForm.get('contactInfo.phoneCode')?.invalid && userRegistrationForm.get('contactInfo.phoneCode')?.touched) ?? false">
+                                                    </select-control>
+                                                </div>
+                                                <div class="second-control lg-70">
+                                                    <input type="number" class="form-control"
+                                                        formControlName="phoneNumber"
+                                                        [ngClass]="controlClass('contactInfo.phoneNumber')" />
+                                                    <span class="focus-border"></span>
+                                                    <label class="val-msg"
+                                                        *ngIf="userRegistrationForm.get('contactInfo.phoneNumber')?.errors?.['pattern']">Only
+                                                        Numbers Are Allowed</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="inp-label">Alternate Phone Number</label>
+                                            <div class="input-group">
+                                                <div class="first-control lg-30">
+                                                    <select-control title="Alt Phone Code" [noLabel]="true"
+                                                        formControlName="altPhoneCode" [selectedItem]="countryCode"
+                                                        [options]="countryCodeOptions"
+                                                        (optionSelected)="selectCountryCode($event)"
+                                                        customClass="no-label list-lg"
+                                                        [validationClass]="(userRegistrationForm.get('contactInfo.altPhoneCode')?.invalid && userRegistrationForm.get('contactInfo.altPhoneCode')?.touched) ?? false">
+                                                    </select-control>
+                                                </div>
+                                                <div class="second-control lg-70">
+                                                    <input type="number" class="form-control"
+                                                        formControlName="altPhoneNumber"
+                                                        [ngClass]="controlClass('contactInfo.altPhoneNumber')" />
+                                                    <span class="focus-border"></span>
+                                                    <label class="val-msg"
+                                                        *ngIf="userRegistrationForm.get('contactInfo.altPhoneNumber')?.errors?.['pattern']">Only
+                                                        Numbers Are Allowed</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="inp-label required">Email Id</label>
+                                            <input type="email" class="form-control" formControlName="emailId"
+                                                [ngClass]="controlClass('contactInfo.emailId')" />
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="inp-label">Emergency Contact Number</label>
+                                            <input type="text" class="form-control"
+                                                formControlName="emergencyContactNumber"
+                                                [ngClass]="controlClass('contactInfo.emergencyContactNumber')" />
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-container formGroupName="sponsorInfo">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="inp-label">Sponsor Name</label>
+                                            <input type="text" class="form-control" formControlName="sponsorName"
+                                                [ngClass]="controlClass('sponsorInfo.sponsorName')" />
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="inp-label">Sponsor Phone Number</label>
+                                            <div class="input-group">
+                                                <div class="first-control lg-30">
+                                                    <select-control title="Sponsor Phone Code" [noLabel]="true"
+                                                        formControlName="sponsorPhoneCode" [selectedItem]="countryCode"
+                                                        [options]="countryCodeOptions"
+                                                        (optionSelected)="selectCountryCode($event)"
+                                                        customClass="no-label list-lg"
+                                                        [validationClass]="(userRegistrationForm.get('sponsorInfo.sponsorPhoneCode')?.invalid && userRegistrationForm.get('sponsorInfo.sponsorPhoneCode')?.touched) ?? false">
+                                                    </select-control>
+                                                </div>
+                                                <div class="second-control lg-70">
+                                                    <input type="number" class="form-control"
+                                                        formControlName="sponsorPhoneNumber"
+                                                        [ngClass]="controlClass('sponsorInfo.sponsorPhoneNumber')" />
+                                                    <span class="focus-border"></span>
+                                                    <label class="val-msg"
+                                                        *ngIf="userRegistrationForm.get('sponsorInfo.sponsorPhoneNumber')?.errors?.['pattern']">Only
+                                                        Numbers Are Allowed</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-title-group">
+                                        <div class="form-title">Communication Address</div>
+                                        <div class="form-sub-title">Knowing the employee's address can be very helpful
+                                            in this
+                                            regard.</div>
+                                    </div>
                                 </div>
-                                <div class="col-lg-4">
+                            </div>
+                            <div class="row" formGroupName="communicationAddress">
+                                <div class="col-lg-8">
                                     <div class="form-group">
-                                        <label class="inp-label required">Email Id</label>
-                                        <input type="email" class="form-control" formControlName="emailId"
-                                            [ngClass]="controlClass('emailId')" />
+                                        <label class="inp-label required">House / Apartment Name</label>
+                                        <input type="text" class="form-control" formControlName="addressLine1"
+                                            [ngClass]="controlClass('communicationAddress.addressLine1')" />
                                         <span class="focus-border"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="inp-label">Emergency Contact Number</label>
-                                        <input type="text" class="form-control" formControlName="emergencyContactNumber"
-                                            [ngClass]="controlClass('emergencyContactNumber')" />
+                                        <label class="inp-label required">Area / Road Name</label>
+                                        <input type="text" class="form-control" formControlName="addressLine2"
+                                            [ngClass]="controlClass('communicationAddress.addressLine2')" />
                                         <span class="focus-border"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="inp-label">Sponsor Name</label>
-                                        <input type="text" class="form-control" formControlName="sponsorName"
-                                            [ngClass]="controlClass('sponsorName')" />
+                                        <label class="inp-label">Landmark</label>
+                                        <input type="text" class="form-control" formControlName="addressLine3"
+                                            [ngClass]="controlClass('communicationAddress.addressLine3')" />
                                         <span class="focus-border"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="form-group">
-                                        <label class="inp-label">Sponsor Phone Number</label>
-                                        <div class="input-group">
-                                            <div class="first-control lg-30">
-                                                <select-control title="Sponsor Phone Code" [noLabel]="true"
-                                                    formControlName="sponsorPhoneCode" [selectedItem]="countryCode"
-                                                    [options]="countryCodeOptions"
-                                                    (optionSelected)="selectCountryCode($event)"
-                                                    customClass="no-label list-lg"
-                                                    [validationClass]="(userRegistrationForm.get('sponsorPhoneCode')?.invalid && userRegistrationForm.get('sponsorPhoneCode')?.touched) ?? false">
-                                                </select-control>
-                                            </div>
-                                            <div class="second-control lg-70">
-                                                <input type="number" class="form-control"
-                                                    formControlName="sponsorPhoneNumber"
-                                                    [ngClass]="controlClass('sponsorPhoneNumber')" />
-                                                <span class="focus-border"></span>
-                                                <label class="val-msg"
-                                                    *ngIf="userRegistrationForm.get('sponsorPhoneNumber')?.errors?.['pattern']">Only
-                                                    Numbers Are Allowed</label>
-                                            </div>
-                                        </div>
+                                        <label class="inp-label">City</label>
+                                        <input type="text" class="form-control" formControlName="city"
+                                            [ngClass]="controlClass('communicationAddress.city')" />
+                                        <span class="focus-border"></span>
                                     </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">Pin / Zip Code</label>
+                                        <input type="text" class="form-control" formControlName="pincode"
+                                            [ngClass]="controlClass('communicationAddress.pincode')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">District</label>
+                                        <input type="text" class="form-control" formControlName="district"
+                                            [ngClass]="controlClass('communicationAddress.district')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="inp-label required">State</label>
+                                        <input type="text" class="form-control" formControlName="state"
+                                            [ngClass]="controlClass('communicationAddress.state')" />
+                                        <span class="focus-border"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <select-control title="Country" validation="required" formControlName="country"
+                                        [selectedItem]="nationality" [options]="countryNameOptions"
+                                        (optionSelected)="selectNationality($event)"
+                                        [validationClass]="(userRegistrationForm.get('communicationAddress.country')?.invalid && userRegistrationForm.get('communicationAddress.country')?.touched) ?? false">
+                                    </select-control>
                                 </div>
                             </div>
                             <div class="row">
@@ -263,20 +373,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row" formGroupName="professionalInfo">
                                 <div class="col-lg-4">
                                     <div class="form-group">
                                         <label class="inp-label">Job Title / Designation</label>
                                         <input type="text" class="form-control" formControlName="jobTitle"
-                                            [ngClass]="controlClass('jobTitle')" />
-                                        <span class="focus-border"></span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label">Job Grade</label>
-                                        <input type="text" class="form-control" formControlName="jobGrade"
-                                            [ngClass]="controlClass('jobGrade')" />
+                                            [ngClass]="controlClass('professionalInfo.jobTitle')" />
                                         <span class="focus-border"></span>
                                     </div>
                                 </div>
@@ -284,39 +386,7 @@
                                     <div class="form-group">
                                         <label class="inp-label">Employee ID</label>
                                         <input type="text" class="form-control" formControlName="employeeId"
-                                            [ngClass]="controlClass('employeeId')" />
-                                        <span class="focus-border"></span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label">Highest Qualification</label>
-                                        <input type="text" class="form-control" formControlName="highestQualification"
-                                            [ngClass]="controlClass('highestQualification')" />
-                                        <span class="focus-border"></span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label">Relevant Experience (In Years)</label>
-                                        <input type="text" class="form-control" formControlName="relevantExperience"
-                                            [ngClass]="controlClass('relevantExperience')" />
-                                        <span class="focus-border"></span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label">Reporting Manager</label>
-                                        <input type="text" class="form-control" formControlName="reportingManager"
-                                            [ngClass]="controlClass('reportingManager')" />
-                                        <span class="focus-border"></span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-8">
-                                    <div class="form-group">
-                                        <label class="inp-label">Languages Known</label>
-                                        <input type="text" class="form-control" formControlName="languagesKnown"
-                                            [ngClass]="controlClass('languagesKnown')" />
+                                            [ngClass]="controlClass('professionalInfo.employeeId')" />
                                         <span class="focus-border"></span>
                                     </div>
                                 </div>
@@ -324,7 +394,8 @@
                                     <div class="form-group">
                                         <label class="inp-label">Date of Join</label>
                                         <input type="date" class="form-control cal-input"
-                                            formControlName="dateOfJoining" [ngClass]="controlClass('dateOfJoining')" />
+                                            formControlName="dateOfJoining"
+                                            [ngClass]="controlClass('professionalInfo.dateOfJoining')" />
                                         <span class="focus-border"></span>
                                         <label class="cal-icon"><i class="vi vi-calendar"></i></label>
                                     </div>
@@ -333,11 +404,11 @@
                                     <div class="form-group">
                                         <label class="inp-label">Remarks</label>
                                         <textarea class="form-control" formControlName="remarks"
-                                            [ngClass]="controlClass('remarks')"
+                                            [ngClass]="controlClass('professionalInfo.remarks')"
                                             placeholder="Provide a brief about the employee if required."></textarea>
                                         <span class="focus-border"></span>
                                         <label class="val-msg"
-                                            *ngIf="userRegistrationForm.get('remarks')?.errors?.['maxlength']">Max
+                                            *ngIf="userRegistrationForm.get('professionalInfo.remarks')?.errors?.['maxlength']">Max
                                             Length is 500</label>
                                     </div>
                                 </div>
@@ -353,18 +424,22 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label required">Role</label>
-                                        <input type="text" class="form-control" formControlName="userRole"
-                                            [ngClass]="controlClass('userRole')" />
-                                        <span class="focus-border"></span>
-                                    </div>
+                                    <ng-container formGroupName="userRole">
+                                        <div class="form-group">
+                                            <label class="inp-label required">Role</label>
+                                            <input type="text" class="form-control" formControlName="role"
+                                                [ngClass]="controlClass('userRole.role')" />
+                                            <span class="focus-border"></span>
+                                        </div>
+                                    </ng-container>
                                 </div>
                                 <div class="col-lg-8">
-                                    <multi-select-control [title]="'Allowed Outlets'" validation="required"
-                                        formControlName="allowedOutlets"
-                                        [validationClass]="(userRegistrationForm.get('allowedOutlets')?.invalid && userRegistrationForm.get('allowedOutlets')?.touched) ?? false"
-                                        [options]="['Outlet 1', 'Outlet 2', 'Outlet 3','Outlet 4']"></multi-select-control>
+                                    <ng-container formGroupName="userOutlets">
+                                        <multi-select-control [title]="'Allowed Outlets'" validation="required"
+                                            formControlName="allowedOutlets"
+                                            [validationClass]="(userRegistrationForm.get('userOutlets.allowedOutlets')?.invalid && userRegistrationForm.get('userOutlets.allowedOutlets')?.touched) ?? false"
+                                            [options]="['Outlet 1', 'Outlet 2', 'Outlet 3','Outlet 4']"></multi-select-control>
+                                    </ng-container>
                                 </div>
                             </div>
                             <div class=" row">
@@ -431,8 +506,8 @@
                         <div class="card-footer">
                             <div></div>
                             <div class="btn-list">
-                                <button class="btn btn-sm btn-success" (click)="onRegisterUser()">REGISTER</button>
-                                <button class="btn btn-sm btn-danger" (click)="onCancelClick()">CANCEL</button>
+                                <button class="btn btn-success" (click)="onRegisterUser()">REGISTER</button>
+                                <button class="btn btn-danger" (click)="onCancelClick()">CANCEL</button>
                             </div>
                         </div>
                     </div>
