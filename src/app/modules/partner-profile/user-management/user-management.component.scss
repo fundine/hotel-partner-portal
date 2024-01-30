@@ -1,3 +1,17 @@
+@mixin info-title {
+    font-size: 0.7em;
+    font-weight: 500;
+    color: #b4aeae;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+@mixin info-value {
+    line-height: 1.4;
+    color: #555f57;
+    min-height: 19px;
+    font-size: 1em;
+}
+
 .page-header {
     top: 0;
     z-index: 1;
@@ -86,9 +100,8 @@
 }
 
 .card {
-    margin-bottom: 0;
     .card-body {
-        padding: 1.5rem 1rem;
+        padding: 1.5rem;
         .action-panel {
             padding: 15px;
             margin-top: 10px;
@@ -117,6 +130,29 @@
             .btn {
                 min-width: 110px;
             }
+        }
+    }
+    &.info-card {
+        .card-body {
+            padding: 1.25rem 0.75rem 0.5rem;
+            .info-group {
+                margin-bottom: 12px;
+                .info-title {
+                    @include info-title;
+                }
+                .info-value {
+                    @include info-value;
+                }
+            }
+        }
+    }
+    &.reg-card {
+        margin-bottom: 0;
+        .card-body {
+            padding: 1.5rem 1rem;
+        }
+        .card-footer {
+            justify-content: end;
         }
     }
 }

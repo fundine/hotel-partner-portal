@@ -41,8 +41,8 @@ export class UserManagementComponent implements OnInit {
   formChangeWarningDialog: boolean = false;
   userSuspendedModal: boolean = false;
   userResignedModal: boolean = false;
-  allemployeeList: boolean = true;
-  employeeProfile: boolean = false;
+  allemployeeList: boolean = false;
+  employeeProfile: boolean = true;
   employeeRegForm: boolean = false;
 
   // api

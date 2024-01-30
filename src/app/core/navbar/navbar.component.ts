@@ -77,8 +77,8 @@ export class NavbarComponent implements OnInit {
       this.activeTab = 'insights';
       this.router.navigate(['/core/insights']);
     } else if (this.roleId === '4') {
-      this.activeTab = 'menu editor';
-      this.router.navigate(['/core/menueditor']);
+      this.activeTab = 'partner profile';
+      this.router.navigate(['/core/partnerprofile']);
     }
     this.tabClicked.emit(this.activeTab);
   }
