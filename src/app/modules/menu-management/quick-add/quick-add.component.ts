@@ -290,7 +290,7 @@ export class QuickAddComponent implements OnInit {
         packageCost: ['', [Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         taxId: [''],
         itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-        itemFinalPrice: [''],
+        itemFinalPrice: ['0.00'],
       });
 
       outletsFormArray.push(defaultOutletFormGroup);

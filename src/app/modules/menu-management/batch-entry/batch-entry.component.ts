@@ -151,7 +151,7 @@ export class BatchEntryComponent implements OnInit {
         itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         packageCost: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-        itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+        itemFinalPrice: ['0.00', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         description: ['', [Validators.maxLength(500)]],
         isAvailable: [true],
         isDisplayInMenu: [true],
@@ -250,6 +250,7 @@ export class BatchEntryComponent implements OnInit {
 
     this.newMenuInfo.controls.forEach((control: AbstractControl, index: number) => {
       control.get('itemPrice')?.valueChanges.subscribe(() => this.calculateFinalPrice(index));
+      control.get('packageCost')?.valueChanges.subscribe(() => this.calculateFinalPrice(index));
       control.get('itemTax')?.valueChanges.subscribe(() => this.calculateFinalPrice(index));
     });
   }
