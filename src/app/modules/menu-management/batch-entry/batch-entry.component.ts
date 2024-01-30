@@ -258,11 +258,12 @@ export class BatchEntryComponent implements OnInit {
   calculateFinalPrice(index: number) {
     const itemPriceControl = this.newMenuInfo.at(index).get('itemPrice');
     const itemTaxControl = this.newMenuInfo.at(index).get('itemTax');
+    const itemPackageCostControl = this.newMenuInfo.at(index).get('packageCost');
     const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
-    // const packageCost = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
+     const packageCost = (typeof itemPackageCostControl?.value === 'string' ? parseFloat(itemPackageCostControl.value) : 0) || 0;
     const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
-    const finalPrice = price + (price * (tax / 100));
-    //const finalPrice = price + packageCost + (price * (tax / 100));
+    //const finalPrice = price + (price * (tax / 100));
+    const finalPrice = (price + packageCost) * (1 + (tax / 100));
     this.newMenuInfo.at(index).get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
   }
   onCancelInfo() {
