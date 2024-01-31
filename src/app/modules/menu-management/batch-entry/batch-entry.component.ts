@@ -11,7 +11,7 @@ export class BatchEntryComponent implements OnInit {
 
 
   categoryTypeId: string = '';
-
+  unitFilter: boolean = true;
   loading: boolean = false;
   alertSuccess: boolean = false;
   emptyItemDialog: boolean = false;
@@ -59,8 +59,8 @@ export class BatchEntryComponent implements OnInit {
     }
   }
 
-  getAllUnits(categoryTypeId: any) {
-    this.apiService.getUnitListData(categoryTypeId).subscribe(
+  getAllUnits(categoryTypeId: any, unitFilter: boolean) {
+    this.apiService.getUnitListData(categoryTypeId, unitFilter).subscribe(
       (data) => {
         this.itemUnitList = data.results;
         this.itemUnitOptions = this.itemUnitList!.map(option => option.unitName);
@@ -243,7 +243,7 @@ export class BatchEntryComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.categoryTypeId = params['categoryTypeId'];
     });
-    this.getAllUnits(this.categoryTypeId);
+    this.getAllUnits(this.categoryTypeId, this.unitFilter);
 
     this.addNewMenuItem(5);
     this.selectCategoryType(this.categoryTypeId);
@@ -261,7 +261,7 @@ export class BatchEntryComponent implements OnInit {
     const itemTaxControl = this.newMenuInfo.at(index).get('itemTax');
     const itemPackageCostControl = this.newMenuInfo.at(index).get('packageCost');
     const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
-     const packageCost = (typeof itemPackageCostControl?.value === 'string' ? parseFloat(itemPackageCostControl.value) : 0) || 0;
+    const packageCost = (typeof itemPackageCostControl?.value === 'string' ? parseFloat(itemPackageCostControl.value) : 0) || 0;
     const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
     //const finalPrice = price + (price * (tax / 100));
     const finalPrice = (price + packageCost) * (1 + (tax / 100));
@@ -326,19 +326,19 @@ export class BatchEntryComponent implements OnInit {
         const itemPriceArray = this.menuBatchEntryForm.get('menuArray') as FormArray;
         const transformedArray: any[] = [];
 
-        
+
         for (let index = 0; index < itemPriceArray.length; index++) {
           const item = itemPriceArray.at(index).value;
 
           const updatedItemPriceList = selectedOutletItems.map((unit: { unitId: any }) => ({
             unitId: unit.unitId,
-            itemPrice: item.itemPrice, 
+            itemPrice: item.itemPrice,
             taxId: '',
             packageCost: item.packageCost == undefined ? '' : item.packageCost
           }));
 
           transformedArray.push({
-            ...item, 
+            ...item,
             itemPriceList: updatedItemPriceList,
             itemUnits: selectedOutletItems,
           });
@@ -351,7 +351,7 @@ export class BatchEntryComponent implements OnInit {
         const requestBody = {
           categoryId: this.menuBatchEntryForm.get('categoryId')?.value,
           subCategoryId: this.menuBatchEntryForm.get('subCategoryId')?.value,
-          items: transformedArray, 
+          items: transformedArray,
         };
 
         console.log('Request Body:', requestBody);

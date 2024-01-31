@@ -12,7 +12,7 @@ import { environment } from 'src/environment';
 export class MenuEditorComponent implements OnInit {
 
   // global variables
-  public roleId: string = environment.roleId;
+  public roleCode: string = environment.roleCode;
   public unitId: string = environment.unitId;
   public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables

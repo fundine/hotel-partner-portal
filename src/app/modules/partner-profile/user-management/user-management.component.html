@@ -15,10 +15,10 @@
                     <div class="title-group">
                         <div class="title-lg">{{ role.userRole }}</div>
                         <div class="title-info">
-                            <span *ngIf="role.roleId === '101'">Oversees menu operations, including add, edit, delete,
+                            <span *ngIf="role.roleCode === '101'">Oversees menu operations, including add, edit, delete,
                                 pricing, and user management
                                 for efficient outlet functioning.</span>
-                            <span *ngIf="role.roleId === '102'">Manages inventory by marking items out of stock,
+                            <span *ngIf="role.roleCode === '102'">Manages inventory by marking items out of stock,
                                 ensuring
                                 accurate representation and availability.</span>
                         </div>
@@ -551,13 +551,6 @@
                                 </div>
                                 <div class="col-lg-8">
                                     <ng-container formGroupName="userOutlets">
-                                        <!-- <multi-select-control [title]="'Allowed Outlets'" validation="required"
-                                            formControlName="allowedOutlets" [options]="userRoleOptions"
-                                            [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
-                                            [validationClass]="(userRegistrationForm.get('userOutlets.allowedOutlets')?.invalid && userRegistrationForm.get('userOutlets.allowedOutlets')?.touched) ?? false">
-                                        </multi-select-control> -->
-
-
                                         <multi-select-control [title]="'Allowed Outlets'" validation="required"
                                             formControlName="allowedOutlets" [options]="itemUnitOptions"
                                             [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"

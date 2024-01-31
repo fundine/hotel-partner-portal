@@ -12,12 +12,12 @@ import { environment } from 'src/environment';
 export class FeaturedGroupComponent implements OnInit {
 
   // global variables
-  public roleId: string = environment.roleId;
+  public roleCode: string = environment.roleCode;
   public unitId: string = environment.unitId;
   // end global variables
 
   categoryTypeId: string = '';
-
+  unitFilter: boolean = false;
   loading: boolean = false;
   innerLoading: boolean = false;
   menuItemsLoading: boolean = false;
@@ -75,6 +75,34 @@ export class FeaturedGroupComponent implements OnInit {
     );
   }
 
+  selectedUnitId: any;
+  itemUnitItem: any[] = [];
+  itemUnitOptions: any;
+  itemUnitList: { unitId: string; unitName: string; unitTypeName: string }[] | undefined;
+  getAllUnits(categoryTypeId: any, unitFilter: boolean) {
+    this.apiService.getUnitListData(categoryTypeId, unitFilter).subscribe(
+      (data) => {
+        this.itemUnitList = data.results;
+        this.itemUnitOptions = this.itemUnitList!.map(option => option.unitName);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectUnitType(event: any) {
+    const selectedUnitName = event as string;
+    const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);
+
+    if (selectedUnitItem) {
+      this.selectedUnitId = selectedUnitItem.unitId;
+      this.itemUnitItem.push(selectedUnitItem.unitName);
+    }
+    this.getCategoryWiseMenuitems(this.categoryTypeId, this.selectedUnitId);
+  }
+
+
   constructor(private fb: FormBuilder, private router: Router, private route: ActivatedRoute, private apiService: ApiService) {
 
   }
@@ -82,6 +110,7 @@ export class FeaturedGroupComponent implements OnInit {
   // feature item form
   featureMenuItemsForm = this.fb.group({
     categoryTypeId: [''],
+    outletName: ['', [Validators.required]],
     itemGroupName: ['', [Validators.required, Validators.maxLength(100), this.duplicateName.bind(this)]],
     items: this.fb.array([])
   })
@@ -114,7 +143,7 @@ export class FeaturedGroupComponent implements OnInit {
     });
     this.selectCategoryType(this.categoryTypeId);
     this.getCategoryWiseFeatureGroups(this.categoryTypeId);
-
+    this.getAllUnits(this.categoryTypeId, this.unitFilter);
     // if (this.isUniquNameShow === true) {
     // this.featureMenuItemsForm.get('itemGroupName')?.valueChanges.subscribe(() => {
     //this.isUniquNameShow = false;
@@ -135,7 +164,6 @@ export class FeaturedGroupComponent implements OnInit {
   // general
   addNewFeatureGroup() {
     this.featureGroupsList = false;
-    this.getCategoryWiseMenuitems(this.categoryTypeId, this.unitId);
   };
   cancelAddfeatureGroup() {
     const itemsArray = this.featureMenuItemsForm.get('items') as FormArray;

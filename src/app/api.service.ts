@@ -8,9 +8,10 @@ import { environment } from '../environment';
 })
 export class ApiService {
   private apiUrl = environment.apiUrl;
-  private unitId = environment.unitId;
   private partnerId = environment.partnerId;
+  private unitId = environment.unitId;
   private userId = environment.userId;
+  private roleId = environment.roleId;
 
   constructor(private http: HttpClient) { }
 
@@ -247,6 +248,7 @@ export class ApiService {
     const requestOptions = {
       headers: {
         'partnerId': this.partnerId,
+        'unitId': this.unitId,
       }
     };
     return this.http.get(url, requestOptions);
@@ -310,6 +312,7 @@ export class ApiService {
     const requestOptions = {
       headers: {
         'userId': this.userId,
+        'roleId': this.roleId,
         'partnerId': this.partnerId,
       }
     };

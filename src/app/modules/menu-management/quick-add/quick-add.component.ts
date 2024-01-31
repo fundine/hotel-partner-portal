@@ -125,7 +125,6 @@ export class QuickAddComponent implements OnInit {
       }
     );
   }
-
   selectUnitType(event: any) {
     const selectedUnitName = event as string;
     const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);

@@ -12,7 +12,7 @@ export class NavbarComponent implements OnInit {
   @Output() tabClicked: EventEmitter<string> = new EventEmitter<string>();
 
   // global variables
-  public roleId: string = environment.roleId;
+  public roleCode: string = environment.roleCode;
   public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit {
 
   navigationItems: any = [
     // role 1
-    (this.roleId === '1' ? [
+    (this.roleCode === '1' ? [
       { tabName: 'guest checkin', route: '/core/guestcheckin', iconClass: 'vi vi-reception-o', name: 'Check-In' },
       { tabName: 'room editor', route: '/core/roomeditor', iconClass: 'vi vi-bed-o', name: 'Rooms' },
       { tabName: 'dine track', route: '/core/dinetrack', iconClass: 'vi vi-dine-o', name: 'Dine-Track' },
@@ -31,7 +31,7 @@ export class NavbarComponent implements OnInit {
     ] : null),
 
     // role 2
-    (this.roleId === '2' ? [
+    (this.roleCode === '2' ? [
       { tabName: 'insights', route: '/core/insights', iconClass: 'vi vi-insights-o', name: 'Insights' },
       { tabName: 'customers', route: '/core/customers', iconClass: 'vi vi-user-group-o', name: 'Customers' },
       // { tabName: 'broadcast', route: '/core/broadcast', iconClass: 'vi vi-bullhorn-o', name: 'Broadcast' },
@@ -39,14 +39,14 @@ export class NavbarComponent implements OnInit {
     ] : []),
 
     // role 3
-    (this.roleId === '3' ? [
+    (this.roleCode === '3' ? [
       { tabName: 'insights', route: '/core/insights', iconClass: 'vi vi-insights-o', name: 'Insights' },
       { tabName: 'categories', route: '/core/categorymanagement', iconClass: 'vi vi-category-o', name: 'Categories' },
       { tabName: 'partner profile', route: '/core/partnerprofile', iconClass: 'vi vi-outlet-o', name: 'Profile' },
     ] : []),
 
     // role 4 : front office staff
-    (this.roleId === '4' ? [
+    (this.roleCode === '4' ? [
       { tabName: 'guest checkin', route: '/core/guestcheckin', iconClass: 'vi vi-reception-o', name: 'Check-In' },
       { tabName: 'orders', route: '/core/orders', iconClass: 'vi vi-list-o', name: 'Orders' },
       // { tabName: 'dine track', route: '/core/dinetrack', iconClass: 'vi vi-dine-o', name: 'Dine-Track' },
@@ -60,7 +60,7 @@ export class NavbarComponent implements OnInit {
     ] : []),
 
     // outlet manager
-    (this.roleId === '102' ? [
+    (this.roleCode === '102' ? [
       (this.categoryTypeId.includes('1') ? { tabName: 'menu editor', route: '/core/menueditor', iconClass: 'vi vi-book-o', name: 'Menu' } : null),
       { tabName: 'insights', route: '/core/insights', iconClass: 'vi vi-insights-o', name: 'Insights' },
       { tabName: 'customers', route: '/core/customers', iconClass: 'vi vi-user-group-o', name: 'Customers' },
@@ -77,21 +77,21 @@ export class NavbarComponent implements OnInit {
 
   // general
   userDefaultMenuItem() {
-    if (this.roleId === '1') {
+    if (this.roleCode === '1') {
       this.activeTab = 'orders';
       this.router.navigate(['/core/orders']);
-    } else if (this.roleId === '2') {
+    } else if (this.roleCode === '2') {
       this.activeTab = 'categories';
       this.router.navigate(['/core/categorymanagement']);
-    } else if (this.roleId === '3') {
+    } else if (this.roleCode === '3') {
       this.activeTab = 'insights';
       this.router.navigate(['/core/insights']);
-    } else if (this.roleId === '4') {
+    } else if (this.roleCode === '4') {
       this.activeTab = 'partner profile';
       this.router.navigate(['/core/partnerprofile']);
-    } else if (this.roleId === '102') {
-      this.activeTab = 'partner profile';
-      this.router.navigate(['/core/partnerprofile']);
+    } else if (this.roleCode === '102') {
+      this.activeTab = 'menu editor';
+      this.router.navigate(['/core/menueditor']);
     }
     this.tabClicked.emit(this.activeTab);
   }

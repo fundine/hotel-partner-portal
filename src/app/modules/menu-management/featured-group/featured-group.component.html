@@ -110,17 +110,29 @@
                 <div class="card-header">
                     <div class="item-title">
                         <form [formGroup]="featureMenuItemsForm" autocomplete="off">
-                            <div class="form-group clear-bottom">
-                                <input type="text" class="form-control" formControlName="itemGroupName"
-                                    placeholder="Feature Group Titile" (input)="onItemGroupNameChange()"
-                                    [ngClass]="controlClass('itemGroupName')" />
-                                <span class="focus-border"></span>
-                                <label class="val-msg"
-                                    *ngIf="featureMenuItemsForm.get('itemGroupName')?.errors?.['maxlength']">Max
-                                    Lenghth is 100</label>
-                                <label class="val-msg"
-                                    *ngIf="featureMenuItemsForm.get('itemGroupName')?.errors?.['invalidName']">
-                                    Group Name Already Exist</label>
+                            <div class="row">
+                                <div class="col-lg-4 wpl-0">
+                                    <select-control title="'Select Outlet'" validation="required"
+                                        placeholder="Select Outlet" formControlName="outletName"
+                                        [options]="itemUnitOptions" [selectedItem]="itemUnitItem" [noLabel]="true"
+                                        (optionSelected)="selectUnitType($event)" customClass="clear-bottom no-label"
+                                        [validationClass]="(featureMenuItemsForm.get('outletName')?.invalid && featureMenuItemsForm.get('outletName')?.touched) ?? false">
+                                    </select-control>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="form-group clear-bottom">
+                                        <input type="text" class="form-control" formControlName="itemGroupName"
+                                            placeholder="Feature Group Titile" (input)="onItemGroupNameChange()"
+                                            [ngClass]="controlClass('itemGroupName')" />
+                                        <span class="focus-border"></span>
+                                        <label class="val-msg"
+                                            *ngIf="featureMenuItemsForm.get('itemGroupName')?.errors?.['maxlength']">Max
+                                            Lenghth is 100</label>
+                                        <label class="val-msg"
+                                            *ngIf="featureMenuItemsForm.get('itemGroupName')?.errors?.['invalidName']">
+                                            Group Name Already Exist</label>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>

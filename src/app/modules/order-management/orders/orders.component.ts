@@ -96,7 +96,7 @@ export class OrdersComponent implements OnInit {
   ];
 
   // global variables
-  public roleId: string = environment.roleId;
+  public roleCode: string = environment.roleCode;
   public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
@@ -141,7 +141,7 @@ export class OrdersComponent implements OnInit {
     this.defaultInputValue++;
   }
   maskPhoneNumber(phoneNumber: string): string {
-    if (this.roleId === '3') {
+    if (this.roleCode === '3') {
       return phoneNumber.slice(-4).padStart(phoneNumber.length, 'X');
     } else {
       return phoneNumber;

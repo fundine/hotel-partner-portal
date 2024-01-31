@@ -8,7 +8,8 @@ export const environment = {
 
   // global variables
 
-  roleId: '102',
+  roleId: '1',
+  roleCode: '102',
   categoryTypeId: ['1', '2', '3', '4', '5'],
   isOrderOnline: true,
   isVegRestaurant: false,
