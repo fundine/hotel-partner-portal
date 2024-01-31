@@ -72,8 +72,8 @@ export class ApiService {
 
 
   // outlets : allowed outlets, assigned unit list for users, disable outlet
-  getUnitListData(categoryTypeId: string): Observable<any> {
-    const url = `${this.apiUrl}/categorytypeunits/${categoryTypeId}`;
+  getUnitListData(categoryTypeId: string, unitFilter: boolean): Observable<any> {
+    const url = `${this.apiUrl}/categorytypeunits/${categoryTypeId}/${unitFilter}`;
     const requestOptions = {
       headers: {
         'userId': this.userId,
@@ -302,6 +302,18 @@ export class ApiService {
       }
     };
     return this.http.delete(url, requestOptions);
+  };
+
+  // role : user roles
+  userRoleList(): Observable<any> {
+    const url = `${this.apiUrl}/partnerroles`;
+    const requestOptions = {
+      headers: {
+        'userId': this.userId,
+        'partnerId': this.partnerId,
+      }
+    };
+    return this.http.get(url, requestOptions);
   };
 }
 

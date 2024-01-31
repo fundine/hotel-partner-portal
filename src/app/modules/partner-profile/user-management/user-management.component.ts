@@ -12,37 +12,38 @@ export class UserManagementComponent implements OnInit {
 
   users = [
     {
-      userRoleId: '1',
-      userRole: 'Manager',
+      roleId: '101',
+      userRole: 'Outlet Manager',
       items: [
-        { userId: '123', userName: 'John Doe', userRoleId: 1, userRole: 'Manager', assignedUnits: 'Outlet A, Outlet B', lastActive: '2023-12-11 10:30 AM', isDisable: false },
-        { userId: '123', userName: 'Jane Smith', userRoleId: 2, userRole: 'Manager', assignedUnits: 'Outlet C', lastActive: '2023-12-11 09:45 AM', isDisable: false },
-        { userId: '123', userName: 'Bob Johnson', userRoleId: 3, userRole: 'Manager', assignedUnits: 'Outlet D, Outlet E', lastActive: '2023-12-11 11:15 AM', isDisable: false },
-        { userId: '123', userName: 'Alice Miller', userRoleId: 4, userRole: 'Manager', assignedUnits: 'Outlet F', lastActive: '2023-12-11 10:00 AM', isDisable: false },
-        { userId: '123', userName: 'Charlie Brown', userRoleId: 5, userRole: 'Manager', assignedUnits: 'Outlet G', lastActive: '2023-12-11 12:00 PM', isDisable: false }
+        { userId: '123', userName: 'John Doe', roleId: 1, userRole: 'Manager', assignedUnits: 'Outlet A, Outlet B', lastActive: '2023-12-11 10:30 AM', isDisable: false },
+        { userId: '123', userName: 'Jane Smith', roleId: 2, userRole: 'Manager', assignedUnits: 'Outlet C', lastActive: '2023-12-11 09:45 AM', isDisable: false },
+        { userId: '123', userName: 'Bob Johnson', roleId: 3, userRole: 'Manager', assignedUnits: 'Outlet D, Outlet E', lastActive: '2023-12-11 11:15 AM', isDisable: false },
+        { userId: '123', userName: 'Alice Miller', roleId: 4, userRole: 'Manager', assignedUnits: 'Outlet F', lastActive: '2023-12-11 10:00 AM', isDisable: false },
+        { userId: '123', userName: 'Charlie Brown', roleId: 5, userRole: 'Manager', assignedUnits: 'Outlet G', lastActive: '2023-12-11 12:00 PM', isDisable: false }
       ]
     },
     {
-      userRoleId: '2',
-      userRole: 'Cashier',
+      roleId: '102',
+      userRole: 'Menu Supervisor',
       items: [
-        { userId: '123', userName: 'John Doe', userRoleId: 1, userRole: 'Cashier', assignedUnits: 'Outlet A, Outlet B', lastActive: '2023-12-11 10:30 AM', isDisable: false },
-        { userId: '123', userName: 'Jane Smith', userRoleId: 2, userRole: 'Cashier', assignedUnits: 'Outlet C', lastActive: '2023-12-11 09:45 AM', isDisable: false },
-        { userId: '123', userName: 'Bob Johnson', userRoleId: 3, userRole: 'Cashier', assignedUnits: 'Outlet D, Outlet E', lastActive: '2023-12-11 11:15 AM', isDisable: false },
-        { userId: '123', userName: 'Alice Miller', userRoleId: 4, userRole: 'Cashier', assignedUnits: 'Outlet F', lastActive: '2023-12-11 10:00 AM', isDisable: false },
-        { userId: '123', userName: 'Charlie Brown', userRoleId: 5, userRole: 'Cashier', assignedUnits: 'Outlet G', lastActive: '2023-12-11 12:00 PM', isDisable: false }
+        { userId: '123', userName: 'John Doe', roleId: 1, userRole: 'Cashier', assignedUnits: 'Outlet A, Outlet B', lastActive: '2023-12-11 10:30 AM', isDisable: false },
+        { userId: '123', userName: 'Jane Smith', roleId: 2, userRole: 'Cashier', assignedUnits: 'Outlet C', lastActive: '2023-12-11 09:45 AM', isDisable: false },
+        { userId: '123', userName: 'Bob Johnson', roleId: 3, userRole: 'Cashier', assignedUnits: 'Outlet D, Outlet E', lastActive: '2023-12-11 11:15 AM', isDisable: false },
+        { userId: '123', userName: 'Alice Miller', roleId: 4, userRole: 'Cashier', assignedUnits: 'Outlet F', lastActive: '2023-12-11 10:00 AM', isDisable: false },
+        { userId: '123', userName: 'Charlie Brown', roleId: 5, userRole: 'Cashier', assignedUnits: 'Outlet G', lastActive: '2023-12-11 12:00 PM', isDisable: false }
       ]
     },
   ];
 
+  categoryTypeId: string = '1';
   passwordHide = false;
   confirmPasswordHide = false;
   alertSuccess: boolean = false;
   formChangeWarningDialog: boolean = false;
   userSuspendedModal: boolean = false;
   userResignedModal: boolean = false;
-  allemployeeList: boolean = false;
-  employeeProfile: boolean = true;
+  allemployeeList: boolean = true;
+  employeeProfile: boolean = false;
   employeeRegForm: boolean = false;
 
   // api
@@ -198,6 +199,85 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
+  selectedRoleCode: any;
+  userRoleItem: any[] = [];
+  userRoleOptions: any;
+  userRoleList: { roleCode: string; roleName: string }[] | undefined;
+  getUserRoles() {
+    this.apiService.userRoleList().subscribe(
+      (data) => {
+        this.userRoleList = data.results;
+        this.userRoleOptions = this.userRoleList!.map(option => option.roleName);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectRoleType(event: any) {
+    const selectedRoleName = event as string;
+    const selectedRoleItem = this.userRoleList!.find(item => item.roleName === selectedRoleName);
+
+    if (selectedRoleItem) {
+      this.selectedRoleCode = selectedRoleItem.roleCode;
+      this.userRoleItem.push(selectedRoleItem.roleName);
+    }
+  }
+
+  // selectedUnitId: any;
+  // itemUnitItem: any[] = [];
+  // itemUnitOptions: any;
+  // itemUnitList: { unitId: string; unitName: string; unitTypeName: string }[] | undefined;
+  // getAllUnits() {
+  //   this.apiService.getUnitsList().subscribe(
+  //     (data) => {
+  //       this.itemUnitList = data.results;
+  //       this.itemUnitOptions = this.itemUnitList!.map(option => option.unitName);
+  //       console.log('Data from API:', data);
+  //     },
+  //     (error) => {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   );
+  // }
+  // selectUnitType(event: any) {
+  //   const selectedUnitName = event as string;
+  //   const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);
+
+  //   if (selectedUnitItem) {
+  //     this.selectedUnitId = selectedUnitItem.unitId;
+  //     this.itemUnitItem.push(selectedUnitItem.unitName);
+  //   }
+  // }
+
+  selectedUnitId: any;
+  itemUnitItem: any[] = [];
+  itemUnitOptions: any;
+  itemUnitList: { unitId: string; unitName: string; unitTypeName: string }[] | undefined;
+  getAllUnits(categoryTypeId: any) {
+    this.apiService.getUnitListData(categoryTypeId).subscribe(
+      (data) => {
+        this.itemUnitList = data.results;
+        this.itemUnitOptions = this.itemUnitList!.map(option => option.unitName);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  selectUnitType(event: any) {
+    const selectedUnitName = event as string;
+    const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);
+
+    if (selectedUnitItem) {
+      this.selectedUnitId = selectedUnitItem.unitId;
+      this.itemUnitItem.push(selectedUnitItem.unitName);
+    }
+  }
+
   constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) {
   }
 
@@ -282,6 +362,8 @@ export class UserManagementComponent implements OnInit {
     this.getUserDocument();
     this.getUserMaritalStatus();
     this.getUserStatus();
+    this.getUserRoles();
+    this.getAllUnits(this.categoryTypeId);
   }
 
   // general

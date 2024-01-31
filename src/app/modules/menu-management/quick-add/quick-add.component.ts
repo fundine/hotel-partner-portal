@@ -12,6 +12,7 @@ export class QuickAddComponent implements OnInit {
 
 
   categoryTypeId: string = '';
+  unitFilter: boolean = true;
   loading: boolean = false;
   alertSuccess: boolean = false;
   isUniquNameShow: boolean = false;
@@ -112,8 +113,8 @@ export class QuickAddComponent implements OnInit {
   itemUnitItem: any[] = [];
   itemUnitOptions: any;
   itemUnitList: { unitId: string; unitName: string; unitTypeName: string }[] | undefined;
-  getAllUnits(categoryTypeId: any) {
-    this.apiService.getUnitListData(categoryTypeId).subscribe(
+  getAllUnits(categoryTypeId: any, unitFilter: boolean) {
+    this.apiService.getUnitListData(categoryTypeId, unitFilter).subscribe(
       (data) => {
         this.itemUnitList = data.results;
         this.itemUnitOptions = this.itemUnitList!.map(option => option.unitName);
@@ -221,7 +222,7 @@ export class QuickAddComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.categoryTypeId = params['categoryTypeId'];
-      this.getAllUnits(this.categoryTypeId);
+      this.getAllUnits(this.categoryTypeId, this.unitFilter);
     });
     this.selectCategoryType(this.categoryTypeId);
 

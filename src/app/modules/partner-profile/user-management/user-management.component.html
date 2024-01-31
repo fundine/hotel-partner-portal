@@ -14,8 +14,14 @@
                 <div class="lt-content">
                     <div class="title-group">
                         <div class="title-lg">{{ role.userRole }}</div>
-                        <div class="title-info">Admin users can add, edit, disable and remove organizational level
-                            settings</div>
+                        <div class="title-info">
+                            <span *ngIf="role.roleId === '101'">Oversees menu operations, including add, edit, delete,
+                                pricing, and user management
+                                for efficient outlet functioning.</span>
+                            <span *ngIf="role.roleId === '102'">Manages inventory by marking items out of stock,
+                                ensuring
+                                accurate representation and availability.</span>
+                        </div>
                     </div>
                 </div>
                 <div class="rt-content">
@@ -54,7 +60,7 @@
 <ng-container *ngIf="employeeProfile">
     <div class="page-content">
         <div class="row">
-            <div class="col-lg-12 col-center">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <div style="display: flex; justify-content: space-between;">
@@ -536,20 +542,27 @@
                             <div class="row">
                                 <div class="col-lg-4">
                                     <ng-container formGroupName="userRole">
-                                        <div class="form-group">
-                                            <label class="inp-label required">Role</label>
-                                            <input type="text" class="form-control" formControlName="role"
-                                                [ngClass]="controlClass('userRole.role')" />
-                                            <span class="focus-border"></span>
-                                        </div>
+                                        <select-control title="Role" validation="required" formControlName="role"
+                                            [selectedItem]="selectedRoleCode" [options]="userRoleOptions"
+                                            (optionSelected)="selectRoleType($event)"
+                                            [validationClass]="(userRegistrationForm.get('userRole.role')?.invalid && userRegistrationForm.get('userRole.role')?.touched) ?? false">
+                                        </select-control>
                                     </ng-container>
                                 </div>
                                 <div class="col-lg-8">
                                     <ng-container formGroupName="userOutlets">
+                                        <!-- <multi-select-control [title]="'Allowed Outlets'" validation="required"
+                                            formControlName="allowedOutlets" [options]="userRoleOptions"
+                                            [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
+                                            [validationClass]="(userRegistrationForm.get('userOutlets.allowedOutlets')?.invalid && userRegistrationForm.get('userOutlets.allowedOutlets')?.touched) ?? false">
+                                        </multi-select-control> -->
+
+
                                         <multi-select-control [title]="'Allowed Outlets'" validation="required"
-                                            formControlName="allowedOutlets"
-                                            [validationClass]="(userRegistrationForm.get('userOutlets.allowedOutlets')?.invalid && userRegistrationForm.get('userOutlets.allowedOutlets')?.touched) ?? false"
-                                            [options]="['Outlet 1', 'Outlet 2', 'Outlet 3','Outlet 4']"></multi-select-control>
+                                            formControlName="allowedOutlets" [options]="itemUnitOptions"
+                                            [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
+                                            [validationClass]="(userRegistrationForm.get('userOutlets.allowedOutlets')?.invalid && userRegistrationForm.get('userOutlets.allowedOutlets')?.touched) ?? false">
+                                        </multi-select-control>
                                     </ng-container>
                                 </div>
                             </div>

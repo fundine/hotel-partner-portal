@@ -57,8 +57,12 @@ export class MultiSelectControlComponent implements ControlValueAccessor {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
+  // isSelected(option: string): boolean {
+  //   return (this.selectedItems ?? []).includes(option);
+  // }
+
   isSelected(option: string): boolean {
-    return (this.selectedItems ?? []).includes(option);
+    return Array.isArray(this.selectedItems) && this.selectedItems.includes(option);
   }
 
   toggleCheckbox(option: string) {

@@ -35,6 +35,7 @@ export class NavbarComponent implements OnInit {
       { tabName: 'insights', route: '/core/insights', iconClass: 'vi vi-insights-o', name: 'Insights' },
       { tabName: 'customers', route: '/core/customers', iconClass: 'vi vi-user-group-o', name: 'Customers' },
       // { tabName: 'broadcast', route: '/core/broadcast', iconClass: 'vi vi-bullhorn-o', name: 'Broadcast' },
+      // { tabName: 'reports', route: '/core/reports', iconClass: 'vi vi-file-text', name: 'Reports' },
     ] : []),
 
     // role 3
@@ -57,6 +58,15 @@ export class NavbarComponent implements OnInit {
       (this.categoryTypeId.includes('1') ? { tabName: 'menu editor', route: '/core/menueditor', iconClass: 'vi vi-book-o', name: 'Menu' } : null),
       { tabName: 'categories', route: '/core/categorymanagement', iconClass: 'vi vi-category-o', name: 'Categories' },
     ] : []),
+
+    // outlet manager
+    (this.roleId === '102' ? [
+      (this.categoryTypeId.includes('1') ? { tabName: 'menu editor', route: '/core/menueditor', iconClass: 'vi vi-book-o', name: 'Menu' } : null),
+      { tabName: 'insights', route: '/core/insights', iconClass: 'vi vi-insights-o', name: 'Insights' },
+      { tabName: 'customers', route: '/core/customers', iconClass: 'vi vi-user-group-o', name: 'Customers' },
+      { tabName: 'categories', route: '/core/categorymanagement', iconClass: 'vi vi-category-o', name: 'Categories' },
+      { tabName: 'partner profile', route: '/core/partnerprofile', iconClass: 'vi vi-outlet-o', name: 'Profile' },
+    ] : []),
   ];
 
   constructor(private router: Router) { }
@@ -77,6 +87,9 @@ export class NavbarComponent implements OnInit {
       this.activeTab = 'insights';
       this.router.navigate(['/core/insights']);
     } else if (this.roleId === '4') {
+      this.activeTab = 'partner profile';
+      this.router.navigate(['/core/partnerprofile']);
+    } else if (this.roleId === '102') {
       this.activeTab = 'partner profile';
       this.router.navigate(['/core/partnerprofile']);
     }
