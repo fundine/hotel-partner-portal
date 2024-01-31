@@ -151,7 +151,7 @@ export class BatchEntryComponent implements OnInit {
         itemPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         packageCost: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-        itemFinalPrice: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
+        itemFinalPrice: ['0.00', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         description: ['', [Validators.maxLength(500)]],
         isAvailable: [true],
         isDisplayInMenu: [true],
@@ -250,6 +250,7 @@ export class BatchEntryComponent implements OnInit {
 
     this.newMenuInfo.controls.forEach((control: AbstractControl, index: number) => {
       control.get('itemPrice')?.valueChanges.subscribe(() => this.calculateFinalPrice(index));
+      control.get('packageCost')?.valueChanges.subscribe(() => this.calculateFinalPrice(index));
       control.get('itemTax')?.valueChanges.subscribe(() => this.calculateFinalPrice(index));
     });
   }
@@ -258,11 +259,12 @@ export class BatchEntryComponent implements OnInit {
   calculateFinalPrice(index: number) {
     const itemPriceControl = this.newMenuInfo.at(index).get('itemPrice');
     const itemTaxControl = this.newMenuInfo.at(index).get('itemTax');
+    const itemPackageCostControl = this.newMenuInfo.at(index).get('packageCost');
     const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
-    // const packageCost = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
+     const packageCost = (typeof itemPackageCostControl?.value === 'string' ? parseFloat(itemPackageCostControl.value) : 0) || 0;
     const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
-    const finalPrice = price + (price * (tax / 100));
-    //const finalPrice = price + packageCost + (price * (tax / 100));
+    //const finalPrice = price + (price * (tax / 100));
+    const finalPrice = (price + packageCost) * (1 + (tax / 100));
     this.newMenuInfo.at(index).get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
   }
   onCancelInfo() {

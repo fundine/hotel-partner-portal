@@ -291,7 +291,7 @@ export class QuickAddComponent implements OnInit {
         packageCost: ['', [Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
         taxId: [''],
         itemTax: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-        itemFinalPrice: [''],
+        itemFinalPrice: ['0.00'],
       });
 
       outletsFormArray.push(defaultOutletFormGroup);
@@ -376,7 +376,7 @@ export class QuickAddComponent implements OnInit {
         const price = (typeof itemPriceControl?.value === 'string' ? parseFloat(itemPriceControl.value) : 0) || 0;
         const packageCost = (typeof itemPackageCostControl?.value === 'string' ? parseFloat(itemPackageCostControl.value) : 0) || 0;
         const tax = (typeof itemTaxControl?.value === 'string' ? parseFloat(itemTaxControl.value) : 0) || 0;
-        const finalPrice = price + packageCost + (price * (tax / 100));
+        const finalPrice = (price + packageCost) * (1 + (tax / 100));
 
         itemControl.get('itemFinalPrice')?.setValue(finalPrice.toFixed(2), { emitEvent: false });
       }
@@ -409,36 +409,36 @@ export class QuickAddComponent implements OnInit {
   // save item
 
   onSaveMenuItem() {
-    const outletsFormArray = this.itemQuickAddForm.get('allowedOutlets') as FormArray;
-    const selectedOutletItems = outletsFormArray.value.map((unitName: string) => {
-      const unit = this.itemUnitList?.find((item) => item.unitName === unitName);
-      if (unit) {
-        return { unitId: unit.unitId };
-      } else {
-        return null;
-      }
-    });
-
-    const itemPriceArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
-    const transformedArray = [];
-
-    for (let index = 0; index < selectedOutletItems.length; index++) {
-      const unitId = selectedOutletItems[index]?.unitId;
-      const item = itemPriceArray.at(index % itemPriceArray.length).value;
-
-      transformedArray.push({
-        unitId: unitId || '',
-        itemPrice: item.itemPrice,
-        packageCost: item.packageCost,
-        taxId: item.taxId
-      });
-    }
-
-
-    console.log(transformedArray);
-    console.log('Form State:', this.itemQuickAddForm);
-
+    
     if (this.itemQuickAddForm.valid) {
+      const outletsFormArray = this.itemQuickAddForm.get('allowedOutlets') as FormArray;
+      const selectedOutletItems = outletsFormArray.value.map((unitName: string) => {
+        const unit = this.itemUnitList?.find((item) => item.unitName === unitName);
+        if (unit) {
+          return { unitId: unit.unitId };
+        } else {
+          return null;
+        }
+      });
+  
+      const itemPriceArray = this.itemQuickAddForm.get('itemPriceArray') as FormArray;
+      const transformedArray = [];
+  
+      for (let index = 0; index < selectedOutletItems.length; index++) {
+        const unitId = selectedOutletItems[index]?.unitId;
+        const item = itemPriceArray.at(index % itemPriceArray.length).value;
+  
+        transformedArray.push({
+          unitId: unitId || '',
+          itemPrice: item.itemPrice,
+          packageCost: item.packageCost,
+          taxId: item.taxId
+        });
+      }
+  
+  
+      console.log(transformedArray);
+      console.log('Form State:', this.itemQuickAddForm);
 
       const requestBody = {
         categoryId: this.selectedCategoryId,
