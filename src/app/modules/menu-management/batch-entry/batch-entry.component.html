@@ -17,7 +17,7 @@
     </div>
     <div class="aside-right">
         <form [formGroup]="menuBatchEntryForm" autocomplete="off">
-            <div class="card" [ngClass]="{'min-card' : (categoryTypeId === '3' || categoryTypeId === '4')}">
+            <div class="card" [ngClass]="{'laundry-item' : categoryTypeId === '3', 'spa-item': categoryTypeId === '4'}">
                 <div class="card-header">
                     <div class="item-outlets">
                         <multi-select-control [title]="'Allowed Outlets'" validation="required"
@@ -96,7 +96,7 @@
                                                 Only Numbers Are Allowed</label>
                                         </div>
                                     </div>
-                                    <div class="item-package-cost">
+                                    <div class="item-package-cost" *ngIf="categoryTypeId !== '4'">
                                         <div class="form-group clear-bottom">
                                             <input type="text" class="form-control price-input"
                                                 placeholder="Package Cost" formControlName="packageCost"

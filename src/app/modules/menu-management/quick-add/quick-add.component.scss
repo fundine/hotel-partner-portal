@@ -140,7 +140,45 @@
                     .item-img + .item-info {
                         width: calc(100% - 165px);
                     }
-                }         
+                }
+                .price-calculator {
+                    color: #939893;
+                    font-size: 0.95em;
+                    label {
+                        cursor: pointer;
+                        font-weight: 500;
+                        color: #8a2be2;
+                        padding-left: 6px;
+                        font-size: 1.05em;
+                        i {
+                            top: 0px;
+                            color: inherit;
+                            font-size: 10px;
+                            font-weight: 500;
+                            padding-right: 2px;
+                        }
+                        &:hover {
+                            span {
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+                .item-price-wrap {
+                    position: relative;
+                    margin: 15px 12px 30px;
+                    padding: 20px 10px 5px;
+                    border: 1px solid #dadada;
+                    .outlet-name {
+                        top: -12px;
+                        left: 22px;
+                        padding: 0 5px;
+                        font-weight: 500;
+                        color: #555f57;
+                        position: absolute;
+                        background: #ffffff;
+                    }
+                }
                 .sel-wrap {
                     display: flex;
                     cursor: pointer;
@@ -171,21 +209,6 @@
                     &:hover {
                         background: #faebd7;
                         border: 1px solid #e2cfb7;
-                    }
-                }
-                .item-price-wrap {
-                    position: relative;
-                    margin: 15px 12px 30px;
-                    padding: 20px 10px 5px;
-                    border: 1px solid #dadada;
-                    .outlet-name {
-                        top: -12px;
-                        left: 22px;
-                        padding: 0 5px;
-                        font-weight: 500;
-                        color: #555f57;
-                        position: absolute;
-                        background: #ffffff;
                     }
                 }
             }

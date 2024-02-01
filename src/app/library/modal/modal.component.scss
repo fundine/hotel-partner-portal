@@ -52,6 +52,9 @@
                         }
                     }
                 }
+                &.form-lg {
+                    padding: 1.5rem 1rem 1rem;
+                }
             }
             ::ng-deep .modal-footer {
                 display: flex;

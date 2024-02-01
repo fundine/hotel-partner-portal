@@ -262,16 +262,16 @@
                     }
                 }
             }
-            &.min-card {
+            &.laundry-item {
                 .card-header {
                     .item-outlets {
-                        width: calc(34% - 72px);
+                        width: calc(43% - 72px);
                     }
                     .item-category {
-                        width: calc(27% - 8px);
+                        width: calc(25% - 8px);
                     }
                     .item-subcategory {
-                        width: calc(35% - 70px);
+                        width: calc(31% - 70px);
                     }
                 }
                 .card-body {
@@ -289,6 +289,37 @@
                             }
                             .item-desc {
                                 width: 20%;
+                            }
+                        }
+                    }
+                }
+            }
+            &.spa-item {
+                .card-header {
+                    .item-outlets {
+                        width: calc(34% - 72px);
+                    }
+                    .item-category {
+                        width: calc(27% - 8px);
+                    }
+                    .item-subcategory {
+                        width: calc(35% - 70px);
+                    }
+                }
+                .card-body {
+                    .menu-row {
+                        .menu-item {
+                            .item-name {
+                                width: calc(35% - 65px);
+                            }
+                            .item-price {
+                                width: 13%;
+                            }
+                            .item-tax {
+                                width: 14%;
+                            }
+                            .item-desc {
+                                width: 25%;
                             }
                         }
                     }
