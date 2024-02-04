@@ -29,8 +29,8 @@ export class FeaturedGroupComponent implements OnInit {
   formChangeWarningDialog: boolean = false;
   formChangeDetectedDialog: boolean = false;
   formChangeIdentifiedDialog: boolean = false;
-  skeletonCardItems = Array(4).fill(0);
-  skeletonMenuItems = Array(4).fill(0);
+  skeletonCardItems = Array(6).fill(0);
+  skeletonMenuItems = Array(6).fill(0);
   quickAddClicked: boolean = false;
   batchEntryClicked: boolean = false;
 

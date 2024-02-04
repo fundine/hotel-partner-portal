@@ -33,6 +33,8 @@ export class CategoryManagementComponent implements OnInit {
   selectedSubCategoryIndex: number | undefined;
   editingCategoryIndex: number | null = null;
   editingSubCategoryIndex!: number | null;
+  categoryDeleteInfoDialog: boolean = false;
+  subCategoryDeleteInfoDialog: boolean = false;
 
   // api 
   getCategoryList(activeCategory: string) {
@@ -93,6 +95,10 @@ export class CategoryManagementComponent implements OnInit {
         console.log('Category deleted successfully.');
       },
       (error) => {
+        if (error.status == 412) {
+          this.selectedCategoryIndex = undefined;
+          this.categoryDeleteInfoDialog = true;
+        }
         console.error('Error deleting category:', error);
       }
     );
@@ -136,6 +142,11 @@ export class CategoryManagementComponent implements OnInit {
                   console.log('Subcategory deleted successfully.');
                 },
                 (error) => {
+                  if (error.status == 412) {
+                    this.selectedCategoryIndex = undefined;
+                    this.selectedSubCategoryIndex = undefined;
+                    this.subCategoryDeleteInfoDialog = true;
+                  }
                   console.error('Error deleting subcategory:', error);
                 }
               );
@@ -172,6 +183,11 @@ export class CategoryManagementComponent implements OnInit {
     moveItemInArray(this.categories[parentIndex].subcategory, event.previousIndex, event.currentIndex);
   }
 
+  // dialog
+  onCancelDialog() {
+    this.categoryDeleteInfoDialog = false;
+    this.subCategoryDeleteInfoDialog = false;
+  }
   // save 
   onSaveCategoryChanges() {
     this.loading = true;

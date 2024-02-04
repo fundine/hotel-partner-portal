@@ -602,7 +602,7 @@
         }
     }
     .menu-selection {
-        padding: 2rem 3.5rem 3.5rem;
+        padding: 2rem 3.5rem;
         .sel-title {
             font-weight: 600;
             font-size: 1.05em;
@@ -618,6 +618,7 @@
                 cursor: pointer;
                 min-height: 115px;
                 align-items: center;
+                margin-bottom: 1.5em;
                 flex-direction: column;
                 justify-content: center;
                 box-shadow: 0 0 5px 1px rgba(209, 209, 209, 0.7);

@@ -197,7 +197,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-8 ta-r">
-                                <div class="price-calculator">Are you looking to find only the item price?
+                                <div class="price-calculator">Are you looking to find out the item price?
                                     <label (click)="openPriceCalculationModal()">
                                         <i class="vi vi-rupee"></i><span>Item Price Calculator</span>
                                     </label>
@@ -210,7 +210,7 @@
                             <div *ngFor="let item of priceInfoArray.controls; let i = index;">
                                 <div [formGroupName]="i">
                                     <div class="item-price-wrap">
-                                        <div class="outlet-name">Price</div>
+                                        <div class="outlet-name">Price For All Outlets</div>
                                         <div class="row">
                                             <div class="col-lg-8 pl-pr-0">
                                                 <div class="row">
@@ -281,7 +281,7 @@
                             <div *ngFor="let item of priceInfoArray.controls; let i = index;">
                                 <div [formGroupName]="i">
                                     <div class="item-price-wrap">
-                                        <div class="outlet-name">Price for {{ getItemOutletValue(i) }}</div>
+                                        <div class="outlet-name">Price For {{ getItemOutletValue(i) }}</div>
                                         <div class="row">
                                             <div class="col-lg-8 pl-pr-0">
                                                 <div class="row">

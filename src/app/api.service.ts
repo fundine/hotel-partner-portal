@@ -319,5 +319,3 @@ export class ApiService {
     return this.http.get(url, requestOptions);
   };
 }
-
-// 412 missing in category sub category delete

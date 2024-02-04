@@ -411,6 +411,8 @@ export class QuickAddComponent implements OnInit {
     this.priceCalculationForm.get('itemPrice')?.setValue('0.00');
   }
   onModalClosed() {
+    this.priceCalculationForm.reset();
+    this.priceCalculationForm.get('itemPrice')?.setValue('0.00');
     this.priceCalculationModal = false;
   }
 
