@@ -29,6 +29,9 @@
 .ta-r {
     text-align: right;
 }
+.justify {
+    text-align: justify;
+}
 .w-80 {
     width: 80%;
 }
@@ -124,6 +127,9 @@ i {
         }
         &.vi-non-veg {
             color: #ff0000 !important;
+        }
+        &.vi-veg-restaurant {
+            color: #157d15 !important;
         }
     }
 }

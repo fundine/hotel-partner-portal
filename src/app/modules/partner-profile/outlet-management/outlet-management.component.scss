@@ -1,5 +1,19 @@
+@mixin info-title {
+    font-size: 0.7em;
+    font-weight: 500;
+    color: #b4aeae;
+    line-height: 1.25;
+    text-transform: uppercase;
+}
+@mixin info-value {
+    line-height: 1.4;
+    color: #555f57;
+    min-height: 19px;
+    font-size: 1em;
+}
+
 .page-content {
-    padding: 15px 0;
+    padding: 15px 0 0;
     .card {
         .card-header {
             padding: 0 1.5rem;
@@ -20,32 +34,134 @@
             }
         }
         &.outlet-card {
+            margin-bottom: 1.5rem;
             .card-header {
-                padding: 1rem 1.5rem;
-                margin-bottom: 10px;
-                border-bottom: 2px dashed rgba(98, 89, 89, 0.12);
-                .unit-count {
-                    width: 30px;
-                    height: 28px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #ffffff;
-                    line-height: 28px;
-                    margin-right: 20px;
-                    text-align: center;
-                    background: linear-gradient(142deg, #fccd4d 50%, #f9b800 50%);
+                display: flex;
+                border-bottom: 0;
+                background: #e9f2ff;
+                padding: 0.75rem 1.5rem;
+                justify-content: space-between;
+                .card-aside-left,
+                .card-aside-right {
+                    display: flex;
+                    align-items: center;
                 }
-                .unit-name {
-                    color: #623b45;
-                    font-size: 1.05em;
-                    text-transform: uppercase;
-                    span {
-                        padding-left: 7px;
+                .card-aside-left {
+                    .unit-count {
+                        width: 30px;
+                        height: 28px;
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: #ffffff;
+                        line-height: 28px;
+                        margin-right: 20px;
+                        text-align: center;
+                        background: linear-gradient(142deg, #5e9c9e 50%, #429598 50%);
+                        background: linear-gradient(142deg, #fccd4d 50%, #f9b800 50%);
+                    }
+                    .unit-info {
+                        line-height: 1.2;
+                        color: #3e35ac;
+                        color: #317b7d;
+                        letter-spacing: 0.015rem;
+                        text-transform: uppercase;
+                        .unit-name {
+                            font-size: 1.05em;
+                            font-weight: 700;
+                        }
+                        .unit-type {
+                            font-weight: 500;
+                            font-size: 0.68em;
+                            padding-left: 1px;
+                        }
+                    }
+                }
+                .card-aside-right {
+                    .indicator {
+                        line-height: 1;
+                        margin-left: 10px;
+                        padding-left: 10px;
+                        border-left: 1px solid #b5c3d8;
+                        &:first-child {
+                            margin-left: 0;
+                            border-left: 0;
+                            padding-left: 0;
+                        }
+                        .switch-container {
+                            top: 2px;
+                        }
+                    }
+                    label {
+                        font-size: 0.9em;
+                        color: #157d15;
+                        padding-right: 6px;
+                        text-transform: uppercase;
+                        i {
+                            top: 0;
+                            font-size: 20px;
+                            font-weight: 400;
+                            vertical-align: sub;
+                        }
+                        &.online {
+                            min-width: 56px;
+                            color: #157d15;
+                        }
+                        &.offline {
+                            min-width: 56px;
+                            color: #ff0000;
+                        }
                     }
                 }
             }
             .card-body {
-                padding: 1rem 1.5rem;
+                min-height: 140px;
+                padding: 1rem 0.75rem;
+                .info-group {
+                    margin-bottom: 12px;
+                    .info-title {
+                        @include info-title;
+                    }
+                    .info-value {
+                        @include info-value;
+                        i {
+                            top: 1px;
+                            font-size: 14px;
+                            font-weight: 400;
+                            padding-right: 7px;
+                            &.vi-clock-o {
+                                color: #a978ff;
+                            }
+                        }
+                    }
+                }
+                .qr-wrap {
+                    text-align: right;
+                    .qr-code-display {
+                        top: -45px;
+                        width: 150px;
+                        height: 150px;
+                        position: relative;
+                        box-shadow: 0 0 5px -1px #9a9a9a;
+                    }
+                }
+            }
+            .card-header {
+                padding-right: 200px;
+            }
+        }
+        &.non-assigned {
+            user-select: none;
+            cursor: not-allowed;
+            filter: grayscale(100%);
+            i,
+            label {
+                cursor: not-allowed !important;
+            }
+            .qr-code-display {
+                opacity: 0.5;
+            }
+            .info-group {
+                opacity: 0.7;
             }
         }
     }

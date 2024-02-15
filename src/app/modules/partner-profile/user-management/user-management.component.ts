@@ -10,32 +10,12 @@ import { ApiService } from 'src/app/api.service';
 })
 export class UserManagementComponent implements OnInit {
 
-  users = [
-    {
-      roleCode: '101',
-      userRole: 'Outlet Manager',
-      items: [
-        { userId: '123', userName: 'John Doe', roleCode: 1, userRole: 'Manager', assignedUnits: 'Outlet A, Outlet B', lastActive: '2023-12-11 10:30 AM', isDisable: false },
-        { userId: '123', userName: 'Jane Smith', roleCode: 2, userRole: 'Manager', assignedUnits: 'Outlet C', lastActive: '2023-12-11 09:45 AM', isDisable: false },
-        { userId: '123', userName: 'Bob Johnson', roleCode: 3, userRole: 'Manager', assignedUnits: 'Outlet D, Outlet E', lastActive: '2023-12-11 11:15 AM', isDisable: false },
-        { userId: '123', userName: 'Alice Miller', roleCode: 4, userRole: 'Manager', assignedUnits: 'Outlet F', lastActive: '2023-12-11 10:00 AM', isDisable: false },
-        { userId: '123', userName: 'Charlie Brown', roleCode: 5, userRole: 'Manager', assignedUnits: 'Outlet G', lastActive: '2023-12-11 12:00 PM', isDisable: false }
-      ]
-    },
-    {
-      roleCode: '102',
-      userRole: 'Menu Supervisor',
-      items: [
-        { userId: '123', userName: 'John Doe', roleCode: 1, userRole: 'Cashier', assignedUnits: 'Outlet A, Outlet B', lastActive: '2023-12-11 10:30 AM', isDisable: false },
-        { userId: '123', userName: 'Jane Smith', roleCode: 2, userRole: 'Cashier', assignedUnits: 'Outlet C', lastActive: '2023-12-11 09:45 AM', isDisable: false },
-        { userId: '123', userName: 'Bob Johnson', roleCode: 3, userRole: 'Cashier', assignedUnits: 'Outlet D, Outlet E', lastActive: '2023-12-11 11:15 AM', isDisable: false },
-        { userId: '123', userName: 'Alice Miller', roleCode: 4, userRole: 'Cashier', assignedUnits: 'Outlet F', lastActive: '2023-12-11 10:00 AM', isDisable: false },
-        { userId: '123', userName: 'Charlie Brown', roleCode: 5, userRole: 'Cashier', assignedUnits: 'Outlet G', lastActive: '2023-12-11 12:00 PM', isDisable: false }
-      ]
-    },
-  ];
-
+  maxDate: string;
+  suspendedReasonModal: boolean = false;
+  resignedReasonModal: boolean = false;
+  innerLoading: boolean = false;
   categoryTypeId: string = '1';
+  reasonType: string = '';
   passwordHide = false;
   confirmPasswordHide = false;
   alertSuccess: boolean = false;
@@ -47,6 +27,26 @@ export class UserManagementComponent implements OnInit {
   employeeRegForm: boolean = false;
 
   // api
+  users: any = [];
+  getAllUserList() {
+    this.innerLoading = true;
+    this.apiService.userList().subscribe(
+      (data) => {
+        this.users = data.results;
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      },
+      () => {
+        this.innerLoading = false;
+      }
+    );
+  }
+  listAllowedUnits(units: any[]): string {
+    return units.map(unit => unit.unitName).join(', ');
+  }
+
   selectedGenderId: any;
   genderItem: string = '';
   genderOptions: any;
@@ -70,32 +70,6 @@ export class UserManagementComponent implements OnInit {
     if (selectedGender) {
       this.selectedGenderId = selectedGender.id;
       this.genderItem = selectedGender.genderName;
-    }
-  }
-
-  selectedDocumentId: any;
-  documentItem: string = '';
-  documentOptions: any;
-  documentList: { id: string; idDocType: string }[] | undefined;
-  getUserDocument() {
-    this.apiService.getIdentifiableDocument().subscribe(
-      (data) => {
-        this.documentList = data.results;
-        this.documentOptions = this.documentList!.map(option => option.idDocType);
-        console.log('Data from API:', data);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
-  }
-  selectDocument(event: any) {
-    const selectedDocumentName = event as string;
-    const selectedDocument = this.documentList!.find(item => item.idDocType === selectedDocumentName);
-
-    if (selectedDocument) {
-      this.selectedDocumentId = selectedDocument.id;
-      this.documentItem = selectedDocument.idDocType;
     }
   }
 
@@ -167,38 +141,6 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
-  selectedUserStatusId: any;
-  userStatusItem: string = '';
-  userStatusOptions: any;
-  userStatusList: { id: string; statusVal: string }[] | undefined;
-  getUserStatus() {
-    this.apiService.getUserStatus().subscribe(
-      (data) => {
-        this.userStatusList = data.results;
-        this.userStatusOptions = this.userStatusList!.map(option => option.statusVal);
-        console.log('Data from API:', data);
-      },
-      (error) => {
-        console.error('Error fetching data:', error);
-      }
-    );
-  }
-  selectUserStatus(event: any) {
-    const selectedUserStatusName = event as string;
-    const selectedUserStatus = this.userStatusList!.find(item => item.statusVal === selectedUserStatusName);
-
-    if (selectedUserStatus) {
-      this.selectedUserStatusId = selectedUserStatus.id;
-      this.userStatusItem = selectedUserStatus.statusVal;
-
-      if (selectedUserStatus.id === '3') {
-        this.userSuspendedModal = true;
-      } else if (selectedUserStatus.id === '4') {
-        this.userResignedModal = true;
-      }
-    }
-  }
-
   selectedRoleCode: any;
   userRoleItem: any[] = [];
   userRoleOptions: any;
@@ -252,7 +194,82 @@ export class UserManagementComponent implements OnInit {
   }
 
 
+  selectedReasonId: any;
+  reasonItem: string = '';
+  reasonOptions: any;
+  reasonList: { id: string; reason: string }[] | undefined;
+  getReasonList() {
+    this.apiService.getReasons(this.reasonType).subscribe(
+      (data) => {
+        this.reasonList = data.results;
+        this.reasonOptions = this.reasonList!.map(option => option.reason);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectReason(event: any) {
+    const selectedReasonName = event as string;
+    const selectedReason = this.reasonList!.find(item => item.reason === selectedReasonName);
+
+    if (selectedReason) {
+      this.selectedReasonId = selectedReason.id;
+      this.reasonItem = selectedReason.reason;
+    }
+  }
+
+  selectedUserStatusId: any;
+  userStatusItem: string = '';
+  userStatusOptions: any;
+  userStatusList: { id: string; statusVal: string }[] | undefined;
+  getUserStatus() {
+    this.apiService.getUserStatus().subscribe(
+      (data) => {
+        this.userStatusList = data.results;
+        this.userStatusOptions = this.userStatusList!.map(option => option.statusVal);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectUserStatus(event: any) {
+    const selectedUserStatusName = event as string;
+    const selectedUserStatus = this.userStatusList!.find(item => item.statusVal === selectedUserStatusName);
+
+    if (selectedUserStatus) {
+      this.selectedUserStatusId = selectedUserStatus.id;
+      this.userStatusItem = selectedUserStatus.statusVal;
+
+      this.userActionReasons(selectedUserStatus.id);
+    }
+  }
+  userActionReasons(userId: string) {
+    const selectedUserStatus = this.userStatusList!.find(item => item.id === userId);
+
+    if (selectedUserStatus) {
+      if (selectedUserStatus.id === '3') {
+        this.reasonType = 'usersuspend';
+        this.suspendedReasonModal = true;
+        this.getReasonList();
+      } else if (selectedUserStatus.id === '4') {
+        this.reasonType = 'userresign';
+        this.resignedReasonModal = true;
+        this.getReasonList();
+      }
+    }
+  }
+
+
   constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1;
+    const day = today.getDate() < 10 ? `0${today.getDate()}` : today.getDate();
+    this.maxDate = `${year}-${month}-${day}`;
   }
 
   // registration form
@@ -260,15 +277,15 @@ export class UserManagementComponent implements OnInit {
     userFirstName: ['', [Validators.required, Validators.maxLength(20)]],
     userLastName: ['', [Validators.required, Validators.maxLength(30)]],
 
-    personalInfo: this.fb.group({
+    basicDetails: this.fb.group({
       genderId: [''],
       gender: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required, this.validateDateOfBirth]],
       age: ['', [Validators.required, this.validateAge]],
       maritalStatus: [''],
       nationality: [''],
-      identifyingDocument: [''],
-      documentNumber: [''],
+      jobTitle: [''],
+      employeeId: [''],
     }),
 
     contactInfo: this.fb.group({
@@ -277,31 +294,6 @@ export class UserManagementComponent implements OnInit {
       altPhoneCode: [''],
       altPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
       emailId: ['', [Validators.required, Validators.email]],
-      emergencyContactNumber: [''],
-    }),
-
-    sponsorInfo: this.fb.group({
-      sponsorName: [''],
-      sponsorPhoneCode: [''],
-      sponsorPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
-    }),
-
-    communicationAddress: this.fb.group({
-      addressLine1: ['', Validators.required],
-      addressLine2: ['', Validators.required],
-      addressLine3: [''],
-      city: [''],
-      pincode: ['', Validators.required],
-      district: ['', Validators.required],
-      state: ['', Validators.required],
-      country: ['', Validators.required],
-    }),
-
-    professionalInfo: this.fb.group({
-      jobTitle: [''],
-      employeeId: [''],
-      dateOfJoining: [''],
-      remarks: ['', [Validators.maxLength(500)]],
     }),
 
     userRole: this.fb.group({
@@ -320,6 +312,13 @@ export class UserManagementComponent implements OnInit {
     suspendedReason: this.fb.group({
       date: [''],
       reason: [''],
+      remarks: ['', [Validators.maxLength(500)]],
+    }),
+
+    resignationReason: this.fb.group({
+      date: [''],
+      reason: [''],
+      remarks: ['', [Validators.maxLength(500)]],
     })
 
   })
@@ -331,17 +330,17 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getAllUserList();
+  }
+
+  // general
+  userRegForm() {
     this.getUserGender();
     this.getCountryList();
-    this.getUserDocument();
     this.getUserMaritalStatus();
     this.getUserStatus();
     this.getUserRoles();
     this.getAllUnits();
-  }
-
-  // general
-  registerNewUser() {
     this.allemployeeList = false;
     this.employeeRegForm = true;
   }
@@ -361,20 +360,44 @@ export class UserManagementComponent implements OnInit {
     }
     return null;
   }
+  // calculateAge() {
+  //   const birthdateValue = this.userRegistrationForm.controls.dateOfBirth.value;
+  //   if (birthdateValue !== null) {
+  //     const birthdate = new Date(birthdateValue);
+  //     if (isNaN(birthdate.getTime())) {
+  //       this.userRegistrationForm.controls.age.setValue('');
+  //     } else {
+  //       const timeDiff = Math.abs(Date.now() - birthdate.getTime());
+  //       const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+  //       this.userRegistrationForm.controls.age.setValue(age.toString());
+  //     }
+  //   } else {
+  //     this.userRegistrationForm.controls.age.setValue('');
+  //   }
+  // }
+  // validateAge(control: AbstractControl) {
+  //   const age = control.value;
+  //   if (age >= 18 && age < 100) {
+  //     return null;
+  //   } else {
+  //     return { invalidAge: true };
+  //   }
+  // }
+
   calculateAge() {
-    // const birthdateValue = this.userRegistrationForm.controls.dateOfBirth.value;
-    // if (birthdateValue !== null) {
-    //   const birthdate = new Date(birthdateValue);
-    //   if (isNaN(birthdate.getTime())) {
-    //     this.userRegistrationForm.controls.age.setValue('');
-    //   } else {
-    //     const timeDiff = Math.abs(Date.now() - birthdate.getTime());
-    //     const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
-    //     this.userRegistrationForm.controls.age.setValue(age.toString());
-    //   }
-    // } else {
-    //   this.userRegistrationForm.controls.age.setValue('');
-    // }
+    const birthdateValue = this.userRegistrationForm.get('basicDetails.dateOfBirth')?.value;
+    if (birthdateValue !== undefined && birthdateValue !== null) {
+      const birthdate = new Date(birthdateValue);
+      if (isNaN(birthdate.getTime())) {
+        this.userRegistrationForm.get('basicDetails.age')?.setValue('');
+      } else {
+        const timeDiff = Math.abs(Date.now() - birthdate.getTime());
+        const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
+        this.userRegistrationForm.get('basicDetails.age')?.setValue(age.toString());
+      }
+    } else {
+      this.userRegistrationForm.get('basicDetails.age')?.setValue('');
+    }
   }
   validateAge(control: AbstractControl) {
     const age = control.value;
@@ -384,6 +407,7 @@ export class UserManagementComponent implements OnInit {
       return { invalidAge: true };
     }
   }
+
   togglePasswordVisibility(controlName: string) {
     if (controlName === 'password') {
       this.passwordHide = !this.passwordHide;
@@ -404,6 +428,12 @@ export class UserManagementComponent implements OnInit {
       this.userRegistrationForm.markAllAsTouched();
     }
     this.alertSuccess = false;
+  }
+
+  // modal
+  onModalClosed() {
+    this.suspendedReasonModal = false;
+    this.resignedReasonModal = false;
   }
 
   // return to home

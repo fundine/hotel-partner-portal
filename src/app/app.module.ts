@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginModule } from './login/login.module';
 import { CoreModule } from './core/core.module';
-import { ExternalLinkModule } from './external-link/external-link.module';
 
 @NgModule({
   declarations: [
@@ -15,8 +14,7 @@ import { ExternalLinkModule } from './external-link/external-link.module';
     BrowserModule,
     AppRoutingModule,
     LoginModule,
-    CoreModule,
-    ExternalLinkModule
+    CoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]

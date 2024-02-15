@@ -55,6 +55,12 @@
                 &.form-lg {
                     padding: 1.5rem 1rem 1rem;
                 }
+                &.form-pad {
+                    padding: 1rem 0.75rem;
+                }
+                &.min-pad {
+                    padding: 1rem;
+                }
             }
             ::ng-deep .modal-footer {
                 display: flex;

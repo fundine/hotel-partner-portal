@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from 'src/app/api.service';
+import { environment } from 'src/environment';
 
 @Component({
   selector: 'app-outlet-management',
@@ -9,37 +11,50 @@ import { Router } from '@angular/router';
 })
 export class OutletManagementComponent implements OnInit {
 
+  // global variables
+  public roleCode: string = environment.roleCode;
+  public unitId: string = environment.unitId;
+  // end global variables
+
+  qrCodeUrl: string = 'https://chocolick.petpooja.com/orders/menu';
+  innerLoading: boolean = false;
   alertSuccess: boolean = false;
+  partnerUnitList: boolean = true;
+  partnerUnitInfoEdit: boolean = false;
   formChangeWarningDialog: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router) { }
+  outlets: any = [];
+  getAllOutletsInfo() {
+    this.innerLoading = true;
+    this.apiService.getAllPartnerUnits().subscribe(
+      (data) => {
+        this.outlets = data.results;
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      },
+      () => {
+        this.innerLoading = false;
+      }
+    );
+  }
+
+
+  constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) { }
 
 
   // outlet form
   outletInfoForm = this.fb.group({
-    unitName: ['', [Validators.required, Validators.maxLength(50)]],
-    unitType: ['', [Validators.required, Validators.maxLength(50)]],
-    unitCategory: ['Restaurant'],
+    contactNumber: ['', [Validators.required]],
     unitLocation: ['', [Validators.required]],
     openingTime: ['', [Validators.required]],
     closingTime: ['', [Validators.required]],
-
-
-
-
-    categoryTypeId: [''],
-    discountAmount: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-    discountPercentage: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?%?$/)]],
-    maxDiscountAmount: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-    minOrderValue: ['', [Validators.required, Validators.pattern(/^[0-9]+(\.[0-9]+)?$/)]],
-    validityStartsFrom: ['', [Validators.required]],
-    validityEndTo: ['', [Validators.required]],
-    customerType: ['', [Validators.required]],
-    // allowedOutlets: [this.fb.array([]), [Validators.required]],
-    allowedOutlets: [[], [Validators.required]],
-    description: ['', [Validators.maxLength(200)]],
-    isValid: [true],
-    isDisabled: [false],
+    tagLine: ['', [Validators.maxLength(200)]],
+    aboutOutlet: ['', [Validators.maxLength(1000)]],
+    allowOnlineOrder:[true],
+    allowFeedbackRequest:[true],
+    allowOnlinePayment:[true],
   })
   controlClass(controlName: string) {
     return { 'is-invalid': this.outletInfoForm?.get(controlName)?.invalid && this.outletInfoForm?.get(controlName)?.touched };
@@ -49,10 +64,26 @@ export class OutletManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.getAllOutletsInfo()
   }
 
-  // coupon save
+  // 
+  toggleUnitStatus(selectedUnit: any, index: number) {
+    // const unitId = this.outlets[index].unitId;
+    // const isUnitOpen = !selectedUnit.isUnitOpen;
+    // this.apiService.changeUnitStatus(unitId, isUnitOpen).subscribe(
+    //   () => {
+    //     this.outlets[index].isUnitOpen = isUnitOpen;
+    //     // const openUnitsCount = this.getOpenUnitsCount();
+    //     console.log('Unit status changed successfully.');
+    //   },
+    //   (error) => {
+    //     console.error('Error in unit status changed:', error);
+    //   }
+    // );
+  }
+
+  // outlet update
   onUpdateOutletInfo() {
     if (this.outletInfoForm.valid) {
       this.alertSuccess = true;

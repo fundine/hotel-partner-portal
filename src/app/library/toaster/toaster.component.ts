@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./toaster.component.scss']
 })
 export class ToasterComponent implements OnInit {
-
+  
   @Input() message!: string;
   @Input() type!: string;
   @Input() position!: string;

@@ -11,6 +11,7 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { LibraryModule } from 'src/app/library/library.module';
 import { PartnerProfileComponent } from './partner-profile.component';
 import { DiscountCouponsComponent } from './discount-coupons/discount-coupons.component';
+import { QrCodeModule } from 'ng-qrcode';
 
 
 
@@ -30,6 +31,7 @@ import { DiscountCouponsComponent } from './discount-coupons/discount-coupons.co
     DragDropModule,
     ScrollingModule,
     ClickOutsideModule,
+    QrCodeModule,
     LibraryModule
   ]
 })

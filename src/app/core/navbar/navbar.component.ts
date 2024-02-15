@@ -90,8 +90,8 @@ export class NavbarComponent implements OnInit {
       this.activeTab = 'partner profile';
       this.router.navigate(['/core/partnerprofile']);
     } else if (this.roleCode === '102') {
-      this.activeTab = 'menu editor';
-      this.router.navigate(['/core/menueditor']);
+      this.activeTab = 'partner profile';
+      this.router.navigate(['/core/partnerprofile']);
     }
     this.tabClicked.emit(this.activeTab);
   }

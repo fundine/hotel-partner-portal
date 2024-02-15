@@ -6,9 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./spinner.component.scss']
 })
 export class SpinnerComponent {
-
   @Input() innerLoader: boolean = false;
   @Input() menuLoader: boolean = false;
   @Input() pageLoader: boolean = false;
-
 }

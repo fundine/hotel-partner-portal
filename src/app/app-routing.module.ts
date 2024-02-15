@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { AppErrorComponent } from './auth/app-error/app-error.component';
 import { CoreComponent } from './core/core.component';
-import { ExternalLinkComponent } from './external-link/external-link.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'partnerlogin', pathMatch: 'full' },
@@ -15,13 +14,6 @@ const routes: Routes = [
     loadChildren: () => import('./core/core.module')
       .then(m => m.CoreModule)
   },
-  {
-    path: 'external',
-    component: ExternalLinkComponent,
-    loadChildren: () => import('./external-link/external-link.module')
-      .then(m => m.ExternalLinkModule)
-  },
-
 ];
 
 @NgModule({

@@ -15,7 +15,7 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  // general : countries, food item type, gender, user status, identifiable document, marital status
+  // general : countries, food item type, gender, user status, identifiable document, marital status, user roles
   getAllCountries(): Observable<any> {
     const url = `${this.apiUrl}/countries`;
     const requestOptions = {
@@ -70,9 +70,37 @@ export class ApiService {
     };
     return this.http.get(url, requestOptions);
   };
+  userRoleList(): Observable<any> {
+    const url = `${this.apiUrl}/partnerroles`;
+    const requestOptions = {
+      headers: {      
+        'roleId': this.roleId,
+        'partnerId': this.partnerId,
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
+  getReasons(reasonType: string): Observable<any> {
+    const url = `${this.apiUrl}/reasons/${reasonType}`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
 
-
-  // outlets : allowed outlets, assigned unit list for users, disable outlet
+  // outlets : partner outlets, allowed outlets, assigned unit list for users, disable outlet
+  getAllPartnerUnits(): Observable<any> {
+    const url = `${this.apiUrl}/partnerunits`;
+    const requestOptions = {
+      headers: {
+        'userId': this.userId,
+        'partnerId': this.partnerId,
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
   getUnitListData(categoryTypeId: string, unitFilter: boolean): Observable<any> {
     const url = `${this.apiUrl}/categorytypeunits/${categoryTypeId}/${unitFilter}`;
     const requestOptions = {
@@ -306,16 +334,29 @@ export class ApiService {
     return this.http.delete(url, requestOptions);
   };
 
-  // role : user roles
-  userRoleList(): Observable<any> {
-    const url = `${this.apiUrl}/partnerroles`;
+  // users : user list, delete user
+  userList(): Observable<any> {
+    const url = `${this.apiUrl}/users/groupbyrole`;
     const requestOptions = {
       headers: {
         'userId': this.userId,
-        'roleId': this.roleId,
         'partnerId': this.partnerId,
       }
     };
     return this.http.get(url, requestOptions);
   };
+  deleteUser(userId: string): Observable<any> {
+    const url = `${this.apiUrl}/user/delete/${userId}`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId,
+        'unitId': this.unitId,
+      }
+    };
+    return this.http.delete(url, requestOptions);
+  };
+
 }
+
+
+// partner units, delete menu item, delete user, edit feature group, unit info
