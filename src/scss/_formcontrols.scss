@@ -121,7 +121,7 @@
         }
         .form-control[readonly] {
             opacity: 1;
-            cursor: text;
+            cursor: default;
             user-select: none;
             background: #eff2f9;
             &:focus ~ .focus-border {
@@ -166,7 +166,7 @@
             top: 68px;
             z-index: 2;
             width: 100%;
-            cursor: pointer;
+            cursor: default;
             max-height: 200px;
             position: absolute;
             overflow-y: overlay;
@@ -174,13 +174,13 @@
             box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.125);
             .list-item {
                 font-size: 1em;
-                cursor: pointer;
+                cursor: default;
                 font-weight: 400;
                 color: #584e4e;
                 padding: 9px 10px;
                 letter-spacing: 0.015rem;
                 label {
-                    cursor: pointer;
+                    cursor: default;
                 }
                 &:hover {
                     background: #efefef;
@@ -485,6 +485,7 @@ input::-webkit-inner-spin-button {
 input[type="date"],
 input[type="time"],
 input[type="datetime-local"] {
+    cursor: default;
     padding-right: 2rem;
     &::-webkit-calendar-picker-indicator {
         top: 0;
@@ -494,7 +495,7 @@ input[type="datetime-local"] {
         z-index: 1;
         width: auto;
         height: auto;
-        cursor: pointer;
+        cursor: default;
         position: absolute;
         color: transparent;
         background: transparent;

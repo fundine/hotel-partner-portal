@@ -188,22 +188,23 @@ export class CategoryManagementComponent implements OnInit {
     this.categoryDeleteInfoDialog = false;
     this.subCategoryDeleteInfoDialog = false;
   }
-  // save 
-  onSaveCategoryChanges() {
-    this.loading = true;
-    setTimeout(() => {
-      this.loading = false;
-      this.alertSuccess = true;
-    }, 2000);
-    this.alertSuccess = false;
-  }
+  
+  // // save 
+  // onSaveCategoryChanges() {
+  //   this.loading = true;
+  //   setTimeout(() => {
+  //     this.loading = false;
+  //     this.alertSuccess = true;
+  //   }, 2000);
+  //   this.alertSuccess = false;
+  // }
 
-  // return to home
-  onCancelClick() {
-    this.loading = false;
-    this.innerLoading = false;
-    this.alertSuccess = false;
-  }
+  // // return to home
+  // onCancelClick() {
+  //   this.loading = false;
+  //   this.innerLoading = false;
+  //   this.alertSuccess = false;
+  // }
 
 }
 

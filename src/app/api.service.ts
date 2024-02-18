@@ -73,7 +73,7 @@ export class ApiService {
   userRoleList(): Observable<any> {
     const url = `${this.apiUrl}/partnerroles`;
     const requestOptions = {
-      headers: {      
+      headers: {
         'roleId': this.roleId,
         'partnerId': this.partnerId,
       }
@@ -344,6 +344,26 @@ export class ApiService {
       }
     };
     return this.http.get(url, requestOptions);
+  };
+  userProfile(userId: string): Observable<any> {
+    const url = `${this.apiUrl}/users/${userId}`;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId,
+        'unitId': this.unitId,
+      }
+    };
+    return this.http.get(url, requestOptions);
+  };
+  saveUser(formBody: any) {
+    const url = `${this.apiUrl}/user/create`;
+    const body = formBody;
+    const requestOptions = {
+      headers: {
+        'partnerId': this.partnerId
+      }
+    };
+    return this.http.post(url, body, requestOptions);
   };
   deleteUser(userId: string): Observable<any> {
     const url = `${this.apiUrl}/user/delete/${userId}`;

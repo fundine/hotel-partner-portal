@@ -1,24 +1,25 @@
 <ng-container *ngIf="allemployeeList">
     <div class="page-header">
         <div>
-            <div>User Management</div>
-            <div>Manage your users and their account permissions here.</div>
+            <div class="ph-title">User Management</div>
+            <div class="ph-sub-title">Manage your users and their account permissions here.</div>
         </div>
         <div>
             <button type="button" class="btn btn-xs btn-primary" (click)="userRegForm()">ADD NEW USER</button>
         </div>
     </div>
     <div class="page-content">
-        <ng-container *ngFor="let role of users">
-            <div class="content-group">
+        <ng-container *ngIf="innerLoading || users.length === 0">
+            <div class="content-group skeleton-loading" *ngFor="let item of skeletonLoadingTable; let i = index">
                 <div class="lt-content">
                     <div class="title-group">
-                        <div class="title-lg">{{ role.roleName }}</div>
+                        <div class="title-lg">
+                            <div class="skeleton-box skeleton-loader w-100"></div>
+                        </div>
                         <div class="title-info">
-                            <span *ngIf="role.roleCode === '101'">Oversees menu operations, including add, edit, delete,
-                                pricing, and user management for efficient outlet functioning.</span>
-                            <span *ngIf="role.roleCode === '102'">Manages inventory by marking items out of stock,
-                                ensuring accurate representation and availability.</span>
+                            <div class="skeleton-box skeleton-loader w-100"></div>
+                            <div class="skeleton-box skeleton-loader w-100"></div>
+                            <div class="skeleton-box skeleton-loader w-100"></div>
                         </div>
                     </div>
                 </div>
@@ -34,14 +35,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let user of role.users" (click)="showUserProfie()">
-                                    <td style="min-width: 165px; max-width: 25%;">{{ user.firstName }} {{ user.lastName
-                                        }}</td>
-                                    <td style="min-width: 235px; max-width: 35%; letter-spacing: 0.01rem;">{{
-                                        listAllowedUnits(user.units) }}
+                                <tr *ngFor="let item of skeletonLoadingItems; let i = index">
+                                    <td style="min-width: 165px; max-width: 25%;">
+                                        <div class="skeleton-box skeleton-loader w-100"></div>
                                     </td>
-                                    <td style="min-width: 165px; max-width: 25%;">{{ user.lastActiveDateTime }}</td>
-                                    <td style="min-width: 100px; max-width: 15%; text-align: center;">Active</td>
+                                    <td style="min-width: 235px; max-width: 35%;">
+                                        <div class="skeleton-box skeleton-loader w-100"></div>
+                                    </td>
+                                    <td style="min-width: 165px; max-width: 25%;">
+                                        <div class="skeleton-box skeleton-loader w-100"></div>
+                                    </td>
+                                    <td style="min-width: 100px; max-width: 15%;">
+                                        <div class="skeleton-box skeleton-loader w-100"></div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -49,23 +55,78 @@
                 </div>
             </div>
         </ng-container>
+        <ng-container *ngIf="!innerLoading && users.length > 0">
+            <ng-container *ngFor="let role of users; let i = index;">
+                <div class="content-group">
+                    <div class="lt-content">
+                        <div class="title-group">
+                            <div class="title-lg">{{ role.roleName }}</div>
+                            <div class="title-info">
+                                <span *ngIf="role.roleCode === '101'">Oversees menu operations, including add, edit,
+                                    delete,
+                                    pricing, and user management for efficient outlet functioning.</span>
+                                <span *ngIf="role.roleCode === '102'">Manages inventory by marking items out of stock,
+                                    ensuring accurate representation and availability.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="rt-content">
+                        <div class="table-container">
+                            <table class="table user-table">
+                                <thead>
+                                    <tr>
+                                        <th style="min-width: 165px; max-width: 25%;">Name</th>
+                                        <th style="min-width: 235px; max-width: 35%;">Assigned Outlets</th>
+                                        <th style="min-width: 165px; max-width: 25%;">Last Active</th>
+                                        <th style="min-width: 100px; max-width: 15%; text-align: center;">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let user of role.users; let j = index" (click)="showUserProfile(i, j)">
+                                        <td style="min-width: 165px; max-width: 25%;">{{ user.firstName }} {{
+                                            user.lastName
+                                            }}</td>
+                                        <td style="min-width: 235px; max-width: 35%; letter-spacing: 0.01rem;">{{
+                                            listAllowedUnits(user.units) }}
+                                        </td>
+                                        <td style="min-width: 165px; max-width: 25%;">{{ user.lastActiveDateTime }}</td>
+                                        <td style="min-width: 100px; max-width: 15%; text-align: center;">Active</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </ng-container>
     </div>
 </ng-container>
+
+
+<!-- // code cleaning
+// skeleton-loader
+// emp list get corrections
+// emp profile view -->
+
+
 <ng-container *ngIf="employeeProfile">
-    <div class="page-content">
+
+    <div *ngIf="innerLoading">loading profile</div>
+    <div class="page-content" *ngIf="!innerLoading">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <div style="display: flex; justify-content: space-between;">
                             <div>
-                                <div>Vishnu Anandababu</div>
-                                <div>+91 8089583858</div>
-                                <div>vishnuanandababu@gmail.com</div>
+                                <div>{{ userProfile.firstName }} {{ userProfile.lastName }}</div>
+                                <div>{{ userProfile.contactInfo.phoneCode }} {{ userProfile.contactInfo.phoneNumber }}
+                                </div>
+                                <div>{{ userProfile.contactInfo.emailId }}</div>
                             </div>
                             <div style="text-align: right;">
-                                <div>Active</div>
-                                <div>Order Manager</div>
+                                <div>{{ userProfile.userStatusId }}</div>
+                                <div>{{ userProfile.userRole.roleId }}</div>
                                 <div>Member Since Jun, 2022</div>
                             </div>
                         </div>
@@ -79,31 +140,15 @@
                             <div class="col-lg-12">
                                 <div class="info-group">
                                     <div class="info-title">Primary Contact No</div>
-                                    <div class="info-value">+91 8089583858</div>
+                                    <div class="info-value">{{ userProfile.contactInfo.phoneCode }} {{
+                                        userProfile.contactInfo.phoneNumber }}</div>
                                 </div>
                             </div>
                             <div class="col-lg-12">
                                 <div class="info-group">
                                     <div class="info-title">Alternate Contact No</div>
-                                    <div class="info-value">+91 9567583858</div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="info-group">
-                                    <div class="info-title">Emergency Contact No</div>
-                                    <div class="info-value">+91 9567583858</div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="info-group">
-                                    <div class="info-title">Sponsor Name</div>
-                                    <div class="info-value">Ananda Babu</div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="info-group">
-                                    <div class="info-title">Sponsor Contact No</div>
-                                    <div class="info-value">+91 9567583858</div>
+                                    <div class="info-value">{{ userProfile.contactInfo.altPhoneCode }} {{
+                                        userProfile.contactInfo.altPhoneNumber }}</div>
                                 </div>
                             </div>
                         </div>
@@ -180,359 +225,371 @@
             </div>
         </div>
     </div>
+
 </ng-container>
+
 <ng-container *ngIf="employeeRegForm">
     <div class="page-content">
-        <div class="row">
-            <div class="col-lg-12 col-center">
-                <form [formGroup]="userRegistrationForm" autocomplete="off">
-                    <div class="card reg-card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-title-group first">
-                                        <div class="form-title">Basic Information</div>
-                                        <div class="form-sub-title">Capture essential personal details for user
-                                            identification.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label required">First Name</label>
-                                        <input type="text" class="form-control" formControlName="userFirstName"
-                                            [ngClass]="controlClass('userFirstName')" />
-                                        <span class="focus-border"></span>
-                                        <label class="val-msg"
-                                            *ngIf="userRegistrationForm.get('userFirstName')?.errors?.['maxlength']">Max
-                                            Length is 20</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label required">Last Name</label>
-                                        <input type="text" class="form-control" formControlName="userLastName"
-                                            [ngClass]="controlClass('userLastName')" />
-                                        <span class="focus-border"></span>
-                                        <label class="val-msg"
-                                            *ngIf="userRegistrationForm.get('userLastName')?.errors?.['maxlength']">Max
-                                            Length is 30</label>
-                                    </div>
-                                </div>
-                                <ng-container formGroupName="basicDetails">
-                                    <div class="col-lg-4">
-                                        <select-control title="Gender" validation="required" formControlName="gender"
-                                            [selectedItem]="genderItem" [options]="genderOptions"
-                                            (optionSelected)="selectGender($event)"
-                                            [validationClass]="(userRegistrationForm.get('basicDetails.gender')?.invalid && userRegistrationForm.get('basicDetails.gender')?.touched) ?? false">
-                                        </select-control>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="inp-label">Date of Birth</label>
-                                            <input type="date" class="form-control cal-input"
-                                                formControlName="dateOfBirth"
-                                                [ngClass]="controlClass('basicDetails.dateOfBirth')"
-                                                (change)="calculateAge()" max="{{ maxDate }}" />
-                                            <span class="focus-border"></span>
-                                            <label class="cal-icon"><i class="vi vi-calendar"></i></label>
-                                            <label class="val-msg"
-                                                *ngIf="userRegistrationForm.get('basicDetails.dateOfBirth')?.errors?.['invalidAge'] && userRegistrationForm.get('basicDetails.dateOfBirth')?.value !== '' && userRegistrationForm.get('basicDetails.dateOfBirth')?.value !== null">Under
-                                                Age</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="inp-label">Age</label>
-                                            <input type="number" class="form-control" formControlName="age"
-                                                [ngClass]="{'is-invalid': (userRegistrationForm.get('basicDetails.age')?.errors?.['invalidAge'] && userRegistrationForm.get('basicDetails.age')?.value !== '' && userRegistrationForm.get('basicDetails.age')?.value !== null) || (userRegistrationForm.get('basicDetails.age')?.errors?.['invalidAge'] && userRegistrationForm.get('basicDetails.age')?.touched)}" />
-                                            <span class="focus-border"></span>
-                                            <label class="val-msg"
-                                                *ngIf="userRegistrationForm.get('basicDetails.age')?.errors?.['invalidAge'] && userRegistrationForm.get('basicDetails.age')?.value !== '' && userRegistrationForm.get('basicDetails.age')?.value !== null">Must
-                                                be 18 or older</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <select-control title="Marital Status" formControlName="maritalStatus"
-                                            [selectedItem]="maritalStatusItem" [options]="maritalStatusOptions"
-                                            (optionSelected)="selectMaritalStatus($event)"
-                                            [validationClass]="(userRegistrationForm.get('basicDetails.maritalStatus')?.invalid && userRegistrationForm.get('basicDetails.maritalStatus')?.touched) ?? false">
-                                        </select-control>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <select-control title="Nationality" formControlName="nationality"
-                                            [selectedItem]="nationality" [options]="countryNameOptions"
-                                            (optionSelected)="selectNationality($event)"
-                                            [validationClass]="(userRegistrationForm.get('basicDetails.nationality')?.invalid && userRegistrationForm.get('basicDetails.nationality')?.touched) ?? false">
-                                        </select-control>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="inp-label">Job Title / Designation</label>
-                                            <input type="text" class="form-control" formControlName="jobTitle"
-                                                [ngClass]="controlClass('basicDetails.jobTitle')" />
-                                            <span class="focus-border"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="inp-label">Employee ID</label>
-                                            <input type="text" class="form-control" formControlName="employeeId"
-                                                [ngClass]="controlClass('basicDetails.employeeId')" />
-                                            <span class="focus-border"></span>
-                                        </div>
-                                    </div>
-                                </ng-container>
-                            </div>
-                            <div class=" row">
-                                <div class="col-lg-12">
-                                    <div class="form-title-group">
-                                        <div class="form-title">Contact Information</div>
-                                        <div class="form-sub-title">Adding contact informations of the
-                                            employee will helps you to call them at any circumstances. The user's
-                                            primary phone number or email ID will be used as login credential.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <ng-container formGroupName="contactInfo">
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="inp-label required">Phone Number</label>
-                                            <div class="input-group">
-                                                <div class="first-control lg-30">
-                                                    <select-control title="Phone Code" [noLabel]="true"
-                                                        formControlName="phoneCode" [selectedItem]="countryCode"
-                                                        [options]="countryCodeOptions"
-                                                        (optionSelected)="selectCountryCode($event)"
-                                                        customClass="no-label list-lg"
-                                                        [validationClass]="(userRegistrationForm.get('contactInfo.phoneCode')?.invalid && userRegistrationForm.get('contactInfo.phoneCode')?.touched) ?? false">
-                                                    </select-control>
-                                                </div>
-                                                <div class="second-control lg-70">
-                                                    <input type="number" class="form-control"
-                                                        formControlName="phoneNumber"
-                                                        [ngClass]="controlClass('contactInfo.phoneNumber')" />
-                                                    <span class="focus-border"></span>
-                                                    <label class="val-msg"
-                                                        *ngIf="userRegistrationForm.get('contactInfo.phoneNumber')?.errors?.['pattern']">Only
-                                                        Numbers Are Allowed</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="inp-label">Alternate Phone Number</label>
-                                            <div class="input-group">
-                                                <div class="first-control lg-30">
-                                                    <select-control title="Alt Phone Code" [noLabel]="true"
-                                                        formControlName="altPhoneCode" [selectedItem]="countryCode"
-                                                        [options]="countryCodeOptions"
-                                                        (optionSelected)="selectCountryCode($event)"
-                                                        customClass="no-label list-lg"
-                                                        [validationClass]="(userRegistrationForm.get('contactInfo.altPhoneCode')?.invalid && userRegistrationForm.get('contactInfo.altPhoneCode')?.touched) ?? false">
-                                                    </select-control>
-                                                </div>
-                                                <div class="second-control lg-70">
-                                                    <input type="number" class="form-control"
-                                                        formControlName="altPhoneNumber"
-                                                        [ngClass]="controlClass('contactInfo.altPhoneNumber')" />
-                                                    <span class="focus-border"></span>
-                                                    <label class="val-msg"
-                                                        *ngIf="userRegistrationForm.get('contactInfo.altPhoneNumber')?.errors?.['pattern']">Only
-                                                        Numbers Are Allowed</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label class="inp-label required">Email Id</label>
-                                            <input type="email" class="form-control" formControlName="emailId"
-                                                [ngClass]="controlClass('contactInfo.emailId')" />
-                                            <span class="focus-border"></span>
-                                        </div>
-                                    </div>
-                                </ng-container>                              
-                            </div>
- 
-                            <div class=" row">
-                                <div class="col-lg-12">
-                                    <div class="form-title-group">
-                                        <div class="form-title">Outlets & Role Allocation</div>
-                                        <div class="form-sub-title">Assign roles and responsibilities to users across
-                                            various outlets for organized and efficient business operations.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <ng-container formGroupName="userRole">
-                                        <select-control title="Role" validation="required" formControlName="role"
-                                            [selectedItem]="selectedRoleCode" [options]="userRoleOptions"
-                                            (optionSelected)="selectRoleType($event)"
-                                            [validationClass]="(userRegistrationForm.get('userRole.role')?.invalid && userRegistrationForm.get('userRole.role')?.touched) ?? false">
-                                        </select-control>
-                                    </ng-container>
-                                </div>
-                                <div class="col-lg-8">
-                                    <ng-container formGroupName="userOutlets">
-                                        <multi-select-control [title]="'Allowed Outlets'" validation="required"
-                                            formControlName="allowedOutlets" [options]="itemUnitOptions"
-                                            [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
-                                            [validationClass]="(userRegistrationForm.get('userOutlets.allowedOutlets')?.invalid && userRegistrationForm.get('userOutlets.allowedOutlets')?.touched) ?? false">
-                                        </multi-select-control>
-                                    </ng-container>
-                                </div>
-                            </div>
-                            <div class=" row">
-                                <div class="col-lg-12">
-                                    <div class="form-title-group">
-                                        <div class="form-title">User Status & Credentials</div>
-                                        <div class="form-sub-title">Manage user access with options for status (active,
-                                            inactive) and credentials (username, password) for secure system
-                                            interactions.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <select-control title="User Status" validation="required"
-                                        formControlName="userStatus" [selectedItem]="userStatusItem"
-                                        [options]="userStatusOptions" (optionSelected)="selectUserStatus($event)"
-                                        [validationClass]="(userRegistrationForm.get('userStatus')?.invalid && userRegistrationForm.get('userStatus')?.touched) ?? false">
-                                    </select-control>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label required">Password</label>
-                                        <input class="form-control" type="{{ passwordHide ? 'text' : 'password' }}"
-                                            formControlName="password" [ngClass]="controlClass('password')" />
-                                        <span class="focus-border"></span>
-                                        <label class="toggle-eye" (click)="togglePasswordVisibility('password')">
-                                            <i class="vi {{ passwordHide ? 'vi-eye-off' : 'vi-eye' }}"></i>
-                                        </label>
-                                        <label class="val-msg"
-                                            *ngIf="userRegistrationForm.get('password')?.errors?.['pattern']">
-                                            At least 6 characters long, 1 uppercase with 1 lowercase
-                                            and 1 numeric digit</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label required">Confirm Password</label>
-                                        <input class="form-control"
-                                            type="{{ confirmPasswordHide ? 'text' : 'password' }}"
-                                            formControlName="confirmPassword"
-                                            [ngClass]="{'is-invalid': userRegistrationForm.get('confirmPassword')?.value !== userRegistrationForm.get('password')?.value && userRegistrationForm.get('confirmPassword')?.touched}" />
-                                        <span class="focus-border"></span>
-                                        <label class="toggle-eye" (click)="togglePasswordVisibility('confirmPassword')">
-                                            <i class="vi {{ confirmPasswordHide ? 'vi-eye-off' : 'vi-eye' }}"></i>
-                                        </label>
-                                        <span class="focus-border"></span>
-                                        <label class="val-msg"
-                                            *ngIf="userRegistrationForm.get('confirmPassword')?.value !== userRegistrationForm.get('password')?.value && userRegistrationForm.get('confirmPassword')?.touched">Passwords
-                                            does not match</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="action-panel">
-                                        <div class="action-title danger">Do you want to delete this user?</div>
-                                        <div>Deleting user account is a permanent action, and it cannot be reversed. you
-                                            can
-                                            click here to <a class="action-delete">Delete User Permanently</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="btn-list">
-                                <button class="btn btn-success" (click)="onRegisterUser()">REGISTER</button>
-                                <button class="btn btn-danger" (click)="onCancelClick()">CANCEL</button>
+        <form [formGroup]="userRegistrationForm" autocomplete="off">
+            <div class="card reg-card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-title-group first">
+                                <div class="form-title">Basic Information</div>
+                                <div class="form-sub-title">Capture essential personal details for user
+                                    identification.</div>
                             </div>
                         </div>
                     </div>
-                </form>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="inp-label required">First Name</label>
+                                <input type="text" class="form-control" formControlName="firstName"
+                                    [ngClass]="controlClass('firstName')" />
+                                <span class="focus-border"></span>
+                                <label class="val-msg"
+                                    *ngIf="userRegistrationForm.get('firstName')?.errors?.['maxlength']">Max
+                                    Length is 20</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="inp-label required">Last Name</label>
+                                <input type="text" class="form-control" formControlName="lastName"
+                                    [ngClass]="controlClass('lastName')" />
+                                <span class="focus-border"></span>
+                                <label class="val-msg"
+                                    *ngIf="userRegistrationForm.get('lastName')?.errors?.['maxlength']">Max
+                                    Length is 30</label>
+                            </div>
+                        </div>
+                        <ng-container formGroupName="basicDetails">
+                            <div class="col-lg-4">
+                                <select-control title="Gender" validation="required" formControlName="gender"
+                                    [selectedItem]="genderItem" [options]="genderOptions"
+                                    (optionSelected)="selectGender($event)"
+                                    [validationClass]="(userRegistrationForm.get('basicDetails.gender')?.invalid && userRegistrationForm.get('basicDetails.gender')?.touched) ?? false">
+                                </select-control>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Date of Birth</label>
+                                    <input type="date" class="form-control cal-input" formControlName="dateOfBirth"
+                                        [ngClass]="controlClass('basicDetails.dateOfBirth')" (change)="calculateAge()"
+                                        max="{{ maxDate }}" />
+                                    <span class="focus-border"></span>
+                                    <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                                    <label class="val-msg"
+                                        *ngIf="userRegistrationForm.get('basicDetails.dateOfBirth')?.errors?.['invalidAge'] && userRegistrationForm.get('basicDetails.dateOfBirth')?.value !== '' && userRegistrationForm.get('basicDetails.dateOfBirth')?.value !== null">Under
+                                        Age</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Age</label>
+                                    <input type="number" class="form-control" formControlName="age"
+                                        [ngClass]="{'is-invalid': (userRegistrationForm.get('basicDetails.age')?.errors?.['invalidAge'] && userRegistrationForm.get('basicDetails.age')?.value !== '' && userRegistrationForm.get('basicDetails.age')?.value !== null) || (userRegistrationForm.get('basicDetails.age')?.errors?.['invalidAge'] && userRegistrationForm.get('basicDetails.age')?.touched)}" />
+                                    <span class="focus-border"></span>
+                                    <label class="val-msg"
+                                        *ngIf="userRegistrationForm.get('basicDetails.age')?.errors?.['invalidAge'] && userRegistrationForm.get('basicDetails.age')?.value !== '' && userRegistrationForm.get('basicDetails.age')?.value !== null">Must
+                                        be 18 or older</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <select-control title="Marital Status" formControlName="maritalStatus"
+                                    [selectedItem]="maritalStatusItem" [options]="maritalStatusOptions"
+                                    (optionSelected)="selectMaritalStatus($event)"
+                                    [validationClass]="(userRegistrationForm.get('basicDetails.maritalStatus')?.invalid && userRegistrationForm.get('basicDetails.maritalStatus')?.touched) ?? false">
+                                </select-control>
+                            </div>
+                            <div class="col-lg-4">
+                                <!-- <select-control title="Nationality" formControlName="nationality"
+                                    [selectedItem]="nationality" [options]="countryNameOptions"
+                                    (optionSelected)="selectNationality($event)"
+                                    [validationClass]="(userRegistrationForm.get('basicDetails.nationality')?.invalid && userRegistrationForm.get('basicDetails.nationality')?.touched) ?? false">
+                                </select-control> -->
+
+                                <select-control title="Nationality" formControlName="nationality"
+                                    [selectedItem]="nationalityItem" [options]="nationalityOptions"
+                                    (optionSelected)="selectNationality($event)"
+                                    [validationClass]="(userRegistrationForm.get('basicDetails.nationality')?.invalid && userRegistrationForm.get('basicDetails.nationality')?.touched) ?? false">
+                                </select-control>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label">Job Title / Designation</label>
+                                    <input type="text" class="form-control" formControlName="jobTitle"
+                                        [ngClass]="controlClass('basicDetails.jobTitle')" />
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label">Employee ID</label>
+                                    <input type="text" class="form-control" formControlName="employeeId"
+                                        [ngClass]="controlClass('basicDetails.employeeId')" />
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class=" row">
+                        <div class="col-lg-12">
+                            <div class="form-title-group">
+                                <div class="form-title">Contact Information</div>
+                                <div class="form-sub-title">Adding contact informations of the
+                                    employee will helps you to call them at any circumstances. The user's
+                                    primary phone number or email ID will be used as login credential.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <ng-container formGroupName="contactInfo">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Phone Number</label>
+                                    <div class="input-group">
+                                        <div class="first-control lg-30">
+                                            <select-control title="Phone Code" [noLabel]="true"
+                                                formControlName="phoneCode" [selectedItem]="countryCode"
+                                                [options]="countryCodeOptions"
+                                                (optionSelected)="selectCountryCode($event, true)"
+                                                customClass="no-label list-lg"
+                                                [validationClass]="(userRegistrationForm.get('contactInfo.phoneCode')?.invalid && userRegistrationForm.get('contactInfo.phoneCode')?.touched) ?? false">
+                                            </select-control>
+                                        </div>
+                                        <div class="second-control lg-70">
+                                            <input type="number" class="form-control" formControlName="phoneNumber"
+                                                [ngClass]="controlClass('contactInfo.phoneNumber')" />
+                                            <span class="focus-border"></span>
+                                            <label class="val-msg"
+                                                *ngIf="userRegistrationForm.get('contactInfo.phoneNumber')?.errors?.['pattern']">Only
+                                                Numbers Are Allowed</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label">Alternate Phone Number</label>
+                                    <div class="input-group">
+                                        <div class="first-control lg-30">
+                                            <select-control title="Alt Phone Code" [noLabel]="true"
+                                                formControlName="altPhoneCode" [selectedItem]="altCountryCode"
+                                                [options]="countryCodeOptions"
+                                                (optionSelected)="selectCountryCode($event)"
+                                                customClass="no-label list-lg"
+                                                [validationClass]="(userRegistrationForm.get('contactInfo.altPhoneCode')?.invalid && userRegistrationForm.get('contactInfo.altPhoneCode')?.touched) ?? false">
+                                            </select-control>
+                                        </div>
+                                        <div class="second-control lg-70">
+                                            <input type="number" class="form-control" formControlName="altPhoneNumber"
+                                                [ngClass]="controlClass('contactInfo.altPhoneNumber')" />
+                                            <span class="focus-border"></span>
+                                            <label class="val-msg"
+                                                *ngIf="userRegistrationForm.get('contactInfo.altPhoneNumber')?.errors?.['pattern']">Only
+                                                Numbers Are Allowed</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label class="inp-label required">Email Id</label>
+                                    <input type="email" class="form-control" formControlName="emailId"
+                                        [ngClass]="controlClass('contactInfo.emailId')" />
+                                    <span class="focus-border"></span>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div class=" row">
+                        <div class="col-lg-12">
+                            <div class="form-title-group">
+                                <div class="form-title">Outlets & Role Allocation</div>
+                                <div class="form-sub-title">Assign roles and responsibilities to users across
+                                    various outlets for organized and efficient business operations.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <ng-container formGroupName="userRole">
+                                <select-control title="Role" validation="required" formControlName="role"
+                                    [selectedItem]="userRoleItem" [options]="userRoleOptions"
+                                    (optionSelected)="selectRoleType($event)"
+                                    [validationClass]="(userRegistrationForm.get('userRole.role')?.invalid && userRegistrationForm.get('userRole.role')?.touched) ?? false">
+                                </select-control>
+                            </ng-container>
+                        </div>
+                        <div class="col-lg-8">
+                            <!-- <ng-container formGroupName="userOutlets">
+                                <multi-select-control [title]="'Allowed Outlets'" validation="required"
+                                    formControlName="allowedOutlets" [options]="itemUnitOptions"
+                                    [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
+                                    [validationClass]="(userRegistrationForm.get('userOutlets.allowedOutlets')?.invalid && userRegistrationForm.get('userOutlets.allowedOutlets')?.touched) ?? false">
+                                </multi-select-control>
+                            </ng-container> -->
+
+
+                            <!-- <multi-select-control [title]="'Allowed Outlets'" validation="required"
+                                formControlName="allowedOutlets" [options]="itemUnitOptions"
+                                [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
+                                [validationClass]="(userRegistrationForm.get('allowedOutlets')?.invalid && userRegistrationForm.get('allowedOutlets')?.touched) ?? false">
+                            </multi-select-control> -->
+
+
+                            <multi-select-control [title]="'Allowed Outlets'" validation="required"
+                                formControlName="allowedOutlets" [options]="itemUnitOptions"
+                                [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
+                                [validationClass]="(userRegistrationForm.get('allowedOutlets')?.invalid && userRegistrationForm.get('allowedOutlets')?.touched) ?? false">
+                            </multi-select-control>
+                        </div>
+                    </div>
+                    <div class=" row">
+                        <div class="col-lg-12">
+                            <div class="form-title-group">
+                                <div class="form-title">User Status & Credentials</div>
+                                <div class="form-sub-title">Manage user access with options for status (active,
+                                    inactive) and credentials (username, password) for secure system
+                                    interactions.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <select-control title="User Status" validation="required" formControlName="userStatus"
+                                [selectedItem]="userStatusItem" [options]="userStatusOptions"
+                                (optionSelected)="selectUserStatus($event)"
+                                [validationClass]="(userRegistrationForm.get('userStatus')?.invalid && userRegistrationForm.get('userStatus')?.touched) ?? false">
+                            </select-control>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="inp-label required">Password</label>
+                                <input class="form-control" type="{{ passwordHide ? 'text' : 'password' }}"
+                                    formControlName="password" [ngClass]="controlClass('password')" />
+                                <span class="focus-border"></span>
+                                <label class="toggle-eye" (click)="togglePasswordVisibility('password')">
+                                    <i class="vi {{ passwordHide ? 'vi-eye-off' : 'vi-eye' }}"></i>
+                                </label>
+                                <label class="val-msg"
+                                    *ngIf="userRegistrationForm.get('password')?.errors?.['pattern']">
+                                    At least 6 characters long, 1 uppercase with 1 lowercase
+                                    and 1 numeric digit</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="inp-label required">Confirm Password</label>
+                                <input class="form-control" type="{{ confirmPasswordHide ? 'text' : 'password' }}"
+                                    formControlName="confirmPassword"
+                                    [ngClass]="{'is-invalid': userRegistrationForm.get('confirmPassword')?.value !== userRegistrationForm.get('password')?.value && userRegistrationForm.get('confirmPassword')?.touched}" />
+                                <span class="focus-border"></span>
+                                <label class="toggle-eye" (click)="togglePasswordVisibility('confirmPassword')">
+                                    <i class="vi {{ confirmPasswordHide ? 'vi-eye-off' : 'vi-eye' }}"></i>
+                                </label>
+                                <span class="focus-border"></span>
+                                <label class="val-msg"
+                                    *ngIf="userRegistrationForm.get('confirmPassword')?.value !== userRegistrationForm.get('password')?.value && userRegistrationForm.get('confirmPassword')?.touched">Passwords
+                                    does not match</label>
+                            </div>
+                        </div>
+
+
+                        <ng-container formGroupName="suspendedReason" *ngIf="reasonType === 'usersuspend'">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="inp-label">Suspended Date</label>
+                                    <input type="date" class="form-control cal-input" formControlName="date"
+                                        [ngClass]="controlClass('suspendedReason.date')" />
+                                    <span class="focus-border"></span>
+                                    <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <select-control title="Suspended Reason" formControlName="reason"
+                                    [selectedItem]="reasonItem" [options]="reasonOptions"
+                                    (optionSelected)="selectReason($event)"
+                                    [validationClass]="(userRegistrationForm.get('suspendedReason.reason')?.invalid && userRegistrationForm.get('suspendedReason.reason')?.touched) ?? false">
+                                </select-control>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="inp-label">Remarks</label>
+                                    <textarea class="form-control" formControlName="remarks"
+                                        [ngClass]="controlClass('suspendedReason.remarks')"
+                                        placeholder="Remarks If Any"></textarea>
+                                    <span class="focus-border"></span>
+                                    <label class="val-msg"
+                                        *ngIf="userRegistrationForm.get('suspendedReason.remarks')?.errors?.['maxlength']">Max
+                                        Length is 500</label>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container formGroupName="resignationReason" *ngIf="reasonType === 'userresign'">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="inp-label">Resigned Date</label>
+                                    <input type="date" class="form-control cal-input" formControlName="date"
+                                        [ngClass]="controlClass('resignationReason.date')" />
+                                    <span class="focus-border"></span>
+                                    <label class="cal-icon"><i class="vi vi-calendar"></i></label>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <select-control title="Resigned Reason" formControlName="reason"
+                                    [selectedItem]="reasonItem" [options]="reasonOptions"
+                                    (optionSelected)="selectReason($event)"
+                                    [validationClass]="(userRegistrationForm.get('resignationReason.reason')?.invalid && userRegistrationForm.get('resignationReason.reason')?.touched) ?? false">
+                                </select-control>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="inp-label">Remarks</label>
+                                    <textarea class="form-control" formControlName="remarks"
+                                        [ngClass]="controlClass('resignationReason.remarks')"
+                                        placeholder="Remarks If Any"></textarea>
+                                    <span class="focus-border"></span>
+                                    <label class="val-msg"
+                                        *ngIf="userRegistrationForm.get('resignationReason.remarks')?.errors?.['maxlength']">Max
+                                        Length is 500</label>
+                                </div>
+                            </div>
+                        </ng-container>
+
+
+
+                        <div class="col-lg-12">
+                            <div class="action-panel">
+                                <div class="action-title danger">Do you want to delete this user?</div>
+                                <div>Deleting user account is a permanent action, and it cannot be reversed. you
+                                    can click here to <a class="action-delete"><i class="vi vi-trash"></i> <span>Delete
+                                            User Permanently</span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-list">
+                        <button class="btn btn-success" (click)="onRegisterUser()">REGISTER</button>
+                        <button class="btn btn-danger" (click)="onCancelClick()">CANCEL</button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </ng-container>
 
-<app-modal *ngIf="suspendedReasonModal" (closed)="onModalClosed()" [header]="'show'" [customClass]="'modal-md'"
-    [modalTitle]="'SUSPENDED REASON'">
-    <div class="modal-body form-pad">
-        <!-- <form [formGroup]="userRegistrationForm" autocomplete="off">
-            <div class="row" formGroupName="suspendedReason">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="inp-label">Suspended Date</label>
-                        <input type="date" class="form-control cal-input" formControlName="date"
-                            [ngClass]="controlClass('suspendedReason.date')" />
-                        <span class="focus-border"></span>
-                        <label class="cal-icon"><i class="vi vi-calendar"></i></label>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <select-control title="Suspended Reason" formControlName="reason" [selectedItem]="reasonItem"
-                        [options]="reasonOptions" (optionSelected)="selectReason($event)"
-                        [validationClass]="(userRegistrationForm.get('suspendedReason.reason')?.invalid && userRegistrationForm.get('suspendedReason.reason')?.touched) ?? false">
-                    </select-control>
-                </div>
-                <div class="col-lg-12">
-                    <div class="form-group">
-                        <label class="inp-label">Remarks</label>
-                        <textarea class="form-control" formControlName="remarks"
-                            [ngClass]="controlClass('suspendedReason.remarks')" placeholder="Remarks If Any"></textarea>
-                        <span class="focus-border"></span>
-                        <label class="val-msg"
-                            *ngIf="userRegistrationForm.get('suspendedReason.remarks')?.errors?.['maxlength']">Max
-                            Length is 500</label>
-                    </div>
-                </div>
-            </div>
-        </form> -->
-    </div>
-</app-modal>
-
-<app-modal *ngIf="resignedReasonModal" (closed)="onModalClosed()" [header]="'show'" [customClass]="'modal-md'"
-    [modalTitle]="'RESIGNATION REASON'">
-    <div class="modal-body form-pad">
-        <!-- <form [formGroup]="userRegistrationForm" autocomplete="off">
-            <div class="row" formGroupName="resignationReason">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="inp-label">Resigned Date</label>
-                        <input type="date" class="form-control cal-input" formControlName="date"
-                            [ngClass]="controlClass('resignationReason.date')" />
-                        <span class="focus-border"></span>
-                        <label class="cal-icon"><i class="vi vi-calendar"></i></label>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <select-control title="Resigned Reason" formControlName="reason" [selectedItem]="reasonItem"
-                        [options]="reasonOptions" (optionSelected)="selectReason($event)"
-                        [validationClass]="(userRegistrationForm.get('resignationReason.reason')?.invalid && userRegistrationForm.get('resignationReason.reason')?.touched) ?? false">
-                    </select-control>
-                </div>
-                <div class="col-lg-12">
-                    <div class="form-group">
-                        <label class="inp-label">Remarks</label>
-                        <textarea class="form-control" formControlName="remarks"
-                            [ngClass]="controlClass('resignationReason.remarks')"
-                            placeholder="Remarks If Any"></textarea>
-                        <span class="focus-border"></span>
-                        <label class="val-msg"
-                            *ngIf="userRegistrationForm.get('resignationReason.remarks')?.errors?.['maxlength']">Max
-                            Length is 500</label>
-                    </div>
-                </div>
-            </div>
-        </form> -->
-    </div>
-</app-modal>
+<app-dialog *ngIf="userStatusChangeWarningDialog" type="confirm" [customClass]="'delete justify'"
+    [title]="'Confirm Inactivation?'"
+    [message]="'Are you sure you want to inactive this user? Inactive users will not be able to log in to the partner portal.'"
+    (confirmClick)="onConfirmUserStatusChange()" (cancelClick)="onCancelUserStatusChange()"></app-dialog>
 
 <app-dialog *ngIf="formChangeWarningDialog" type="confirm" [customClass]="'delete justify'" [title]="'Discard Changes?'"
     [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"
@@ -540,3 +597,8 @@
 
 <app-toaster *ngIf="alertSuccess" type="success" position="top-right" customClass="" [title]="false"
     message="Great, there's a new user added!"></app-toaster>
+
+<app-dialog *ngIf="internalServerErrorDialog" type="info" [customClass]="'delete justify'"
+    [title]="'Oops, Internal Server Error!'"
+    [message]="'Sorry, something went wrong. Please try after sometime. If the issue persists, dont hesitate to contact our support team for assistance.'"
+    (cancelClick)="onCancelDialog()"></app-dialog>

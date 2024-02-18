@@ -56,6 +56,11 @@ export class MultiSelectControlComponent implements ControlValueAccessor {
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
+  openDropdown(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key === 'Enter') {
+      this.toggleDropdown();
+    }
+  }
 
   // isSelected(option: string): boolean {
   //   return (this.selectedItems ?? []).includes(option);
@@ -78,6 +83,22 @@ export class MultiSelectControlComponent implements ControlValueAccessor {
     this.onTouched();
     this.optionsSelected.emit(this.selectedItems);
   }
+
+  // toggleCheckbox(option: string) {
+  //   setTimeout(() => {
+  //     this.selectedItems = this.selectedItems || [];
+  //     if (this.isSelected(option)) {
+  //       this.selectedItems = this.selectedItems.filter(item => item !== option);
+  //     } else {
+  //       this.selectedItems = [...this.selectedItems, option];
+  //     }
+  //     const inputValue = this.selectedItems.join(', ');
+  //     this.selectedItemList = inputValue;
+  //     this.onChange(this.selectedItems);
+  //     this.onTouched();
+  //     this.optionsSelected.emit(this.selectedItems);
+  //   });
+  // }
 
   selectOption(option: string) {
     const isSelected = this.selectedItems.includes(option);

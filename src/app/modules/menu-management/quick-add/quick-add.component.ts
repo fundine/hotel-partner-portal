@@ -469,7 +469,7 @@ export class QuickAddComponent implements OnInit {
       console.log(transformedArray);
       console.log('Form State:', this.itemQuickAddForm);
 
-      const requestBody = {
+      const requestBody = { 
         categoryId: this.selectedCategoryId,
         subCategoryId: this.selectedSubCategoryId || '',
         itemName: this.itemQuickAddForm.get('itemName')?.value,

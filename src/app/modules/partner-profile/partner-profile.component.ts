@@ -7,14 +7,14 @@ import { environment } from 'src/environment';
   templateUrl: './partner-profile.component.html',
   styleUrls: ['./partner-profile.component.scss']
 })
-export class PartnerProfileComponent  implements OnInit {
+export class PartnerProfileComponent implements OnInit {
 
   // global variables
   public roleCode: string = environment.roleCode;
   public categoryTypeId: string[] = environment.categoryTypeId;
   // end global variables
 
-  currentPage: string = 'outlet-management';
+  currentPage: string = 'user-management';
 
   constructor(private location: Location) { }
 
@@ -23,7 +23,7 @@ export class PartnerProfileComponent  implements OnInit {
   }
 
   // general 
-  loadPage(page: string): void {  
+  loadPage(page: string): void {
     this.currentPage = page;
     this.updateUrl();
   }

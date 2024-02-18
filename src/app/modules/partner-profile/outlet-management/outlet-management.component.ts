@@ -11,6 +11,12 @@ import { environment } from 'src/environment';
 })
 export class OutletManagementComponent implements OnInit {
 
+  // remove later
+  allowOnlineOrder = true;
+  allowOnlinePayment = false;
+  allowFeedbackRequest = true;
+
+
   // global variables
   public roleCode: string = environment.roleCode;
   public unitId: string = environment.unitId;
@@ -22,6 +28,9 @@ export class OutletManagementComponent implements OnInit {
   partnerUnitList: boolean = true;
   partnerUnitInfoEdit: boolean = false;
   formChangeWarningDialog: boolean = false;
+  confirmContactSupportDialog: boolean = false;
+  skeletonCardItems = Array(2).fill(0);
+  skeletonCardSubItems = Array(3).fill(0);
 
   outlets: any = [];
   getAllOutletsInfo() {
@@ -52,9 +61,9 @@ export class OutletManagementComponent implements OnInit {
     closingTime: ['', [Validators.required]],
     tagLine: ['', [Validators.maxLength(200)]],
     aboutOutlet: ['', [Validators.maxLength(1000)]],
-    allowOnlineOrder:[true],
-    allowFeedbackRequest:[true],
-    allowOnlinePayment:[true],
+    allowOnlineOrder: [true],
+    allowFeedbackRequest: [true],
+    allowOnlinePayment: [true],
   })
   controlClass(controlName: string) {
     return { 'is-invalid': this.outletInfoForm?.get(controlName)?.invalid && this.outletInfoForm?.get(controlName)?.touched };
@@ -64,7 +73,7 @@ export class OutletManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllOutletsInfo()
+    this.getAllOutletsInfo();
   }
 
   // 
@@ -84,6 +93,10 @@ export class OutletManagementComponent implements OnInit {
   }
 
   // outlet update
+  editOutletInfo(index: number) {
+    this.partnerUnitList = false;
+    this.partnerUnitInfoEdit = true;
+  }
   onUpdateOutletInfo() {
     if (this.outletInfoForm.valid) {
       this.alertSuccess = true;
@@ -100,9 +113,7 @@ export class OutletManagementComponent implements OnInit {
       this.formChangeWarningDialog = true;
     }
     else {
-      this.alertSuccess = false;
-      this.outletInfoForm.reset();
-      this.router.navigate(['/core']);
+      this.onBackConfirmClick();
     }
   }
   onCancelClearChanges() {
@@ -111,6 +122,26 @@ export class OutletManagementComponent implements OnInit {
   onBackConfirmClick() {
     this.alertSuccess = false;
     this.outletInfoForm.reset();
-    this.router.navigate(['/core']);
+    this.formChangeWarningDialog = false;
+    this.outletInfoForm.get('allowOnlineOrder')?.setValue(true);
+    this.outletInfoForm.get('allowFeedbackRequest')?.setValue(true);
+    this.outletInfoForm.get('allowOnlinePayment')?.setValue(true);
+    this.partnerUnitInfoEdit = false;
+    this.partnerUnitList = true;
+    this.getAllOutletsInfo();
   }
+
+  contactPartnerSupport() {
+    this.confirmContactSupportDialog = true;
+  }
+
+  confirmContactPartnerSupport() {
+    this.confirmContactSupportDialog = false;
+    window.open('/partnersupport', '_blank');
+  }
+
+  cancelContactPartnerSupport() {
+    this.confirmContactSupportDialog = false;
+  }
+
 }

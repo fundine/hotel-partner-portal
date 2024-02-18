@@ -11,7 +11,34 @@
     min-height: 19px;
     font-size: 1em;
 }
-
+.page-header {
+    display: flex;
+    padding: 15px 0;
+    position: relative;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.75rem;
+    justify-content: space-between;
+    border-bottom: 1px solid #cccccc;
+    .ph-title {
+        font-weight: 600;
+        font-size: 1.1em;
+        line-height: 1.4;
+        color: #188184;
+        letter-spacing: 0.015rem;
+    }
+    .ph-sub-title {
+        font-size: 0.975em;
+    }
+    .btn {
+        i {
+            top: 3px;
+            color: #ffffff;
+            font-weight: 400;
+            padding-right: 7px;
+        }
+    }
+}
 .page-content {
     padding: 15px 0 0;
     .card {
@@ -21,12 +48,15 @@
         }
         .card-body {
             padding: 1rem 0.75rem;
+            .checkbox-list {
+                margin: 0.75rem 0;
+            }
         }
         .card-footer {
             display: flex;
             align-items: center;
             padding: 0.75rem 1.5rem;
-            justify-content: space-between;
+            justify-content: flex-end;
             .btn-list {
                 .btn {
                     min-width: 110px;
@@ -36,10 +66,11 @@
         &.outlet-card {
             margin-bottom: 1.5rem;
             .card-header {
+                height: 53px;
                 display: flex;
                 border-bottom: 0;
+                padding: 0 1.5rem;
                 background: #e9f2ff;
-                padding: 0.75rem 1.5rem;
                 justify-content: space-between;
                 .card-aside-left,
                 .card-aside-right {
@@ -114,7 +145,6 @@
                 }
             }
             .card-body {
-                min-height: 140px;
                 padding: 1rem 0.75rem;
                 .info-group {
                     margin-bottom: 12px;
@@ -144,6 +174,25 @@
                         box-shadow: 0 0 5px -1px #9a9a9a;
                     }
                 }
+                .btn-edit {
+                    width: 100%;
+                    cursor: pointer;
+                    margin: 0.5rem 0;
+                    font-weight: 500;
+                    color: #99012a;
+                    font-size: 0.85em;
+                    text-align: center;
+                    text-transform: uppercase;
+                    i {
+                        top: 1px;
+                        color: inherit;
+                        font-size: 13px;
+                        padding-right: 7px;
+                    }
+                    &:hover {
+                        color: #d8023c;
+                    }
+                }
             }
             .card-header {
                 padding-right: 200px;
@@ -162,6 +211,25 @@
             }
             .info-group {
                 opacity: 0.7;
+            }
+        }
+        &.skeleton-card {
+            .skeleton-box {
+                height: 16px;
+                overflow: hidden;
+                border-bottom: 0;
+                position: relative;
+                background-color: #f7f7f7;
+            }
+            .card-header {
+                height: 45px;
+            }
+            .card-body {
+                height: 150px;
+                padding: 1.5rem 1rem;
+                .skeleton-box {
+                    margin-bottom: 1.5rem;
+                }
             }
         }
     }

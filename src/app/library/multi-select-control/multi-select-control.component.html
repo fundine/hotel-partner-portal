@@ -1,7 +1,8 @@
 <div class="form-group multi-select" [ngClass]="customClass" (clickOutside)="selectListOutsideClick($event)">
     <label class="inp-label" [ngClass]="validation" *ngIf="!noLabel">{{ title }}</label>
     <input type="text" class="form-control" placeholder="{{ placeholder }}" [ngClass]="{'is-invalid': validationClass}"
-        [disabled]="disabled" (click)="toggleDropdown()" readonly [value]="selectedItemList" />
+        [disabled]="disabled" (click)="toggleDropdown()" readonly [value]="selectedItemList" (keydown)="openDropdown($event)"
+         />
     <span class="focus-border"></span>
     <label class="arrow"><i class="vi vi-chevron-down"></i></label>
     <label class="close" *ngIf="isDropdownOpen" (click)="resetSelection()">
@@ -9,7 +10,7 @@
     </label>
     <div class="option-list" *ngIf="isDropdownOpen">
         <div class="list-item" *ngFor="let option of options" (change)="toggleCheckbox(option)">
-            <label class="checkbox-container multi-select" >
+            <label class="checkbox-container multi-select">
                 <input type="checkbox" [checked]="isSelected(option)" />
                 <span class="checkmark"></span>{{ option }}
             </label>

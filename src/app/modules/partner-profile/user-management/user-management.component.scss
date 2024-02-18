@@ -13,17 +13,24 @@
 }
 
 .page-header {
-    top: 0;
-    z-index: 1;
     display: flex;
     padding: 15px 0;
-    position: sticky;
+    position: relative;
     margin-bottom: 1rem;
     align-items: center;
-    background: #f2f3f9;
     padding-bottom: 0.75rem;
     justify-content: space-between;
     border-bottom: 1px solid #cccccc;
+    .ph-title {
+        font-weight: 600;
+        font-size: 1.1em;
+        line-height: 1.4;
+        color: #188184;
+        letter-spacing: 0.015rem;
+    }
+    .ph-sub-title {
+        font-size: 0.975em;
+    }
 }
 .page-content {
     padding: 15px 0;
@@ -91,6 +98,55 @@
                 }
             }
         }
+        &.skeleton-loading {
+            .lt-content {
+                .title-group {
+                    .skeleton-box {
+                        overflow: hidden;
+                        border-bottom: 0;
+                        position: relative;
+                    }
+                    .title-lg {
+                        .skeleton-box {
+                            height: 18px;
+                            margin: 2px 0 12px;
+                        }
+                    }
+                    .title-info {
+                        .skeleton-box {
+                            height: 10px;
+                            margin-bottom: 5px;
+                        }
+                    }
+                }
+            }
+            .rt-content {
+                .table-container {
+                    table {
+                        &.user-table {
+                            tbody {
+                                tr {
+                                    cursor: default;
+                                    td {
+                                        .skeleton-box {
+                                            height: 16px;
+                                            overflow: hidden;
+                                            border-bottom: 0;
+                                            position: relative;
+                                        }
+                                    }
+                                    &:hover {
+                                        td {
+                                            background: #ffffff;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         &:last-child {
             margin-bottom: 0;
             border-bottom: 0;
@@ -104,7 +160,7 @@
         padding: 1.5rem;
         .action-panel {
             padding: 15px;
-            margin-top: 10px;
+            margin-top: 1rem;
             color: #424542;
             border: 1px solid #efefef;
             .action-title,
@@ -115,8 +171,16 @@
                 cursor: pointer;
                 font-weight: 500;
                 padding-left: 5px;
-                &:hover {
-                    text-decoration: underline;
+                i {
+                    top: 1px;
+                    color: inherit;
+                    font-size: 15px;
+                    padding-right: 5px;
+                }
+                span {
+                    &:hover {
+                        text-decoration: underline;
+                    }
                 }
             }
         }

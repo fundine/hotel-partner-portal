@@ -51,6 +51,16 @@ export class SelectControlComponent implements ControlValueAccessor {
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
+  openDropdown(event: KeyboardEvent) {
+    if (event.ctrlKey && event.key === 'Enter') {
+      this.toggleDropdown();
+    }
+  }
+  hideDropdown() {
+    setTimeout(() => {
+      this.isDropdownOpen = false;
+    }, 200);
+  }
 
   selectOption(option: string) {
     this.selectedItem = option;
@@ -87,6 +97,45 @@ export class SelectControlComponent implements ControlValueAccessor {
     this.openResSubCategoryModal = true;
     this.openResCategoryModal = false;
   }
+
+
+  // onKeyDown(event: KeyboardEvent) {
+  //   switch (event.key) {
+  //     case 'ArrowDown':
+  //       this.moveSelection(1); // Move selection down
+  //       event.preventDefault(); // Prevent default scroll behavior
+  //       break;
+  //     case 'ArrowUp':
+  //       this.moveSelection(-1); // Move selection up
+  //       event.preventDefault(); // Prevent default scroll behavior
+  //       break;
+  //     case 'Enter':
+  //       // Handle selection when Enter is pressed
+  //       event.preventDefault(); // Prevent form submission if needed
+  //       break;
+  //     // case 'Escape':
+  //     //   this.hideDropdown(); // Hide dropdown when Escape is pressed
+  //     //   break;
+  //     default:
+  //       break;
+  //   }
+  // }
+
+  // moveSelection(step: number) {
+  //   const currentIndex = this.options.indexOf(this.selectedItem);
+  //   let newIndex = currentIndex + step;
+
+  //   // Ensure the newIndex stays within bounds
+  //   if (newIndex < 0) {
+  //     newIndex = this.options.length - 1;
+  //   } else if (newIndex >= this.options.length) {
+  //     newIndex = 0;
+  //   }
+
+  //   // Update the selectedItem
+  //   this.selectedItem = this.options[newIndex];
+  // }
+
 }
 
 

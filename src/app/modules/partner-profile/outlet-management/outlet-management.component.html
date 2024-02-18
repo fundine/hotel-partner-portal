@@ -1,403 +1,461 @@
-<div class="page-content">
-    <ng-container *ngIf="partnerUnitList">
-        <div class="row">
-            <div class="col-lg-12 col-center">
-                <div class="card outlet-card" *ngFor="let item of outlets.assignedUnits; let i = index;">
-                    <div class="card-header">
-                        <div class="card-aside-left">
-                            <div class="unit-count">{{ i + 1 }}</div>
-                            <div class="unit-info">
-                                <div class="unit-name">{{ item.unitName }}</div>
-                                <div class="unit-type">{{ item.unitTypeName }}</div>
+<ng-container *ngIf="partnerUnitList">
+    <div class="page-header">
+        <div>
+            <div class="ph-title">Outlet Management</div>
+            <div class="ph-sub-title">Contact us directly for any further assistance needed. We're here to help with
+                any
+                changes you require.</div>
+        </div>
+        <div>
+            <button type="button" class="btn btn-xs btn-default" (click)="contactPartnerSupport()">
+                <i class="vi vi-headphone"></i>CONTACT US</button>
+        </div>
+    </div>
+    <div class="page-content">
+        <ng-container *ngIf="innerLoading || outlets.length === 0">
+            <div class="card outlet-card skeleton-card" *ngFor="let item of skeletonCardItems; let i = index">
+                <div class="card-header">
+                    <div class="skeleton-box skeleton-loader w-80"></div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-9 pl-pr-0">
+                            <div class="row" *ngFor="let item of skeletonCardSubItems; let i = index">
+                                <div class="col-lg-4">
+                                    <div class="skeleton-box skeleton-loader w-100"></div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="skeleton-box skeleton-loader w-100"></div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="skeleton-box skeleton-loader w-100"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card-aside-right">
-                            <div class="indicator" *ngIf="item.isVegOnly">
-                                <label>Pure Veg</label>
-                                <label><i class="vi vi-veg-restaurant"></i></label>
-                            </div>
-                            <div class="indicator">
-                                <label class="online" *ngIf="item.isUnitOpen">Online</label>
-                                <label class="offline" *ngIf="!item.isUnitOpen">Offline</label>
-                                <label class="switch-container sleek" (click)="toggleUnitStatus(item, i)">
-                                    <input type="checkbox" [checked]="item.isUnitOpen" />
-                                    <span class="switch-slider"></span>
+                        <div class="col-lg-3">
+                            <div class="qr-wrap">
+                                <label class="qr-code-display">
+                                    <qr-code value="'QR Code Loading..'" size="150" darkColor="#979292"
+                                        errorCorrectionLevel="H" [margin]="2"></qr-code>
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-9 pl-pr-0">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Location</div>
-                                            <div class="info-value">{{ item.unitLocation }}</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Operating Hours</div>
-                                            <div class="info-value"><i class="vi vi-clock-o"></i>{{item.openingTime}} -
-                                                {{item.closingTime}}</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Contact No</div>
-                                            <div class="info-value">+91 9633907111</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">GSTIN</div>
-                                            <div class="info-value">3234355465DSFD45</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">CIN</div>
-                                            <div class="info-value">3234355465DSFD45</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">FSSAI License No</div>
-                                            <div class="info-value">454654GHGH34</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Tax Type</div>
-                                            <div class="info-value">Inclusive Tax</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">VAT</div>
-                                            <div class="info-value">Not Applicable</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Tax Rate</div>
-                                            <div class="info-value">5% (SGST 2.5% CGST 2.5%)</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Order Online</div>
-                                            <div class="info-value">Yes, Allowed</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Online Payments</div>
-                                            <div class="info-value">Yes, Allowed</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Feedback Requests</div>
-                                            <div class="info-value">Yes, Allowed</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Date of Registration</div>
-                                            <div class="info-value">11/06/1994</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="info-group">
-                                            <div class="info-title">Url</div>
-                                            <div class="info-value"><a href="https://chocolick.petpooja.com/orders/menu"
-                                                    target="_blank">https://chocolick.petpooja.com/orders/menu</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="qr-wrap">
-                                    <label class="qr-code-display">
-                                        <qr-code [value]="qrCodeUrl" size="150" errorCorrectionLevel="M"
-                                            [margin]="2"></qr-code>
-                                    </label>
-                                </div>
-                            </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container
+            *ngIf="!innerLoading && (outlets.assignedUnits.length > 0 || outlets.nonAssignedUnits.length > 0)">
+            <div class="card outlet-card" *ngFor="let item of outlets.assignedUnits; let i = index;">
+                <div class="card-header">
+                    <div class="card-aside-left">
+                        <div class="unit-count">{{ i + 1 }}</div>
+                        <div class="unit-info">
+                            <div class="unit-name">{{ item.unitName }}</div>
+                            <div class="unit-type">{{ item.unitTypeName }}</div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="info-group">
-                                    <div class="info-title">Tag Line</div>
-                                    <div class="info-value"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="info-group">
-                                    <div class="info-title">About Outlet</div>
-                                    <div class="info-value justify">Step into the Oriental Kitchen for a
-                                        culinary experience
-                                        like none other – with pan-Asian cuisines, and Szechuan and Thai
-                                        specialities,
-                                        communal tables where you can watch the chef prepare your meal, a
-                                        mixologist’s
-                                        station for custom cocktails and mocktails, and two private dining
-                                        rooms, the
-                                        Oriental Kitchen is theater in motion.</div>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="card-aside-right">
+                        <div class="indicator" *ngIf="item.isVegOnly">
+                            <label>Pure Veg</label>
+                            <label><i class="vi vi-veg-restaurant"></i></label>
+                        </div>
+                        <div class="indicator">
+                            <label class="online" *ngIf="item.isUnitOpen">Online</label>
+                            <label class="offline" *ngIf="!item.isUnitOpen">Offline</label>
+                            <label class="switch-container sleek" (click)="toggleUnitStatus(item, i)">
+                                <input type="checkbox" [checked]="item.isUnitOpen" />
+                                <span class="switch-slider"></span>
+                            </label>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12 col-center">
-                <div class="card outlet-card non-assigned"
-                    *ngFor="let item of outlets.nonAssignedUnits; let i = index;">
-                    <div class="card-header">
-                        <div class="card-aside-left">
-                            <div class="unit-count">{{ outlets.assignedUnits.length + i + 1 }}</div>
-                            <div class="unit-info">
-                                <div class="unit-name">{{ item.unitName }}</div>
-                                <div class="unit-type">{{ item.unitTypeName }}</div>
-                            </div>
-                        </div>
-                        <div class="card-aside-right">
-                            <div class="indicator" *ngIf="item.isVegOnly">
-                                <label>Pure Veg</label>
-                                <label><i class="vi vi-veg-restaurant"></i></label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-9 pl-pr-0">
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Location</div>
-                                            <div class="info-value">{{ item.unitLocation }}</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Operating Hours</div>
-                                            <div class="info-value"><i class="vi vi-clock-o"></i>{{item.openingTime}} -
-                                                {{item.closingTime}}</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Contact No</div>
-                                            <div class="info-value">+91 9633907111</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">GSTIN</div>
-                                            <div class="info-value">3234355465DSFD45</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">CIN</div>
-                                            <div class="info-value">3234355465DSFD45</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">FSSAI License No</div>
-                                            <div class="info-value">454654GHGH34</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Tax Type</div>
-                                            <div class="info-value">Inclusive Tax</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">VAT</div>
-                                            <div class="info-value">Not Applicable</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Tax Rate</div>
-                                            <div class="info-value">5% (SGST 2.5% CGST 2.5%)</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Order Online</div>
-                                            <div class="info-value">Yes, Allowed</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Online Payments</div>
-                                            <div class="info-value">Yes, Allowed</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Feedback Messages</div>
-                                            <div class="info-value">Yes, Allowed</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <div class="info-group">
-                                            <div class="info-title">Date of Registration</div>
-                                            <div class="info-value">11/06/1994</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <div class="info-group">
-                                            <div class="info-title">Url</div>
-                                            <div class="info-value"><a href="https://chocolick.petpooja.com/orders/menu"
-                                                    target="_blank">https://chocolick.petpooja.com/orders/menu</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="qr-wrap">
-                                    <label class="qr-code-display">
-                                        <qr-code [value]="qrCodeUrl" size="150" errorCorrectionLevel="M"
-                                            [margin]="2"></qr-code>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="info-group">
-                                    <div class="info-title">Tag Line</div>
-                                    <div class="info-value"></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="info-group">
-                                    <div class="info-title">About Outlet</div>
-                                    <div class="info-value justify">Step into the Oriental Kitchen for a
-                                        culinary experience
-                                        like none other – with pan-Asian cuisines, and Szechuan and Thai
-                                        specialities,
-                                        communal tables where you can watch the chef prepare your meal, a
-                                        mixologist’s
-                                        station for custom cocktails and mocktails, and two private dining
-                                        rooms, the
-                                        Oriental Kitchen is theater in motion.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </ng-container>
-
-    <ng-container *ngIf="partnerUnitInfoEdit">
-        <div class="row">
-            <div class="col-lg-12 col-center">
-                <form [formGroup]="outletInfoForm" autocomplete="off">
-                    <div class="card">
-                        <div class="card-header">The Sky Bar (Seaview Resto Bar)</div>
-                        <div class="card-body">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-9 pl-pr-0">
                             <div class="row">
                                 <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label required">Outlet Contact Number</label>
-                                        <input type="text" class="form-control" formControlName="contactNumber" />
-                                        <span class="focus-border"></span>
+                                    <div class="info-group">
+                                        <div class="info-title">Location</div>
+                                        <div class="info-value">{{ item.unitLocation }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Operating Hours</div>
+                                        <div class="info-value"><i class="vi vi-clock-o"></i>{{item.openingTime}} -
+                                            {{item.closingTime}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Contact No</div>
+                                        <div class="info-value">+91 9633907111</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">GSTIN</div>
+                                        <div class="info-value">3234355465DSFD45</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">CIN</div>
+                                        <div class="info-value">3234355465DSFD45</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">FSSAI License No</div>
+                                        <div class="info-value">454654GHGH34</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Tax Type</div>
+                                        <div class="info-value">Inclusive Tax</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">VAT</div>
+                                        <div class="info-value">Not Applicable</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Tax Rate</div>
+                                        <div class="info-value">5% (SGST 2.5% CGST 2.5%)</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Order Online</div>
+                                        <div class="info-value bold-500"
+                                            [ngClass]="{'p-value': allowOnlineOrder, 'n-value': !allowOnlineOrder}">
+                                            Yes, Allowed</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Online Payments</div>
+                                        <div class="info-value bold-500"
+                                            [ngClass]="{'p-value': allowOnlinePayment, 'n-value': !allowOnlinePayment}">
+                                            Not Allowed</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Feedback Requests</div>
+                                        <div class="info-value bold-500"
+                                            [ngClass]="{'p-value': allowFeedbackRequest, 'n-value': !allowFeedbackRequest}">
+                                            Yes, Allowed</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Date of Registration</div>
+                                        <div class="info-value">11/06/1994</div>
                                     </div>
                                 </div>
                                 <div class="col-lg-8">
-                                    <div class="form-group">
-                                        <label class="inp-label required">Outlet Location</label>
-                                        <input type="text" class="form-control" formControlName="unitLocation"
-                                            [ngClass]="controlClass('unitLocation')" />
-                                        <span class="focus-border"></span>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label required">Opening Time</label>
-                                        <input type="time" class="form-control" formControlName="openingTime"
-                                            [ngClass]="controlClass('openingTime')" />
-                                        <span class="focus-border"></span>
-                                        <label class="time-icon"><i class="vi vi-time"></i></label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="inp-label required">Closing Time</label>
-                                        <input type="time" class="form-control" formControlName="closingTime"
-                                            [ngClass]="controlClass('closingTime')" />
-                                        <span class="focus-border"></span>
-                                        <label class="time-icon"><i class="vi vi-time"></i></label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="checkbox-list">
-                                        <label class="checkbox-container clear-bottom">
-                                            <input type="checkbox" formControlName="allowOnlineOrder" />
-                                            <span class="checkmark"></span>Allow Online Order
-                                        </label>
-                                        <label class="checkbox-container clear-bottom">
-                                            <input type="checkbox" formControlName="allowFeedbackRequest" />
-                                            <span class="checkmark"></span>Allow Feedback Request
-                                        </label>
-                                        <label class="checkbox-container clear-bottom">
-                                            <input type="checkbox" formControlName="allowOnlinePayment" />
-                                            <span class="checkmark"></span>Allow Online Payment
-                                        </label>
-
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="inp-label">Tag Line</label>
-                                        <input type="text" class="form-control" formControlName="tagLine"
-                                            [ngClass]="controlClass('tagLine')" />
-                                        <span class="focus-border"></span>
-                                        <label class="val-msg"
-                                            *ngIf="outletInfoForm.get('tagLine')?.errors?.['maxlength']">Max
-                                            Length is 200</label>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label class="inp-label">About Outlet</label>
-                                        <textarea class="form-control" formControlName="aboutOutlet"
-                                            [ngClass]="controlClass('aboutOutlet')"
-                                            placeholder="Brief about the outlet if required."></textarea>
-                                        <span class="focus-border"></span>
-                                        <label class="val-msg"
-                                            *ngIf="outletInfoForm.get('aboutOutlet')?.errors?.['maxlength']">Max
-                                            Length is 1000</label>
+                                    <div class="info-group">
+                                        <div class="info-title">Url</div>
+                                        <div class="info-value"><a href="https://chocolick.petpooja.com/orders/menu"
+                                                target="_blank">https://chocolick.petpooja.com/orders/menu</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">                           
-                            <div class="btn-list">
-                                <button class="btn btn-sm btn-success" (click)="onUpdateOutletInfo()">UPDATE</button>
-                                <button class="btn btn-sm btn-danger">CANCEL</button>
+                        <div class="col-lg-3">
+                            <div class="qr-wrap">
+                                <label class="qr-code-display">
+                                    <qr-code [value]="qrCodeUrl" size="150" errorCorrectionLevel="M"
+                                        [margin]="2"></qr-code>
+                                    <label class="btn-edit" (click)="editOutletInfo(i)"><i
+                                            class="vi vi-pencil-o"></i>Edit
+                                        Outlet Info</label>
+                                </label>
                             </div>
                         </div>
                     </div>
-                </form>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="info-group">
+                                <div class="info-title">Tag Line</div>
+                                <div class="info-value"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="info-group">
+                                <div class="info-title">About Outlet</div>
+                                <div class="info-value justify">Step into the Oriental Kitchen for a
+                                    culinary experience
+                                    like none other – with pan-Asian cuisines, and Szechuan and Thai
+                                    specialities,
+                                    communal tables where you can watch the chef prepare your meal, a
+                                    mixologist’s
+                                    station for custom cocktails and mocktails, and two private dining
+                                    rooms, the
+                                    Oriental Kitchen is theater in motion.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </ng-container>
-</div>
+            <div class="card outlet-card non-assigned" *ngFor="let item of outlets.nonAssignedUnits; let i = index;">
+                <div class="card-header">
+                    <div class="card-aside-left">
+                        <div class="unit-count">{{ outlets.assignedUnits.length + i + 1 }}</div>
+                        <div class="unit-info">
+                            <div class="unit-name">{{ item.unitName }}</div>
+                            <div class="unit-type">{{ item.unitTypeName }}</div>
+                        </div>
+                    </div>
+                    <div class="card-aside-right">
+                        <div class="indicator" *ngIf="item.isVegOnly">
+                            <label>Pure Veg</label>
+                            <label><i class="vi vi-veg-restaurant"></i></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-9 pl-pr-0">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Location</div>
+                                        <div class="info-value">{{ item.unitLocation }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Operating Hours</div>
+                                        <div class="info-value"><i class="vi vi-clock-o"></i>{{item.openingTime}} -
+                                            {{item.closingTime}}</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Contact No</div>
+                                        <div class="info-value">+91 9633907111</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">GSTIN</div>
+                                        <div class="info-value">3234355465DSFD45</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">CIN</div>
+                                        <div class="info-value">3234355465DSFD45</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">FSSAI License No</div>
+                                        <div class="info-value">454654GHGH34</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Tax Type</div>
+                                        <div class="info-value">Inclusive Tax</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">VAT</div>
+                                        <div class="info-value">Not Applicable</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Tax Rate</div>
+                                        <div class="info-value">5% (SGST 2.5% CGST 2.5%)</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Order Online</div>
+                                        <div class="info-value">Yes, Allowed</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Online Payments</div>
+                                        <div class="info-value">Yes, Allowed</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Feedback Messages</div>
+                                        <div class="info-value">Yes, Allowed</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="info-group">
+                                        <div class="info-title">Date of Registration</div>
+                                        <div class="info-value">11/06/1994</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <div class="info-group">
+                                        <div class="info-title">Url</div>
+                                        <div class="info-value"><a href="https://chocolick.petpooja.com/orders/menu"
+                                                target="_blank">https://chocolick.petpooja.com/orders/menu</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="qr-wrap">
+                                <label class="qr-code-display">
+                                    <qr-code [value]="qrCodeUrl" size="150" errorCorrectionLevel="M"
+                                        [margin]="2"></qr-code>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="info-group">
+                                <div class="info-title">Tag Line</div>
+                                <div class="info-value"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="info-group">
+                                <div class="info-title">About Outlet</div>
+                                <div class="info-value justify">Step into the Oriental Kitchen for a
+                                    culinary experience
+                                    like none other – with pan-Asian cuisines, and Szechuan and Thai
+                                    specialities,
+                                    communal tables where you can watch the chef prepare your meal, a
+                                    mixologist’s
+                                    station for custom cocktails and mocktails, and two private dining
+                                    rooms, the
+                                    Oriental Kitchen is theater in motion.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</ng-container>
 
+<ng-container *ngIf="partnerUnitInfoEdit">
+    <div class="page-content">
+        <form [formGroup]="outletInfoForm" autocomplete="off">
+            <div class="card">
+                <div class="card-header">The Sky Bar (Seaview Resto Bar)</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="page-info clear-bottom">We're sorry, but it seems you don't have
+                                permission to edit all the information for this outlet due to security reasons.
+                                If the options below don't meet your needs, please don't hesitate to contact us
+                                directly for further assistance. We're here to help you with any corresponding
+                                changes you require.</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="inp-label required">Outlet Contact Number</label>
+                                <input type="text" class="form-control" formControlName="contactNumber" />
+                                <span class="focus-border"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="inp-label required">Outlet Location</label>
+                                <input type="text" class="form-control" formControlName="unitLocation"
+                                    [ngClass]="controlClass('unitLocation')" />
+                                <span class="focus-border"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-4"></div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="inp-label required">Opening Time</label>
+                                <input type="time" class="form-control" formControlName="openingTime"
+                                    [ngClass]="controlClass('openingTime')" />
+                                <span class="focus-border"></span>
+                                <label class="time-icon"><i class="vi vi-time"></i></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label class="inp-label required">Closing Time</label>
+                                <input type="time" class="form-control" formControlName="closingTime"
+                                    [ngClass]="controlClass('closingTime')" />
+                                <span class="focus-border"></span>
+                                <label class="time-icon"><i class="vi vi-time"></i></label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="inp-label">Tag Line</label>
+                                <input type="text" class="form-control" formControlName="tagLine"
+                                    [ngClass]="controlClass('tagLine')" />
+                                <span class="focus-border"></span>
+                                <label class="val-msg" *ngIf="outletInfoForm.get('tagLine')?.errors?.['maxlength']">Max
+                                    Length is 200</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="inp-label">About Outlet</label>
+                                <textarea class="form-control" formControlName="aboutOutlet"
+                                    [ngClass]="controlClass('aboutOutlet')"
+                                    placeholder="Brief about the outlet if required."></textarea>
+                                <span class="focus-border"></span>
+                                <label class="val-msg"
+                                    *ngIf="outletInfoForm.get('aboutOutlet')?.errors?.['maxlength']">Max
+                                    Length is 1000</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="checkbox-list">
+                                <label class="checkbox-container clear-bottom">
+                                    <input type="checkbox" formControlName="allowOnlineOrder" />
+                                    <span class="checkmark"></span>Allow Online Order
+                                </label>
+                                <label class="checkbox-container clear-bottom">
+                                    <input type="checkbox" formControlName="allowFeedbackRequest" />
+                                    <span class="checkmark"></span>Allow Feedback Request
+                                </label>
+                                <label class="checkbox-container clear-bottom">
+                                    <input type="checkbox" formControlName="allowOnlinePayment" />
+                                    <span class="checkmark"></span>Allow Online Payment
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="btn-list">
+                        <button class="btn btn-sm btn-success" (click)="onUpdateOutletInfo()">UPDATE</button>
+                        <button class="btn btn-sm btn-danger" (click)="onCancelClick()">CANCEL</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-container>
+
+<app-dialog *ngIf="confirmContactSupportDialog" type="confirm" [customClass]="'delete justify'"
+    [title]="'Need Assistance?'"
+    [message]="'Are you absolutely certain you wish to contact customer care support? Proceeding with this action will result in redirection to another browser tab.'"
+    (confirmClick)="confirmContactPartnerSupport()" (cancelClick)="cancelContactPartnerSupport()"></app-dialog>
 
 <app-dialog *ngIf="formChangeWarningDialog" type="confirm" [customClass]="'delete justify'" [title]="'Discard Changes?'"
     [message]="'Are you sure you want to discard the changes? Changes you made may not be saved.'"

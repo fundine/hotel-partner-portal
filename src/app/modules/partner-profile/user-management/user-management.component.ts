@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api.service';
@@ -10,9 +10,10 @@ import { ApiService } from 'src/app/api.service';
 })
 export class UserManagementComponent implements OnInit {
 
+
   maxDate: string;
-  suspendedReasonModal: boolean = false;
-  resignedReasonModal: boolean = false;
+  userStatusChangeWarningDialog: boolean = false;
+  loading: boolean = false;
   innerLoading: boolean = false;
   categoryTypeId: string = '1';
   reasonType: string = '';
@@ -20,11 +21,12 @@ export class UserManagementComponent implements OnInit {
   confirmPasswordHide = false;
   alertSuccess: boolean = false;
   formChangeWarningDialog: boolean = false;
-  userSuspendedModal: boolean = false;
-  userResignedModal: boolean = false;
+  internalServerErrorDialog: boolean = false;
   allemployeeList: boolean = true;
   employeeProfile: boolean = false;
   employeeRegForm: boolean = false;
+  skeletonLoadingTable = Array(2).fill(0);
+  skeletonLoadingItems = Array(3).fill(0);
 
   // api
   users: any = [];
@@ -99,21 +101,16 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
-  selectedISOCode: any;
-  countryCode: string = '';
-  countryName: string = '';
-  nationality: string = '';
-  countryNameOptions: any;
-  countryCodeOptions: any;
-  countryNameList: { isoCode: any; countryName: string; nationality: string, }[] | undefined;
-  countryCodeList: { isoCode: string; countryCode: string, countryName: string, }[] | undefined;
-  getCountryList() {
+  selectedNationalityId: any;
+  nationalityItem: string = '';
+  nationalityOptions: any;
+  nationalityList: { id: string; countryName: string; nationality: string; }[] | undefined;
+  getNationality() {
     this.apiService.getAllCountries().subscribe(
       (data) => {
-        this.countryNameList = data.results;
-        this.countryCodeList = data.results;
-        this.countryNameOptions = this.countryNameList!.map(option => `${option.nationality} (${option.countryName})`);
-        this.countryCodeOptions = this.countryCodeList!.map(option => `${option.countryName} (${option.countryCode})`);
+
+        this.nationalityList = data.results;
+        this.nationalityOptions = this.nationalityList!.map(option => option.nationality);
         console.log('Data from API:', data);
       },
       (error) => {
@@ -122,29 +119,53 @@ export class UserManagementComponent implements OnInit {
     );
   }
   selectNationality(event: any) {
-    const selectedNationality = event as string;
-    const selectedCountryItem = this.countryNameList!.find(item => item.countryName === selectedNationality);
+    const selectedNationalityName = event as string;
+    const selectedNationality = this.nationalityList!.find(item => item.nationality === selectedNationalityName);
 
-    if (selectedCountryItem) {
-      this.selectedISOCode = selectedCountryItem.nationality;
-      this.countryName = selectedCountryItem.countryName;
-    }
-  }
-  selectCountryCode(event: any) {
-    const selectedCountryCode = event as string;
-    const selectedCountryItem = this.countryCodeList!.find(item => item.countryCode === selectedCountryCode);
-
-    if (selectedCountryItem) {
-      this.selectedISOCode = selectedCountryItem.isoCode;
-      this.countryName = selectedCountryItem.countryName;
-      this.countryCode = selectedCountryItem.countryCode;
+    if (selectedNationality) {
+      this.selectedNationalityId = selectedNationality.id;
+      this.nationalityItem = selectedNationality.nationality;
     }
   }
 
-  selectedRoleCode: any;
-  userRoleItem: any[] = [];
+  selectedCountryCodeId: any;
+  selectedAltCountryCodeId: any;
+  countryCode: string = '';
+  altCountryCode: string = '';
+  countryCodeOptions: any;
+  countryCodeList: { id: string; isoCode: string; countryCode: string; countryName: string; }[] | undefined;
+
+  getCountryCode() {
+    this.apiService.getAllCountries().subscribe(
+      (data) => {
+        this.countryCodeList = data.results;
+        this.countryCodeOptions = this.countryCodeList!.map(option => option.countryCode);
+        // this.countryCodeOptions = this.countryCodeList!.map(option => `${option.countryName} (${option.countryCode})`);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectCountryCode(event: any, isPrimary: boolean = false) {
+    const selectedCountryCodeName = event as string;
+    const selectedCountryCode = this.countryCodeList!.find(item => item.countryCode === selectedCountryCodeName);
+    if (selectedCountryCode) {
+      if (isPrimary) {
+        this.selectedCountryCodeId = selectedCountryCode.id;
+        this.countryCode = selectedCountryCode.countryCode;
+      } else {
+        this.selectedAltCountryCodeId = selectedCountryCode.id;
+        this.altCountryCode = selectedCountryCode.countryCode;
+      }
+    }
+  }
+
+  selectedRoleId: any;
+  userRoleItem: string = '';
   userRoleOptions: any;
-  userRoleList: { roleCode: string; roleName: string }[] | undefined;
+  userRoleList: { id: string; roleName: string }[] | undefined;
   getUserRoles() {
     this.apiService.userRoleList().subscribe(
       (data) => {
@@ -160,10 +181,9 @@ export class UserManagementComponent implements OnInit {
   selectRoleType(event: any) {
     const selectedRoleName = event as string;
     const selectedRoleItem = this.userRoleList!.find(item => item.roleName === selectedRoleName);
-
     if (selectedRoleItem) {
-      this.selectedRoleCode = selectedRoleItem.roleCode;
-      this.userRoleItem.push(selectedRoleItem.roleName);
+      this.selectedRoleId = selectedRoleItem.id;
+      this.userRoleItem = selectedRoleItem.roleName;
     }
   }
 
@@ -192,7 +212,6 @@ export class UserManagementComponent implements OnInit {
       this.itemUnitItem.push(selectedUnitItem.unitName);
     }
   }
-
 
   selectedReasonId: any;
   reasonItem: string = '';
@@ -251,17 +270,43 @@ export class UserManagementComponent implements OnInit {
     const selectedUserStatus = this.userStatusList!.find(item => item.id === userId);
 
     if (selectedUserStatus) {
-      if (selectedUserStatus.id === '3') {
+      if (selectedUserStatus.id === '2') {
+        this.userStatusChangeWarningDialog = true;
+      } else if (selectedUserStatus.id === '3') {
         this.reasonType = 'usersuspend';
-        this.suspendedReasonModal = true;
+        this.userRegistrationForm.get('suspendedReason.date')?.setValidators([Validators.required]);
+        this.userRegistrationForm.get('suspendedReason.reason')?.setValidators([Validators.required]);
+
         this.getReasonList();
       } else if (selectedUserStatus.id === '4') {
         this.reasonType = 'userresign';
-        this.resignedReasonModal = true;
+        this.userRegistrationForm.get('resignationReason.date')?.setValidators([Validators.required]);
+        this.userRegistrationForm.get('resignationReason.reason')?.setValidators([Validators.required]);
+
         this.getReasonList();
       }
+      this.userRegistrationForm.get('suspendedReason.date')?.updateValueAndValidity();
+      this.userRegistrationForm.get('suspendedReason.reason')?.updateValueAndValidity();
+      this.userRegistrationForm.get('resignationReason.date')?.updateValueAndValidity();
+      this.userRegistrationForm.get('resignationReason.reason')?.updateValueAndValidity();
     }
   }
+  onConfirmUserStatusChange() {
+    this.userStatusChangeWarningDialog = false;
+  }
+  onCancelUserStatusChange() {
+    const previousUserStatus = this.userRegistrationForm.get('userStatus')?.value;
+    if (previousUserStatus !== null && previousUserStatus !== undefined) {
+      this.userRegistrationForm.get('userStatus')?.setValue(previousUserStatus);
+    } else {
+      this.userRegistrationForm.get('userStatus')?.setValue('');
+    }
+    this.userStatusChangeWarningDialog = false;
+  }
+  // selectReasonType(newReasonType: string) {
+  //   this.reasonType = newReasonType;
+  //   this.cdr.detectChanges();
+  // }
 
 
   constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) {
@@ -274,15 +319,17 @@ export class UserManagementComponent implements OnInit {
 
   // registration form
   userRegistrationForm = this.fb.group({
-    userFirstName: ['', [Validators.required, Validators.maxLength(20)]],
-    userLastName: ['', [Validators.required, Validators.maxLength(30)]],
+    firstName: ['', [Validators.required, Validators.maxLength(20)]],
+    lastName: ['', [Validators.required, Validators.maxLength(30)]],
 
     basicDetails: this.fb.group({
       genderId: [''],
       gender: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required, this.validateDateOfBirth]],
       age: ['', [Validators.required, this.validateAge]],
+      maritalStatusId: [''],
       maritalStatus: [''],
+      nationalityId: [''],
       nationality: [''],
       jobTitle: [''],
       employeeId: [''],
@@ -297,12 +344,14 @@ export class UserManagementComponent implements OnInit {
     }),
 
     userRole: this.fb.group({
+      roleId: [''],
       role: ['', [Validators.required]],
     }),
 
-    userOutlets: this.fb.group({
-      allowedOutlets: [this.fb.array([])],
-    }),
+    // allowedOutlets: [this.fb.array([]), [Validators.required]],
+
+    allowedOutlets: this.fb.array([]),
+
 
     userStatusId: [''],
     userStatus: ['', [Validators.required]],
@@ -320,11 +369,12 @@ export class UserManagementComponent implements OnInit {
       reason: [''],
       remarks: ['', [Validators.maxLength(500)]],
     })
-
   })
+
   controlClass(controlName: string) {
     return { 'is-invalid': this.userRegistrationForm?.get(controlName)?.invalid && this.userRegistrationForm?.get(controlName)?.touched };
   }
+
   get employeeInfo() {
     return this.userRegistrationForm;
   }
@@ -336,7 +386,8 @@ export class UserManagementComponent implements OnInit {
   // general
   userRegForm() {
     this.getUserGender();
-    this.getCountryList();
+    this.getNationality();
+    this.getCountryCode();
     this.getUserMaritalStatus();
     this.getUserStatus();
     this.getUserRoles();
@@ -344,10 +395,35 @@ export class UserManagementComponent implements OnInit {
     this.allemployeeList = false;
     this.employeeRegForm = true;
   }
-  showUserProfie() {
+
+  userProfile: any = [];
+  showUserProfile(roleIndex: number, userIndex: number) {
     this.allemployeeList = false;
     this.employeeProfile = true;
+    this.innerLoading = true;
+    const user = this.users[roleIndex].users[userIndex];
+    const userId = user.userId;
+    this.apiService.userProfile(userId).subscribe(
+      (data: any) => {
+        this.userProfile = data.results;
+        console.log('User profile loaded successfully.');
+      },
+      (error) => {
+        console.error('Error showing profile:', error);
+        if (error.status == 500) {
+          this.internalServerErrorDialog = true;
+        }
+      },
+      () => {
+        this.innerLoading = false;
+      }
+    );
   }
+
+
+
+
+
   validateDateOfBirth(control: { value: string | number | Date; }) {
     const currentDate = new Date();
     const selectedDate = new Date(control.value);
@@ -407,7 +483,6 @@ export class UserManagementComponent implements OnInit {
       return { invalidAge: true };
     }
   }
-
   togglePasswordVisibility(controlName: string) {
     if (controlName === 'password') {
       this.passwordHide = !this.passwordHide;
@@ -415,25 +490,83 @@ export class UserManagementComponent implements OnInit {
       this.confirmPasswordHide = !this.confirmPasswordHide;
     }
   }
+  onCancelDialog() {
+    this.internalServerErrorDialog = false;
+  }
+
 
   // register user
   onRegisterUser() {
     if (this.userRegistrationForm.valid) {
-      this.alertSuccess = true;
 
-      // this.userRegistrationForm.reset();
-      console.log('Form Values:', this.userRegistrationForm.value);
+      const outletsFormArray = this.userRegistrationForm.get('allowedOutlets') as FormArray;
+
+      const selectedOutletItems = outletsFormArray.value.map((unitName: string) => {
+        const unit = this.itemUnitList?.find((item) => item.unitName === unitName);
+        if (unit) {
+          return { unitId: unit.unitId };
+        } else {
+          return null;
+        }
+      });
+
+      const requestBody = {
+        firstName: this.userRegistrationForm.get('firstName')?.value,
+        lastName: this.userRegistrationForm.get('lastName')?.value,
+        password: this.userRegistrationForm.get('password')?.value,
+        basicDetails: {
+          dateOfBirth: this.userRegistrationForm.get('basicDetails.dateOfBirth')?.value,
+          genderId: this.selectedGenderId,
+          maritalStatusId: this.selectedMaritalStatusId,
+          nationalityId: this.selectedNationalityId,
+          jobTitle: this.userRegistrationForm.get('basicDetails.jobTitle')?.value,
+          employeeId: this.userRegistrationForm.get('basicDetails.employeeId')?.value || '',
+        },
+        contactInfo: {
+          phoneCode: this.countryCode,
+          phoneNumber: this.userRegistrationForm.get('contactInfo.phoneNumber')?.value,
+          altPhoneCode: this.altCountryCode,
+          altPhoneNumber: this.userRegistrationForm.get('contactInfo.altPhoneNumber')?.value,
+          emailId: this.userRegistrationForm.get('contactInfo.emailId')?.value,
+        },
+        userRole: {
+          roleId: this.selectedRoleId,
+        },
+        userOutlets: selectedOutletItems,
+      }
+      this.loading = true;
+      console.log('User info', requestBody);
+      this.apiService.saveUser(requestBody).subscribe(
+        (response: any) => {
+          console.log('User saved successfully', response);
+          this.userRegistrationForm.reset();
+          // this.isUniquNameShow = false;
+        },
+        (error) => {
+          this.loading = false;
+          if (error.status == 412) {
+            // this.isUniquNameShow = true;
+            this.userRegistrationForm.markAllAsTouched();
+          } else if (error.status == 500) {
+            this.internalServerErrorDialog = true;
+          }
+
+          // if (error instanceof HttpErrorResponse && error.status === 500) {
+          //  this.internalServerError.emit();
+          // }
+          console.error('Error saving User', error);
+        },
+        () => {
+          this.loading = false;
+          this.alertSuccess = true;
+        }
+      );
+      console.log('User Data:', this.userRegistrationForm.value);
     }
     else {
       this.userRegistrationForm.markAllAsTouched();
     }
     this.alertSuccess = false;
-  }
-
-  // modal
-  onModalClosed() {
-    this.suspendedReasonModal = false;
-    this.resignedReasonModal = false;
   }
 
   // return to home
@@ -442,10 +575,7 @@ export class UserManagementComponent implements OnInit {
       this.formChangeWarningDialog = true;
     }
     else {
-      this.alertSuccess = false;
-      this.userRegistrationForm.reset();
-      this.allemployeeList = true;
-      this.employeeRegForm = false;
+      this.onBackConfirmClick();
     }
   }
   onCancelClearChanges() {
@@ -457,7 +587,6 @@ export class UserManagementComponent implements OnInit {
     this.formChangeWarningDialog = false;
     this.allemployeeList = true;
     this.employeeRegForm = false;
+    this.getAllUserList();
   }
-
-
 }
