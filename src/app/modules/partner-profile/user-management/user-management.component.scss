@@ -56,6 +56,7 @@
                     color: #5f6469;
                     font-size: 0.9em;
                     text-align: justify;
+                    word-break: break-all;
                 }
             }
         }
@@ -79,6 +80,8 @@
                             tr {
                                 cursor: pointer;
                                 td {
+                                    cursor: inherit;
+                                    overflow-wrap: break-word;
                                     .user-name {
                                         line-height: 1.15;
                                     }
@@ -90,6 +93,35 @@
                                 &:hover {
                                     td {
                                         background: #eff2f9;
+                                    }
+                                }
+                            }
+                        }
+                        thead,
+                        tbody {
+                            tr {
+                                th,
+                                td {
+                                    &:nth-child(1) {
+                                        min-width: 150px;
+                                        max-width: 150px;
+                                        // max-width: 23%;
+                                    }
+                                    &:nth-child(2) {
+                                        min-width: 180px;
+                                        max-width: 180px;
+                                        // max-width: 29%;
+                                    }
+                                    &:nth-child(3) {
+                                        min-width: 235px;
+                                        max-width: 235px;
+                                        // max-width: 34%;
+                                    }
+                                    &:nth-child(4) {
+                                        min-width: 100px;
+                                        max-width: 100px;
+                                        // max-width: 14%;
+                                        text-align: center;
                                     }
                                 }
                             }
@@ -150,7 +182,7 @@
         &:last-child {
             margin-bottom: 0;
             border-bottom: 0;
-            padding-bottom: 1rem;
+            padding-bottom: 0;
         }
     }
 }

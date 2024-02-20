@@ -34,8 +34,8 @@ export class NavbarComponent implements OnInit {
     (this.roleCode === '2' ? [
       { tabName: 'insights', route: '/core/insights', iconClass: 'vi vi-insights-o', name: 'Insights' },
       { tabName: 'customers', route: '/core/customers', iconClass: 'vi vi-user-group-o', name: 'Customers' },
-      // { tabName: 'broadcast', route: '/core/broadcast', iconClass: 'vi vi-bullhorn-o', name: 'Broadcast' },
-      // { tabName: 'reports', route: '/core/reports', iconClass: 'vi vi-file-text', name: 'Reports' },
+      { tabName: 'broadcast', route: '/core/broadcast', iconClass: 'vi vi-bullhorn-o', name: 'Broadcast' },
+      { tabName: 'reports', route: '/core/reports', iconClass: 'vi vi-file-text', name: 'Reports' },
     ] : []),
 
     // role 3
@@ -49,8 +49,8 @@ export class NavbarComponent implements OnInit {
     (this.roleCode === '4' ? [
       { tabName: 'guest checkin', route: '/core/guestcheckin', iconClass: 'vi vi-reception-o', name: 'Check-In' },
       { tabName: 'orders', route: '/core/orders', iconClass: 'vi vi-list-o', name: 'Orders' },
-      // { tabName: 'dine track', route: '/core/dinetrack', iconClass: 'vi vi-dine-o', name: 'Dine-Track' },
-      // { tabName: 'room cleaning', route: '/core/roomcleaning', iconClass: 'vi vi-room-cleaning-o', name: 'Cleaning' },
+      { tabName: 'dine track', route: '/core/dinetrack', iconClass: 'vi vi-dine-o', name: 'Dine-Track' },
+      { tabName: 'room cleaning', route: '/core/roomcleaning', iconClass: 'vi vi-room-cleaning-o', name: 'Cleaning' },
       { tabName: 'valet parking', route: '/core/valetparking', iconClass: 'vi vi-parking-o', name: 'Parking' },
       { tabName: 'partner profile', route: '/core/partnerprofile', iconClass: 'vi vi-outlet-o', name: 'Profile' },
 

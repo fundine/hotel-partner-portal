@@ -44,6 +44,7 @@ export class MultiSelectControlComponent implements ControlValueAccessor {
       this.selectedItems = value;
     }
   }
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
@@ -62,10 +63,6 @@ export class MultiSelectControlComponent implements ControlValueAccessor {
     }
   }
 
-  // isSelected(option: string): boolean {
-  //   return (this.selectedItems ?? []).includes(option);
-  // }
-
   isSelected(option: string): boolean {
     return Array.isArray(this.selectedItems) && this.selectedItems.includes(option);
   }
@@ -83,22 +80,6 @@ export class MultiSelectControlComponent implements ControlValueAccessor {
     this.onTouched();
     this.optionsSelected.emit(this.selectedItems);
   }
-
-  // toggleCheckbox(option: string) {
-  //   setTimeout(() => {
-  //     this.selectedItems = this.selectedItems || [];
-  //     if (this.isSelected(option)) {
-  //       this.selectedItems = this.selectedItems.filter(item => item !== option);
-  //     } else {
-  //       this.selectedItems = [...this.selectedItems, option];
-  //     }
-  //     const inputValue = this.selectedItems.join(', ');
-  //     this.selectedItemList = inputValue;
-  //     this.onChange(this.selectedItems);
-  //     this.onTouched();
-  //     this.optionsSelected.emit(this.selectedItems);
-  //   });
-  // }
 
   selectOption(option: string) {
     const isSelected = this.selectedItems.includes(option);

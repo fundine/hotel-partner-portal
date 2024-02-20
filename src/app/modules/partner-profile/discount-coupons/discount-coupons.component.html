@@ -87,7 +87,8 @@
                                     <span class="focus-border"></span>
                                     <label class="price-icon"><i class="vi vi-rupee"></i></label>
                                     <label class="val-msg"
-                                        *ngIf="discountCouponForm.get('minOrderValue')?.errors?.['pattern']">Only Numbers
+                                        *ngIf="discountCouponForm.get('minOrderValue')?.errors?.['pattern']">Only
+                                        Numbers
                                         Are Allowed</label>
                                 </div>
                             </div>
@@ -122,9 +123,10 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <multi-select-control [title]="'Allowed Outlets'" validation="required"
-                                    formControlName="allowedOutlets"
-                                    [validationClass]="(discountCouponForm.get('allowedOutlets')?.invalid && discountCouponForm.get('allowedOutlets')?.touched) ?? false"
-                                    [options]="['Outlet 1', 'Outlet 2', 'Outlet 3','Outlet 4']"></multi-select-control>
+                                    formControlName="allowedOutlets" [options]="itemUnitOptions"
+                                    [selectedItems]="itemUnitItem" (optionSelected)="selectUnitType($event)"
+                                    [validationClass]="(discountCouponForm.get('allowedOutlets')?.invalid && discountCouponForm.get('allowedOutlets')?.touched) ?? false">
+                                </multi-select-control>
                             </div>
                         </div>
                         <div class="row">

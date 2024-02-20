@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ApiService } from 'src/app/api.service';
 
 @Component({
   selector: 'app-discount-coupons',
@@ -12,7 +13,34 @@ export class DiscountCouponsComponent implements OnInit {
   alertSuccess: boolean = false;
   formChangeWarningDialog: boolean = false;
 
-  constructor(private fb: FormBuilder, private router: Router) { }
+
+  selectedUnitId: any;
+  itemUnitItem: any[] = [];
+  itemUnitOptions: any;
+  itemUnitList: { unitId: string; unitName: string; unitTypeName: string }[] | undefined;
+  getAllUnits() {
+    this.apiService.getUnitsList().subscribe(
+      (data) => {
+        this.itemUnitList = data.results;
+        this.itemUnitOptions = this.itemUnitList!.map(option => option.unitName);
+        console.log('Data from API:', data);
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+  selectUnitType(event: any) {
+    const selectedUnitName = event as string;
+    const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);
+
+    if (selectedUnitItem) {
+      this.selectedUnitId = selectedUnitItem.unitId;
+      this.itemUnitItem.push(selectedUnitItem.unitName);
+    }
+  }
+
+  constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) { }
 
 
   // discount coupon form
@@ -42,7 +70,7 @@ export class DiscountCouponsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.getAllUnits();
   }
 
   // coupon save

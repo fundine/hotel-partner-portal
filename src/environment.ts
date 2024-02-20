@@ -4,7 +4,8 @@ export const environment = {
 
   partnerId: 'b3SWd1qAVPiLZxIPNAl6',
   unitId: 'RBTSzuOXgJ9mqXlclBaf',
-  userId: 'NQLr4V3AtTzrXI42R551',
+  userId: 'bDSxliNm38dWhvpWiRiu',
+  // userId: 'bDSxliNm38dWhvpWiRiu',
 
   // global variables
 

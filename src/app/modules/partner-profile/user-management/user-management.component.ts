@@ -10,9 +10,10 @@ import { ApiService } from 'src/app/api.service';
 })
 export class UserManagementComponent implements OnInit {
 
+  unitFilter: boolean = true;
 
   maxDate: string;
-  userStatusChangeWarningDialog: boolean = false;
+  userProfile: any = [];
   loading: boolean = false;
   innerLoading: boolean = false;
   categoryTypeId: string = '1';
@@ -22,6 +23,8 @@ export class UserManagementComponent implements OnInit {
   alertSuccess: boolean = false;
   formChangeWarningDialog: boolean = false;
   internalServerErrorDialog: boolean = false;
+  userStatusChangeWarningDialog: boolean = false;
+  UserIdExistsErrorDialog: boolean = false;
   allemployeeList: boolean = true;
   employeeProfile: boolean = false;
   employeeRegForm: boolean = false;
@@ -187,8 +190,9 @@ export class UserManagementComponent implements OnInit {
     }
   }
 
-  selectedUnitId: any;
-  itemUnitItem: any[] = [];
+  selectedUnitId: string | undefined;
+  itemUnitItem: string[] = [];
+  // itemUnitOptions: string[] = []; 
   itemUnitOptions: any;
   itemUnitList: { unitId: string; unitName: string; unitTypeName: string }[] | undefined;
   getAllUnits() {
@@ -205,11 +209,14 @@ export class UserManagementComponent implements OnInit {
   }
   selectUnitType(event: any) {
     const selectedUnitName = event as string;
-    const selectedUnitItem = this.itemUnitList!.find(item => item.unitName === selectedUnitName);
 
-    if (selectedUnitItem) {
-      this.selectedUnitId = selectedUnitItem.unitId;
-      this.itemUnitItem.push(selectedUnitItem.unitName);
+    if (this.itemUnitList) { // Ensure itemUnitList exists
+      const selectedUnitItem = this.itemUnitList.find(item => item.unitName === selectedUnitName);
+
+      if (selectedUnitItem) {
+        this.selectedUnitId = selectedUnitItem.unitId;
+        this.itemUnitItem.push(selectedUnitItem.unitName); // Update selectedItems array
+      }
     }
   }
 
@@ -271,24 +278,21 @@ export class UserManagementComponent implements OnInit {
 
     if (selectedUserStatus) {
       if (selectedUserStatus.id === '2') {
+        this.reasonType = 'userinvalid';
         this.userStatusChangeWarningDialog = true;
       } else if (selectedUserStatus.id === '3') {
         this.reasonType = 'usersuspend';
-        this.userRegistrationForm.get('suspendedReason.date')?.setValidators([Validators.required]);
-        this.userRegistrationForm.get('suspendedReason.reason')?.setValidators([Validators.required]);
-
+        this.userRegistrationForm.get('date')?.setValidators([Validators.required]);
+        this.userRegistrationForm.get('reason')?.setValidators([Validators.required]);
         this.getReasonList();
       } else if (selectedUserStatus.id === '4') {
         this.reasonType = 'userresign';
-        this.userRegistrationForm.get('resignationReason.date')?.setValidators([Validators.required]);
-        this.userRegistrationForm.get('resignationReason.reason')?.setValidators([Validators.required]);
-
+        this.userRegistrationForm.get('date')?.setValidators([Validators.required]);
+        this.userRegistrationForm.get('reason')?.setValidators([Validators.required]);
         this.getReasonList();
       }
-      this.userRegistrationForm.get('suspendedReason.date')?.updateValueAndValidity();
-      this.userRegistrationForm.get('suspendedReason.reason')?.updateValueAndValidity();
-      this.userRegistrationForm.get('resignationReason.date')?.updateValueAndValidity();
-      this.userRegistrationForm.get('resignationReason.reason')?.updateValueAndValidity();
+      this.userRegistrationForm.get('date')?.updateValueAndValidity();
+      this.userRegistrationForm.get('reason')?.updateValueAndValidity();
     }
   }
   onConfirmUserStatusChange() {
@@ -303,11 +307,6 @@ export class UserManagementComponent implements OnInit {
     }
     this.userStatusChangeWarningDialog = false;
   }
-  // selectReasonType(newReasonType: string) {
-  //   this.reasonType = newReasonType;
-  //   this.cdr.detectChanges();
-  // }
-
 
   constructor(private fb: FormBuilder, private router: Router, private apiService: ApiService) {
     const today = new Date();
@@ -322,59 +321,40 @@ export class UserManagementComponent implements OnInit {
     firstName: ['', [Validators.required, Validators.maxLength(20)]],
     lastName: ['', [Validators.required, Validators.maxLength(30)]],
 
-    basicDetails: this.fb.group({
-      genderId: [''],
-      gender: ['', [Validators.required]],
-      dateOfBirth: ['', [Validators.required, this.validateDateOfBirth]],
-      age: ['', [Validators.required, this.validateAge]],
-      maritalStatusId: [''],
-      maritalStatus: [''],
-      nationalityId: [''],
-      nationality: [''],
-      jobTitle: [''],
-      employeeId: [''],
-    }),
+    genderId: [''],
+    gender: ['', [Validators.required]],
+    dateOfBirth: ['', [Validators.required, this.validateDateOfBirth]],
+    age: ['', [Validators.required, this.validateAge]],
+    maritalStatusId: [''],
+    maritalStatus: [''],
+    nationalityId: [''],
+    nationality: [''],
+    jobTitle: [''],
+    employeeNo: [''],
 
-    contactInfo: this.fb.group({
-      phoneCode: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
-      altPhoneCode: [''],
-      altPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
-      emailId: ['', [Validators.required, Validators.email]],
-    }),
+    phoneCode: ['', [Validators.required]],
+    phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+    altPhoneCode: [''],
+    altPhoneNumber: ['', [Validators.pattern(/^[0-9]+$/)]],
+    emailId: ['', [Validators.required, Validators.email]],
 
-    userRole: this.fb.group({
-      roleId: [''],
-      role: ['', [Validators.required]],
-    }),
+    roleId: [''],
+    role: ['', [Validators.required]],
 
-    // allowedOutlets: [this.fb.array([]), [Validators.required]],
-
-    allowedOutlets: this.fb.array([]),
-
+    allowedOutlets: [[], [Validators.required]],
 
     userStatusId: [''],
     userStatus: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.pattern(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/\-]{6,}$/),],],
     confirmPassword: [''],
 
-    suspendedReason: this.fb.group({
-      date: [''],
-      reason: [''],
-      remarks: ['', [Validators.maxLength(500)]],
-    }),
-
-    resignationReason: this.fb.group({
-      date: [''],
-      reason: [''],
-      remarks: ['', [Validators.maxLength(500)]],
-    })
+    date: [''],
+    reason: [''],
+    remarks: ['', [Validators.maxLength(500)]],
   })
-
   controlClass(controlName: string) {
     return { 'is-invalid': this.userRegistrationForm?.get(controlName)?.invalid && this.userRegistrationForm?.get(controlName)?.touched };
   }
-
   get employeeInfo() {
     return this.userRegistrationForm;
   }
@@ -384,19 +364,19 @@ export class UserManagementComponent implements OnInit {
   }
 
   // general
-  userRegForm() {
-    this.getUserGender();
-    this.getNationality();
-    this.getCountryCode();
-    this.getUserMaritalStatus();
-    this.getUserStatus();
-    this.getUserRoles();
-    this.getAllUnits();
-    this.allemployeeList = false;
-    this.employeeRegForm = true;
+  togglePasswordVisibility(controlName: string) {
+    if (controlName === 'password') {
+      this.passwordHide = !this.passwordHide;
+    } else if (controlName === 'confirmPassword') {
+      this.confirmPasswordHide = !this.confirmPasswordHide;
+    }
+  }
+  onCancelDialog() {
+    this.internalServerErrorDialog = false;
+    this.UserIdExistsErrorDialog = false;
   }
 
-  userProfile: any = [];
+  // user profile
   showUserProfile(roleIndex: number, userIndex: number) {
     this.allemployeeList = false;
     this.employeeProfile = true;
@@ -419,11 +399,31 @@ export class UserManagementComponent implements OnInit {
       }
     );
   }
+  userAge(dateOfBirth: string): string {
+    const dob = new Date(dateOfBirth);
+    const today = new Date();
 
+    let years = today.getFullYear() - dob.getFullYear();
+    let months = today.getMonth() - dob.getMonth();
+    if (months < 0 || (months === 0 && today.getDate() < dob.getDate())) {
+      years--;
+      months += 12;
+    }
+    return `${years} Years ${months} Months`;
+  }
 
-
-
-
+  // user registration
+  userRegForm() {
+    this.getUserGender();
+    this.getNationality();
+    this.getCountryCode();
+    this.getUserMaritalStatus();
+    this.getUserStatus();
+    this.getUserRoles();
+    this.getAllUnits();
+    this.allemployeeList = false;
+    this.employeeRegForm = true;
+  }
   validateDateOfBirth(control: { value: string | number | Date; }) {
     const currentDate = new Date();
     const selectedDate = new Date(control.value);
@@ -436,43 +436,19 @@ export class UserManagementComponent implements OnInit {
     }
     return null;
   }
-  // calculateAge() {
-  //   const birthdateValue = this.userRegistrationForm.controls.dateOfBirth.value;
-  //   if (birthdateValue !== null) {
-  //     const birthdate = new Date(birthdateValue);
-  //     if (isNaN(birthdate.getTime())) {
-  //       this.userRegistrationForm.controls.age.setValue('');
-  //     } else {
-  //       const timeDiff = Math.abs(Date.now() - birthdate.getTime());
-  //       const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
-  //       this.userRegistrationForm.controls.age.setValue(age.toString());
-  //     }
-  //   } else {
-  //     this.userRegistrationForm.controls.age.setValue('');
-  //   }
-  // }
-  // validateAge(control: AbstractControl) {
-  //   const age = control.value;
-  //   if (age >= 18 && age < 100) {
-  //     return null;
-  //   } else {
-  //     return { invalidAge: true };
-  //   }
-  // }
-
   calculateAge() {
-    const birthdateValue = this.userRegistrationForm.get('basicDetails.dateOfBirth')?.value;
-    if (birthdateValue !== undefined && birthdateValue !== null) {
+    const birthdateValue = this.userRegistrationForm.controls.dateOfBirth.value;
+    if (birthdateValue !== null) {
       const birthdate = new Date(birthdateValue);
       if (isNaN(birthdate.getTime())) {
-        this.userRegistrationForm.get('basicDetails.age')?.setValue('');
+        this.userRegistrationForm.controls.age.setValue('');
       } else {
         const timeDiff = Math.abs(Date.now() - birthdate.getTime());
         const age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
-        this.userRegistrationForm.get('basicDetails.age')?.setValue(age.toString());
+        this.userRegistrationForm.controls.age.setValue(age.toString());
       }
     } else {
-      this.userRegistrationForm.get('basicDetails.age')?.setValue('');
+      this.userRegistrationForm.controls.age.setValue('');
     }
   }
   validateAge(control: AbstractControl) {
@@ -483,23 +459,11 @@ export class UserManagementComponent implements OnInit {
       return { invalidAge: true };
     }
   }
-  togglePasswordVisibility(controlName: string) {
-    if (controlName === 'password') {
-      this.passwordHide = !this.passwordHide;
-    } else if (controlName === 'confirmPassword') {
-      this.confirmPasswordHide = !this.confirmPasswordHide;
-    }
-  }
-  onCancelDialog() {
-    this.internalServerErrorDialog = false;
-  }
-
-
-  // register user
   onRegisterUser() {
     if (this.userRegistrationForm.valid) {
 
-      const outletsFormArray = this.userRegistrationForm.get('allowedOutlets') as FormArray;
+      // const outletsFormArray = this.userRegistrationForm.get('allowedOutlets') as FormArray;
+      const outletsFormArray = this.userRegistrationForm.controls.allowedOutlets as unknown as FormArray;
 
       const selectedOutletItems = outletsFormArray.value.map((unitName: string) => {
         const unit = this.itemUnitList?.find((item) => item.unitName === unitName);
@@ -515,19 +479,19 @@ export class UserManagementComponent implements OnInit {
         lastName: this.userRegistrationForm.get('lastName')?.value,
         password: this.userRegistrationForm.get('password')?.value,
         basicDetails: {
-          dateOfBirth: this.userRegistrationForm.get('basicDetails.dateOfBirth')?.value,
+          dateOfBirth: this.userRegistrationForm.get('dateOfBirth')?.value,
           genderId: this.selectedGenderId,
           maritalStatusId: this.selectedMaritalStatusId,
           nationalityId: this.selectedNationalityId,
-          jobTitle: this.userRegistrationForm.get('basicDetails.jobTitle')?.value,
-          employeeId: this.userRegistrationForm.get('basicDetails.employeeId')?.value || '',
+          jobTitle: this.userRegistrationForm.get('jobTitle')?.value,
+          employeeNo: this.userRegistrationForm.get('employeeNo')?.value || '',
         },
         contactInfo: {
           phoneCode: this.countryCode,
-          phoneNumber: this.userRegistrationForm.get('contactInfo.phoneNumber')?.value,
+          phoneNumber: this.userRegistrationForm.get('phoneNumber')?.value,
           altPhoneCode: this.altCountryCode,
-          altPhoneNumber: this.userRegistrationForm.get('contactInfo.altPhoneNumber')?.value,
-          emailId: this.userRegistrationForm.get('contactInfo.emailId')?.value,
+          altPhoneNumber: this.userRegistrationForm.get('altPhoneNumber')?.value,
+          emailId: this.userRegistrationForm.get('emailId')?.value,
         },
         userRole: {
           roleId: this.selectedRoleId,
@@ -546,6 +510,7 @@ export class UserManagementComponent implements OnInit {
           this.loading = false;
           if (error.status == 412) {
             // this.isUniquNameShow = true;
+            this.UserIdExistsErrorDialog = true;
             this.userRegistrationForm.markAllAsTouched();
           } else if (error.status == 500) {
             this.internalServerErrorDialog = true;
@@ -587,6 +552,6 @@ export class UserManagementComponent implements OnInit {
     this.formChangeWarningDialog = false;
     this.allemployeeList = true;
     this.employeeRegForm = false;
-    this.getAllUserList();
+    // this.getAllUserList();
   }
 }
